@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".loginScreen">
+
+    <EditText
+        android:id="@+id/usernameEntry"
+        android:layout_width="191dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="108dp"
+        android:layout_marginLeft="108dp"
+        android:layout_marginTop="204dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="@string/username"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/passwordEntry"
+        android:layout_width="191dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:inputType="textPassword"
+        android:text="@string/filler"
+        app:layout_constraintStart_toStartOf="@+id/usernameEntry"
+        app:layout_constraintTop_toBottomOf="@+id/usernameEntry"
+        android:autofillHints="password"/>
+
+    <Button
+        android:id="@+id/loginSubmitButton"
+        android:layout_width="191dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="104dp"
+        android:onClick="homePage"
+        android:text="@string/login"
+        app:layout_constraintStart_toStartOf="@+id/passwordEntry"
+        app:layout_constraintTop_toBottomOf="@+id/passwordEntry" />
+
+    <Button
+        android:id="@+id/createNewUserButton"
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:onClick="createAccountPage"
+        android:text="@string/createUser"
+        app:layout_constraintStart_toStartOf="@+id/loginSubmitButton"
+        app:layout_constraintTop_toBottomOf="@+id/loginSubmitButton" />
+
+</android.support.constraint.ConstraintLayout>
