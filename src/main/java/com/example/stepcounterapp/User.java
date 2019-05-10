@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class User implements Serializable {
     private int steps;
     private int calories;
+    private int distance;
     private float weight;
     private float height;
     private int age;
@@ -15,9 +16,10 @@ public class User implements Serializable {
 
     }
 
-    public User(int steps, int calories, float weight, float height, int age, short exerciseTime, String username) {
+    public User(int steps, int calories, int distance, float weight, float height, int age, short exerciseTime, String username) {
         this.steps = steps;
         this.calories = calories;
+        this.distance = distance;
         this.weight = weight;
         this.height = height;
         this.age = age;
@@ -65,5 +67,11 @@ public class User implements Serializable {
     }
     public String getUsername() {
         return username;
+    }
+    public void updateDistance(int distance) {
+        this.distance = distance;
+    }
+    public int getDistance() {
+        return distance;
     }
 }

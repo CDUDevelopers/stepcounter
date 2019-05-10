@@ -51,8 +51,11 @@ public class homeScreen extends AppCompatActivity {
         Intent gattServiceIntent = new Intent(this, BTService.class);
         bindService(gattServiceIntent, serviceConnection, BIND_AUTO_CREATE);
 
-        //update the weight on screen to the users stored weight
+        //update the numbers on screen to the users stored values
         updateWeightIndication();
+        updateStepDisplay();
+        updateCalorieDisplay();
+        updateDistanceDisplay();
     }
     //todo update onResume and onPause methods to account for broadcast reciver
     //runs when the page is brought to the foreground of the device screen
@@ -106,7 +109,6 @@ public class homeScreen extends AppCompatActivity {
 
     private void updateWeightIndication() {
         TextView weightView = findViewById(R.id.currentWeightDisplay);
-        //weightView.setText("");
         //Todo Check Null pointer exceptions handling
         weightView.setText(user.getWeight() + "kg");
     }
@@ -116,8 +118,20 @@ public class homeScreen extends AppCompatActivity {
         intent.putExtra("userData", user);
         startActivity(intent);
     }
-    //Todo auto updating step counter
-    //todo auto updating calories (note will not work but can be made before step counter is written)
+    //Todo auto updating step counter(add monthly)
+    private void updateStepDisplay() {
+        TextView dailyStepView = findViewById(R.id.dailyStepCountTextview);
+        dailyStepView.setText("Steps Today:\n" + user.getSteps());
+    }
+    private void updateCalorieDisplay() {
+        TextView dailyCalorieView = findViewById(R.id.dailyCaloriesTextview);
+        dailyCalorieView.setText("Calories Today:\n" + user.getCalories());
+    }
+    private void updateDistanceDisplay() {
+        TextView dailyDistanceView = findViewById(R.id.dailyDistanceTextview);
+        dailyDistanceView.setText("Distance Today(m):\n" + user.getDistance());
+    }
+
 
     private final BroadcastReceiver updateReciver = new BroadcastReceiver() {
         @Override
@@ -125,10 +139,13 @@ public class homeScreen extends AppCompatActivity {
             String action = intent.getAction();
             if (action.equals(BTService.stepCountUpdateString)) {
                 user.updateSteps(intent.getIntExtra("Steps", 0));
+                user.updateCalories(intent.getIntExtra("Calories", 0));
+                user.updateDistance(intent.getIntExtra("Distance", 0));
                 //todo use step data
-                int temp = user.getSteps();
-                System.out.println("temp");
-            } else {
+                updateStepDisplay();
+                updateCalorieDisplay();
+                updateDistanceDisplay();
+            }else {
                 System.out.println("broadcast receiver error");
             }
             //todo on successful connect go home

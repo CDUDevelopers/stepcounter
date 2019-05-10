@@ -49,11 +49,15 @@ public class BTService extends Service {
         Intent intent = new Intent(action);
 
         if (action.equals(stepCountUpdateString)) {
-                //todo test variables(remove)
-                byte[] data = characteristic.getValue();
-                int steps = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 0);
+            //todo test variables(remove)
+            byte[] data = characteristic.getValue();
+            int steps = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, 0);
+            int calories = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, 6);
+            int distance = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, 3);
 
-                intent.putExtra("Steps", steps);
+            intent.putExtra("Steps", steps);
+            intent.putExtra("Calories", calories);
+            intent.putExtra("Distance", distance);
         }else {
             //todo error check (remove)
             System.out.println("error");
