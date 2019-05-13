@@ -1,0 +1,351 @@
+package com.example.stepcounterapp;
+
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCallback;
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
+import android.bluetooth.BluetoothManager;
+import android.bluetooth.BluetoothProfile;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
+import android.nfc.Tag;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Looper;
+import android.os.Message;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.UUID;
+
+public class BluetoothConnectionScreen extends AppCompatActivity implements BluetoothAdapter.LeScanCallback{
+    private User user;
+    private BluetoothManager btManager;
+    private BluetoothAdapter btadapter;
+    private BluetoothGatt btGatt;
+    private ArrayList<BluetoothDevice> deviceArray;
+    private ArrayList<String> deviceNameArray;
+    private final String tag = BluetoothConnectionScreen.class.getSimpleName();
+    private BTService btService;
+
+    ListView deviceList;
+    TextView connectedDeviceName;
+    Button scanButton;
+
+    private static final int stepCountUpdate = 1;
+
+    private final static UUID configDescriptor = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
+    private final static UUID rcsService = UUID.fromString("00001814-0000-1000-8000-00805f9b34fb");
+    private final static UUID rcsMeasurment = UUID.fromString("00002a53-0000-1000-8000-00805f9b34fb");
+    private final static UUID stepCounterBasedCount = UUID.fromString("00001068-0000-1000-8000-00805f9b34fb");
+    private final static UUID batteryService = UUID.fromString("0000180f-0000-1000-8000-00805f9b34fb");
+    private final static UUID stepService = UUID.fromString("0000feea-0000-1000-8000-00805f9b34fb");
+    private final static UUID stepChar = UUID.fromString("0000fee1-0000-1000-8000-00805f9b34fb");
+
+    /*  **/
+
+    private final ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            btService = ((BTService.LocalBinder) service).getService();
+            if (btService.needStart()) {
+                btService.start((BluetoothManager) getSystemService(BLUETOOTH_SERVICE));
+            }
+
+            //attempt auto-connect
+            if (btService.getDeviceAddress() != null) {
+                btService.gattConnect(btService.getDeviceAddress());
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            btService = null;
+        }
+    };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_bluetooth_connection_screen);
+
+        // pass user data from previous screen
+        Intent i = getIntent();
+        user = (User)i.getSerializableExtra("userData");
+
+
+        btManager = (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
+        btadapter = btManager.getAdapter();
+
+
+        deviceArray = new ArrayList<BluetoothDevice>();
+        deviceNameArray = new ArrayList<String>();
+
+        //set page elements as variables
+        deviceList = findViewById(R.id.deviceList);
+        connectedDeviceName = findViewById(R.id.connectedDeviceNameDisplay);
+        scanButton = findViewById(R.id.scanButton);
+
+        //bind the service that handles the bluetooth
+        Intent gattServiceIntent = new Intent(this, BTService.class);
+        bindService(gattServiceIntent, serviceConnection, BIND_AUTO_CREATE);
+
+        // add listener to the scan button on the bluetooth connection screen
+        scanButton.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startScan();
+            }
+        });
+
+        // add listener to the items in the device list on the bluetooth connection screen
+        deviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //stop the current scan
+                handler.removeCallbacks(runnableStopScan);
+                stopScan();
+                //try to connect to the selected device
+                BluetoothDevice device = deviceArray.get(position);
+                Log.i(tag, "Attempting to connect to " + device.getName());
+
+                if (device != null) {
+                    Intent intent = new Intent(BluetoothConnectionScreen.this, homeScreen.class);
+                    intent.putExtra("Device address", device.getAddress());
+                    intent.putExtra("userData", user);
+
+                    if (btService != null) {
+                        if (!btService.isGattConnected()) {
+                            btService.gattConnect(device.getAddress());
+                        }
+                        btService.setDeviceAddress(device.getAddress());
+                        System.out.println("temp");
+                    }else {
+                        System.out.println("btService not initialised");
+                    }
+                    startActivity(intent);
+                }
+                //todo set device name page element to the devices name after the connection succeeds
+                //todo at some point try to connect to the watch and update the step count late at night so the data isnt lost
+            }
+        });
+    }
+
+    //runs when the page is brought to the foreground of the device screen
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        registerReceiver(updateReciver, generateIntentFilter());
+        if (btService != null) {
+            btService.gattConnect(btService.getDeviceAddress());
+        }
+        //todo add this to all onResume callbacks
+        if(btadapter == null || !btadapter.isEnabled()){//check bluetooth
+            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivity(intent);
+            finish();
+        }
+        if(!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)){//check LE bluetooth
+            Toast.makeText(this, "Low Energy Bluetooth not Supported", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+    }
+
+    //runs when the page is removed from te foreground of the device screen
+    @Override
+    protected void onPause() {
+        //todo add this to all onPause callbacks
+        super.onPause();
+        unregisterReceiver(updateReciver);
+        //stop any unfired callbacks and stop scanning
+        handler.removeCallbacks(runnableStartScan);
+        handler.removeCallbacks(runnableStopScan);
+        btadapter.stopLeScan(this);
+    }
+
+    //runs when the activity is closed either trough the app closing or navigating to another screen
+    @Override
+    protected void onStop() {
+        //todo possibly remove this if decide to move bt code somewhere else
+
+        super.onStop();
+        //if still connected to a gatt server disconnect
+        if (btGatt != null) {
+            btGatt.disconnect();
+            btGatt = null;
+        }
+    }
+
+    //runs whenever a device is detected during a LE bluetooth scan
+    @Override
+    public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord) {//callback for whenever a new device is detected
+        Log.i(tag, "New LE bluetooth device found: " + device.getName() + " @ " + device.getAddress());
+
+        //check if the device found has already been listed
+        if(!deviceArray.contains(device)){
+            //if it has not been listed put it in the device array
+            deviceArray.add(device);
+            //then check if a name is available and either get it or if it is not available set the default name
+            if (device.getName() != null) {
+                deviceNameArray.add(device.getName());
+            }else {
+                deviceNameArray.add("Unknown Device");
+            }
+        }
+
+        //put the contents of the array into the list on the page
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, deviceNameArray);
+        deviceList.setAdapter(arrayAdapter);
+
+    }
+
+    //the callback that allows us to override the methods the gatt server will call
+   /* private BluetoothGattCallback gattCallback = new BluetoothGattCallback() {
+
+        //runs when the connection state changes i.e. connects disconnects or fails
+        @Override
+        public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+            if (newState == BluetoothProfile.STATE_CONNECTED) {
+                Log.i(tag, "Gatt server connection successful");
+
+                btGatt.discoverServices();
+            }else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+                Log.i(tag, "Gatt server disconnected");
+
+            }
+            //todo what happens when the connection fails
+        }
+
+        //runs when the gatt server successfully finishes discovering services(might be when they are discovered but it gets them all at once)
+        @Override
+        public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+            BluetoothGattCharacteristic characteristic;
+            characteristic = gatt.getService(stepService).getCharacteristic(stepChar);
+            //local notifications
+            gatt.setCharacteristicNotification(characteristic, true);
+            //remote notifications
+            BluetoothGattDescriptor descriptor = characteristic.getDescriptor(configDescriptor);
+            descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+            gatt.writeDescriptor(descriptor);
+        }
+    //runs when a characteristic is read by the client
+        @Override
+        public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+            super.onCharacteristicRead(gatt, characteristic, status);
+            //todo is this override necessary(i dont think it gets called for us)?
+        }
+
+        //runs when a characteristic that is set to notify changes(server calls client)
+        @Override
+        public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
+            if(characteristic.getUuid().equals(stepChar)){
+                //todo test variables(remove)
+                byte[] data = characteristic.getValue();
+                int steps = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 0);
+
+                //resynchronises the characteristic callback to the main thread so the program can use it
+                handler.sendMessage(Message.obtain(null, stepCountUpdate, characteristic));
+            }
+        }
+    };**/
+
+    //runnable function calls that can be delayed as required
+    //todo might get rid of runnable start method dont think i use it anywhere
+    private Runnable runnableStopScan = new Runnable() {
+        @Override
+        public void run() {
+            stopScan();
+        }
+    };
+    private Runnable runnableStartScan = new Runnable() {
+        @Override
+        public void run() {
+            startScan();
+        }
+    };
+
+    //starts the LE scan
+    private void startScan() {
+        //todo cause the scan button to indicate that a scan is happening
+        //clear the old scan results
+        deviceArray.clear();
+        deviceNameArray.clear();
+        //start the LE scan
+        btadapter.startLeScan(this);
+        //set the scanStop() function to run 10 seconds after this function does
+        handler.postDelayed(runnableStopScan, 10000);
+        //todo add progress bar
+    }
+
+    private void stopScan() {
+        //todo return scan button to normal
+        //stop the LE scan
+        btadapter.stopLeScan(this);
+        //todo add progress bar
+    }
+
+    private Handler handler = new Handler(Looper.getMainLooper()) {
+        //runs when a message is broadcast through the handler
+        @Override
+        public void handleMessage(Message inputMessage) {
+            BluetoothGattCharacteristic characteristic;
+            //check the message has contents
+            if(inputMessage.obj != null){
+                //extract the message contents
+                characteristic = (BluetoothGattCharacteristic)inputMessage.obj;
+
+                //depending on when the message says do something
+                if (inputMessage.what == stepCountUpdate){
+                    if(characteristic.getValue() == null) {
+                        Log.i(tag, "Failed to obtain step data");
+                        return;
+                    }
+                    //todo what happens when we get the step data(function call)
+                }else {
+                    //todo error checking for message contents(remove)
+                    System.out.println("handler.what error");
+                }
+            }
+
+        }
+    };
+
+    private final BroadcastReceiver updateReciver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(BTService.stepCountUpdateString)) {
+                user.updateSteps(intent.getIntExtra("Steps", 0));
+                //todo use step data
+                int temp = user.getSteps();
+                System.out.println("temp");
+            } else {
+                System.out.println("broadcast receiver error");
+            }
+        }
+    };
+
+    private static IntentFilter generateIntentFilter() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BTService.stepCountUpdateString);
+
+        return intentFilter;
+    }
+}
