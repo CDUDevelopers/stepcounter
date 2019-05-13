@@ -181,7 +181,7 @@ public class BTService extends Service {
         if (address != null) {
             BluetoothDevice device = btadapter.getRemoteDevice(address);
             if(device != null) {
-                btGatt = device.connectGatt(this, false, gattCallback);
+                btGatt = device.connectGatt(this, true, gattCallback);
                 //todo change auto connect to true
             }
         }

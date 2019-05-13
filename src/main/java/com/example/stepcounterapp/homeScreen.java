@@ -1,6 +1,5 @@
 package com.example.stepcounterapp;
 
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -8,13 +7,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class homeScreen extends AppCompatActivity {
     private User user;
@@ -76,6 +73,9 @@ public class homeScreen extends AppCompatActivity {
         unregisterReceiver(updateReciver);
     }
 
+    //todo add onStop() or onDestroy() override
+    //todo include database update in them to save data
+
     public void stepInfoPage(View view) {
         Intent intent = new Intent(this, stepCountScreen.class);
         intent.putExtra("userData", user);
@@ -95,6 +95,7 @@ public class homeScreen extends AppCompatActivity {
     }
 
     public void weightInfoScreen(View view) {
+        //todo add a button to add a new weight measurement
         Intent intent = new Intent(this, weightScreen.class);
         intent.putExtra("userData", user);
         startActivity(intent);

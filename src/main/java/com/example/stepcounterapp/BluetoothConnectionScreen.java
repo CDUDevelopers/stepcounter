@@ -141,7 +141,6 @@ public class BluetoothConnectionScreen extends AppCompatActivity implements Blue
                     }
                     startActivity(intent);
                 }
-                //todo set auto connect to true after testing is done
                 //todo set device name page element to the devices name after the connection succeeds
                 //todo at some point try to connect to the watch and update the step count late at night so the data isnt lost
             }

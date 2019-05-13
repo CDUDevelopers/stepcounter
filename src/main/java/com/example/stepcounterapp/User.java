@@ -7,16 +7,18 @@ public class User implements Serializable {
     private int calories;
     private int distance;
     private float weight;
-    private float height;
+    private int height;
     private int age;
-    private short exerciseTime;
+    private float exerciseTime;
     private String username;
+
+    //todo add linked bt device auto connect so can resume without reconnecting
 
     public User() {
 
     }
 
-    public User(int steps, int calories, int distance, float weight, float height, int age, short exerciseTime, String username) {
+    public User(int steps, int calories, int distance, float weight, int height, int age, float exerciseTime, String username) {
         this.steps = steps;
         this.calories = calories;
         this.distance = distance;
@@ -44,10 +46,10 @@ public class User implements Serializable {
     public float getWeight() {
         return weight;
     }
-    public void updateHeight(float height) {
+    public void updateHeight(int height) {
         this.height = height;
     }
-    public float getHeight() {
+    public int getHeight() {
         return height;
     }
     public void updateAge(int age) {
@@ -56,10 +58,10 @@ public class User implements Serializable {
     public int getAge() {
         return age;
     }
-    public void updateExerciseTime(short exerciseTime) {
+    public void updateExerciseTime(float exerciseTime) {
         this.exerciseTime = exerciseTime;
     }
-    public short getExerciseTime() {
+    public float getExerciseTime() {
         return exerciseTime;
     }
     public void updateUsername(String username) {
