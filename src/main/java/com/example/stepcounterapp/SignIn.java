@@ -9,19 +9,19 @@ import android.widget.Toast;
 
 import java.text.ParseException;
 
-public class loginScreen extends AppCompatActivity {
+public class SignIn extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_screen);
+        setContentView(R.layout.activity_signin);
     }
 // Change back to private after login fixed
     public void homePage(View view, User user) {
         //Todo add SQL login and pull data from memory then add to the user object to pass
         //Todo add check for session in each onCreate call i.e. if (user.username = null) {go to login};
 
-        Intent intent = new Intent(this, homeScreen.class);
+        Intent intent = new Intent(this, Main.class);
         intent.putExtra("userData", user);
         startActivity(intent);
     }
@@ -34,7 +34,7 @@ public class loginScreen extends AppCompatActivity {
         EditText passwordEntry = findViewById(R.id.passwordEntry);
         String password = passwordEntry.getText().toString();
 
-        UserDatabase db = new UserDatabase(loginScreen.this);
+        UserDatabase db = new UserDatabase(SignIn.this);
         db.open();
 
         loginSuccess = db.Login(username, password);
@@ -56,7 +56,7 @@ public class loginScreen extends AppCompatActivity {
     }
 
     public void createAccountPage(View view) {
-        Intent intent = new Intent(this, createUserLogin.class);
+        Intent intent = new Intent(this, SignUp.class);
 
         startActivity(intent);
     }

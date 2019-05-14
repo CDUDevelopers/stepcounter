@@ -13,7 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
-public class homeScreen extends AppCompatActivity {
+public class Main extends AppCompatActivity {
     private User user;
     private BTService btService;
 
@@ -40,7 +40,7 @@ public class homeScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home_screen);
+        setContentView(R.layout.activity_main);
         Intent i = getIntent();
         user = (User)i.getSerializableExtra("userData");
 
@@ -83,7 +83,7 @@ public class homeScreen extends AppCompatActivity {
     }
 
     public void bluetoothPage(View view) {
-        Intent intent = new Intent(this, BluetoothConnectionScreen.class);
+        Intent intent = new Intent(this, BluetoothConnectionSetup.class);
         intent.putExtra("userData", user);
         startActivity(intent);
     }

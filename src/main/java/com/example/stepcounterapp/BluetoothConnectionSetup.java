@@ -3,11 +3,8 @@ package com.example.stepcounterapp;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
-import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothManager;
-import android.bluetooth.BluetoothProfile;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -15,7 +12,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
-import android.nfc.Tag;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -34,14 +30,14 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class BluetoothConnectionScreen extends AppCompatActivity implements BluetoothAdapter.LeScanCallback{
+public class BluetoothConnectionSetup extends AppCompatActivity implements BluetoothAdapter.LeScanCallback{
     private User user;
     private BluetoothManager btManager;
     private BluetoothAdapter btadapter;
     private BluetoothGatt btGatt;
     private ArrayList<BluetoothDevice> deviceArray;
     private ArrayList<String> deviceNameArray;
-    private final String tag = BluetoothConnectionScreen.class.getSimpleName();
+    private final String tag = BluetoothConnectionSetup.class.getSimpleName();
     private BTService btService;
 
     ListView deviceList;
@@ -83,7 +79,7 @@ public class BluetoothConnectionScreen extends AppCompatActivity implements Blue
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bluetooth_connection_screen);
+        setContentView(R.layout.activity_bluetooth_connection_setup);
 
         // pass user data from previous screen
         Intent i = getIntent();
@@ -126,7 +122,7 @@ public class BluetoothConnectionScreen extends AppCompatActivity implements Blue
                 Log.i(tag, "Attempting to connect to " + device.getName());
 
                 if (device != null) {
-                    Intent intent = new Intent(BluetoothConnectionScreen.this, homeScreen.class);
+                    Intent intent = new Intent(BluetoothConnectionSetup.this, Main.class);
                     intent.putExtra("Device address", device.getAddress());
                     intent.putExtra("userData", user);
 
