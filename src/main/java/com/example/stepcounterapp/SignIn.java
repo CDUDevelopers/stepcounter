@@ -29,9 +29,9 @@ public class SignIn extends AppCompatActivity {
     public void submitLogin(View view) {//todo test login method
         Boolean loginSuccess = false;
 
-        EditText usernameEntry = findViewById(R.id.usernameEntry);
+        EditText usernameEntry = findViewById(R.id.usernameTextbox);
         String username = usernameEntry.getText().toString();
-        EditText passwordEntry = findViewById(R.id.passwordEntry);
+        EditText passwordEntry = findViewById(R.id.passwordTextbox);
         String password = passwordEntry.getText().toString();
 
         UserDatabase db = new UserDatabase(SignIn.this);

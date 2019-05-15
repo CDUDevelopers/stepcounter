@@ -8,7 +8,6 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-import com.example.step_counter_app.R;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
