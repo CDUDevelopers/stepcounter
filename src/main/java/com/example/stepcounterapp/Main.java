@@ -76,61 +76,57 @@ public class Main extends AppCompatActivity {
     //todo add onStop() or onDestroy() override
     //todo include database update in them to save data
 
-    public void stepInfoPage(View view) {
-        Intent intent = new Intent(this, stepCountScreen.class);
-        intent.putExtra("userData", user);
-        startActivity(intent);
-    }
+    //----------------------------------------------------------------------------
+    public void walking(View v) {
+        Intent i = new Intent(Main.this, Walking.class);
+        i.putExtra("userData", user);//todo other side
+        startActivity(i);
 
-    public void bluetoothPage(View view) {
+    }
+    public void hiking(View v) {
+        Intent i = new Intent(Main.this, Hiking.class);
+        i.putExtra("userData", user);//todo other side
+        startActivity(i);
+
+    }
+    public void running(View v) {
+        Intent i = new Intent(Main.this, Running.class);
+        i.putExtra("userData", user);//todo other side
+        startActivity(i);
+
+    }
+    public void edit(View v) {
+        Intent i = new Intent(Main.this, Profile.class);
+        i.putExtra("userData", user);//todo other side
+        startActivity(i);
+
+    }
+    //-------------------------------------------------------------------------------
+
+    public void bluetoothPage(View view) {//todo add and link the button for this
         Intent intent = new Intent(this, BluetoothConnectionSetup.class);
-        intent.putExtra("userData", user);
-        startActivity(intent);
-    }
-
-    public void caloireInfoPage(View view) {
-        Intent intent = new Intent(this, calorieScreen.class);
-        intent.putExtra("userData", user);
-        startActivity(intent);
-    }
-
-    public void weightInfoScreen(View view) {
-        //todo add a button to add a new weight measurement
-        Intent intent = new Intent(this, weightScreen.class);
-        intent.putExtra("userData", user);
-        startActivity(intent);
-    }
-
-    public void exerciseInfoPage(View view) {
-        Intent intent = new Intent(this, exerciseScreen.class);
         intent.putExtra("userData", user);
         startActivity(intent);
     }
     //------------------------------------------------------------------------------------
 
     private void updateWeightIndication() {
-        TextView weightView = findViewById(R.id.currentWeightDisplay);
+        TextView weightView = findViewById(R.id.weightDisplay);
         //Todo Check Null pointer exceptions handling
         weightView.setText(user.getWeight() + "kg");
     }
-    public void recordNewWeightPage(View view) {
-        //Todo Make weight entry screen and functions
-        Intent intent = new Intent(this, stepCountScreen.class);
-        intent.putExtra("userData", user);
-        startActivity(intent);
-    }
     //Todo auto updating step counter(add monthly)
     private void updateStepDisplay() {
-        TextView dailyStepView = findViewById(R.id.dailyStepCountTextview);
-        dailyStepView.setText("Steps Today:\n" + user.getSteps());
+       //TextView dailyStepView = findViewById(R.id.dailyStepCountTextview);
+       //dailyStepView.setText("Steps Today:\n" + user.getSteps());
     }
     private void updateCalorieDisplay() {
-        TextView dailyCalorieView = findViewById(R.id.dailyCaloriesTextview);
-        dailyCalorieView.setText("Calories Today:\n" + user.getCalories());
+        //TextView dailyCalorieView = findViewById(R.id.dailyCaloriesTextview);
+        //dailyCalorieView.setText("Calories Today:\n" + user.getCalories());
     }
     private void updateDistanceDisplay() {
-        TextView dailyDistanceView = findViewById(R.id.dailyDistanceTextview);
-        dailyDistanceView.setText("Distance Today(m):\n" + user.getDistance());
+        //TextView dailyDistanceView = findViewById(R.id.dailyDistanceTextview);
+        //dailyDistanceView.setText("Distance Today(m):\n" + user.getDistance());
     }
 
 
