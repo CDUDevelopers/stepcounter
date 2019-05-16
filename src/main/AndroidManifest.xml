@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.step_counter_app">
+    package="com.example.stepcounterapp">
 
-    <!--
-         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
-         Google Maps Android API v2, but you must specify either coarse or fine
-         location permissions for the 'MyLocation' functionality.
-    -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
@@ -16,39 +15,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <!--
-             The API key for Google Maps-based APIs is defined as a string resource.
-             (See the file "res/values/google_maps_api.xml").
-             Note that the API key is linked to the encryption key used to sign the APK.
-             You need a different API key for each encryption key, including the release key that is used to
-             sign the APK for publishing.
-             You can define the keys for the debug and release targets in src/debug/ and src/release/.
-        -->
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
-
-        <activity
-            android:name=".MapsActivity2"
-            android:label="@string/title_activity_maps2"></activity>
-        <activity android:name=".graph" />
-        <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_maps" />
-        <activity android:name=".signinActivity" />
-        <activity android:name=".signupActivity" />
-        <activity android:name=".profileActivity" />
-        <activity android:name=".runningActivity" />
-        <activity android:name=".hikingActivity" />
-        <activity android:name=".walkingActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".BluetoothConnectionSetup"></activity>
+        <activity android:name=".Graph" />
+        <activity android:name=".Hiking" />
+        <activity android:name=".Walking" />
+        <activity android:name=".MapsActivity" />
+        <activity android:name=".MapsActivity2" />
+        <activity android:name=".Profile" />
+        <activity android:name=".Running" />
+        <activity android:name=".Main" />
+        <activity android:name=".SignUp" />
+        <activity android:name=".SignIn" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service android:enabled="true" android:name=".BTService" />
     </application>
 
 </manifest>
