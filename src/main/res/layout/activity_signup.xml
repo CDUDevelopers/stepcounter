@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:onClick="submitNewUser"
             android:padding="20dp"
-            android:text="Button" />
+            android:text="Create Account" />
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

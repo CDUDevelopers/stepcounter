@@ -113,7 +113,11 @@ public class Main extends AppCompatActivity {
     private void updateWeightIndication() {
         TextView weightView = findViewById(R.id.weightDisplay);
         //Todo Check Null pointer exceptions handling
-        weightView.setText(user.getWeight() + "kg");
+        if (user.getWeight() != -1) {
+            weightView.setText("Weight: " + user.getWeight() + "kg");
+        } else {
+            weightView.setText("Weight not recorded yet.");
+        }
     }
     //Todo auto updating step counter(add monthly)
     private void updateStepDisplay() {

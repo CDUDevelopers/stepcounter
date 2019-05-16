@@ -1,5 +1,6 @@
 package com.example.stepcounterapp;
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
@@ -16,6 +17,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -137,10 +139,16 @@ public class BluetoothConnectionSetup extends AppCompatActivity implements Bluet
                     }
                     startActivity(intent);
                 }
-                //todo set device name page element to the devices name after the connection succeeds
-                //todo at some point try to connect to the watch and update the step count late at night so the data isnt lost
+                //todo remove device name textbox as it is not used
             }
         });
+
+        //if location access is not given request it
+        //todo test permission requesting
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
+
     }
 
     //runs when the page is brought to the foreground of the device screen
@@ -148,23 +156,26 @@ public class BluetoothConnectionSetup extends AppCompatActivity implements Bluet
     protected void onResume() {
         super.onResume();
 
-        registerReceiver(updateReciver, generateIntentFilter());
-        if (btService != null) {
-            btService.gattConnect(btService.getDeviceAddress());
-        }
         //todo add this to all onResume callbacks
-        if(btadapter == null || !btadapter.isEnabled()){//check bluetooth
+        //check bluetooth
+        if(btadapter == null || !btadapter.isEnabled()){
             Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivity(intent);
             finish();
         }
-        if(!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)){//check LE bluetooth
+        //check LE bluetooth
+        if(!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)){
             Toast.makeText(this, "Low Energy Bluetooth not Supported", Toast.LENGTH_SHORT).show();
             finish();
         }
+        //rebind the BT service and attempt to connect to gatt server
+        registerReceiver(updateReciver, generateIntentFilter());
+        if (btService != null) {
+            btService.gattConnect(btService.getDeviceAddress());
+        }
     }
 
-    //runs when the page is removed from te foreground of the device screen
+    //runs when the page is removed from the foreground of the device screen
     @Override
     protected void onPause() {
         //todo add this to all onPause callbacks
