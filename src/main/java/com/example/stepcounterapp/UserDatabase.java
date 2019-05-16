@@ -161,8 +161,8 @@ public class UserDatabase {
                 user.updateCalories(0);
                 user.updateDistance(0);
                 user.updateExerciseTime(0);
-                updateUserDB(user);
             }
+            updateUserDB(user);
         }
         return user;
     }
@@ -251,6 +251,40 @@ public class UserDatabase {
             user = saveUser(user);
         }
         return user;
+    }
+
+    public boolean changeUsername(String oldUsername, String newUsername, User user) {
+        Cursor result = db.rawQuery("select * from " + LOGIN_TABLE + " where " + LOGIN_COLUMN1 + " = ?;", new String[]{newUsername});
+        Boolean cont = false;
+
+        if (result != null) {
+            if(result.getCount() == 0)
+            {
+                cont = true;
+            }else {
+                return false;
+            }
+        }
+        if (cont) {
+            Cursor cursor = db.rawQuery("select * from " + USER_TABLE + " where " + USER_COLUMN1 + " = ?;", new String[] {oldUsername});
+            cursor.moveToFirst();
+            ContentValues values = new ContentValues();
+            values.put(LOGIN_COLUMN1, newUsername);
+            values.put(LOGIN_COLUMN2, result.getString(1));
+            db.update(LOGIN_TABLE, values, LOGIN_COLUMN1 + " = ?", new String[] {oldUsername});
+
+            values = new ContentValues();
+            values.put(USER_COLUMN1, newUsername);
+
+            user.updateUsername(newUsername);
+            try {
+                saveUser(user);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        return true;
     }
 
     //gets the date without the time

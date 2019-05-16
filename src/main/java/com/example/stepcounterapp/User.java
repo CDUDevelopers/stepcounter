@@ -11,14 +11,16 @@ public class User implements Serializable {
     private int age;
     private float exerciseTime;
     private String username;
+    private String gender;
 
     //todo add linked bt device auto connect so can resume without reconnecting
+    //todo add age to user and to database
 
     public User() {
 
     }
 
-    public User(int steps, int calories, int distance, float weight, int height, int age, float exerciseTime, String username) {
+    public User(int steps, int calories, int distance, float weight, int height, int age, float exerciseTime, String username, String gender) {
         this.steps = steps;
         this.calories = calories;
         this.distance = distance;
@@ -27,6 +29,7 @@ public class User implements Serializable {
         this.age = age;
         this.exerciseTime = exerciseTime;
         this.username = username;
+        this.gender = gender;
     }
     public void updateSteps(int steps) {
         this.steps = steps;
@@ -75,5 +78,11 @@ public class User implements Serializable {
     }
     public int getDistance() {
         return distance;
+    }
+    public void updateGender(String gender) {
+        this.gender = gender;
+    }
+    public String getGender() {
+        return gender;
     }
 }
