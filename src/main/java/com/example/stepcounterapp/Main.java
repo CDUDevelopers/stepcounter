@@ -117,16 +117,16 @@ public class Main extends AppCompatActivity {
     }
     //Todo auto updating step counter(add monthly)
     private void updateStepDisplay() {
-       //TextView dailyStepView = findViewById(R.id.dailyStepCountTextview);
-       //dailyStepView.setText("Steps Today:\n" + user.getSteps());
+       TextView dailyStepView = findViewById(R.id.daliyStepsTextbox);
+       dailyStepView.setText("Steps Today:\n" + user.getSteps());
     }
     private void updateCalorieDisplay() {
-        //TextView dailyCalorieView = findViewById(R.id.dailyCaloriesTextview);
-        //dailyCalorieView.setText("Calories Today:\n" + user.getCalories());
+        TextView dailyCalorieView = findViewById(R.id.daliyCaloriesTextbox);
+        dailyCalorieView.setText("Calories Today:\n" + user.getCalories());
     }
     private void updateDistanceDisplay() {
-        //TextView dailyDistanceView = findViewById(R.id.dailyDistanceTextview);
-        //dailyDistanceView.setText("Distance Today(m):\n" + user.getDistance());
+        TextView dailyDistanceView = findViewById(R.id.daliyDistanceTextbox);
+        dailyDistanceView.setText("Distance Today(m):\n" + user.getDistance());
     }
 
 

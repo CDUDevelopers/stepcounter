@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Step_Counter_APP</string>
+    <string name="app_name">StepCounterApp</string>
 
     <string name="walking_prompt">Choose a walking Activities</string>
 
