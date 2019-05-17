@@ -1,13 +1,11 @@
 package com.example.stepcounterapp;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import java.text.ParseException;
 
 public class SignIn extends AppCompatActivity {
 
@@ -40,13 +38,9 @@ public class SignIn extends AppCompatActivity {
 
         if (loginSuccess) {
             User user;
-            try {
-                user = db.populateUserData(username);
-                db.close();
-                homePage(view, user);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            user = db.populateUserData(username);
+            db.close();
+            homePage(view, user);
         } else {
             db.close();
             usernameEntry.setText("");
