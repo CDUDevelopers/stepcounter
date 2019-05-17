@@ -53,6 +53,13 @@
             android:textAlignment="center"
             android:textSize="32dp" />
 
+        <Button
+            android:id="@+id/bluetoothButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="bluetoothPage"
+            android:text="Bluetooth" />
+
         <TextView
             android:id="@+id/textView4"
             android:layout_width="match_parent"
@@ -143,10 +150,12 @@
                         android:layout_marginBottom="132dp"
                         android:onClick="edit"
                         android:text="Edit" />
+
                 </RelativeLayout>
             </FrameLayout>
 
         </FrameLayout>
 
     </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>

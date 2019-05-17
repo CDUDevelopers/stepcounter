@@ -106,6 +106,7 @@ public class Main extends AppCompatActivity {
     }
     //-------------------------------------------------------------------------------
 
+    //todo move bluetooth button to a better place
     public void bluetoothPage(View view) {//todo add and link the button for this
         Intent intent = new Intent(this, BluetoothConnectionSetup.class);
         intent.putExtra("userData", user);
