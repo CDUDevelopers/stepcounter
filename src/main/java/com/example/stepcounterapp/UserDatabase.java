@@ -48,8 +48,12 @@ public class UserDatabase {
 
     private static final int DATABASE_VERSION = 5;
 
+    private static final long DAY_IN_MS = 1000 * 60 * 60 * 24;
+
     private DatabaseHelper DBHelper;
     private SQLiteDatabase db;
+
+    //----------------------------------------------------------------------------------------------
 
     public UserDatabase(Context ctx) {
         DBHelper = new DatabaseHelper(ctx);
@@ -79,24 +83,24 @@ public class UserDatabase {
         }
     }
 
-
     public void open() throws SQLException {
         db = DBHelper.getWritableDatabase();
     }
-
 
     public void close() {
         DBHelper.close();
     }
 
+    //----------------------------------------------------------------------------------------------
+
     public int AddUser(String username, String password) throws SQLException {
         //return -1 for existing user, 0 for successful completion, and 1 for other errors
-        Cursor result;
+        Cursor accounts;
         Boolean cont = false;
 
-        result = db.rawQuery("select * from " + LOGIN_TABLE + " where " + LOGIN_COLUMN1 + " = ?;", new String[]{username});
-        if (result != null) {
-            if(result.getCount() == 0)
+        accounts = db.rawQuery("select * from " + LOGIN_TABLE + " where " + LOGIN_COLUMN1 + " = ?;", new String[]{username});
+        if (accounts != null) {
+            if(accounts.getCount() == 0)
             {
                 cont = true;
             }else {
@@ -132,9 +136,9 @@ public class UserDatabase {
     }
 
     public boolean Login(String username, String password) throws SQLException {
-        Cursor cursor = db.rawQuery("select * from " + LOGIN_TABLE + " where " + LOGIN_COLUMN1 + " = ? and " + LOGIN_COLUMN2 + " = ?;", new String[]{username,password});
-        if (cursor != null) {
-            if(cursor.getCount() > 0)
+        Cursor accounts = db.rawQuery("select * from " + LOGIN_TABLE + " where " + LOGIN_COLUMN1 + " = ? and " + LOGIN_COLUMN2 + " = ?;", new String[]{username,password});
+        if (accounts != null) {
+            if(accounts.getCount() > 0)
             {
                 return true;
             }
@@ -142,25 +146,48 @@ public class UserDatabase {
         return false;
     }
 
-    public User saveUser(User user) {
-        Cursor cursor = db.rawQuery("select * from " + USER_TABLE + " where " + USER_COLUMN1 + " = ?;", new String[] {user.getUsername()});
+    public User populateUserData(String username) {
+        User user = new User();
+        Cursor userData = db.rawQuery("select * from " + USER_TABLE + " where " + USER_COLUMN1 + " = ?;", new String[] {username});
 
-        if (cursor != null) {
-            cursor.moveToFirst();
+        if (userData != null) {
+            userData.moveToFirst();
+            user.updateUsername(username);
+            user.updateSteps(userData.getInt(1));
+            user.updateCalories(userData.getInt(2));
+            user.updateDistance(userData.getInt(3));
+            user.updateWeight(userData.getFloat(4));
+            user.updateHeight(userData.getInt(5));
+            user.updateAge(userData.getInt(6));
+            user.updateExerciseTime(userData.getFloat(7));
+
+            if (!saveUser(user)) {
+                System.out.println("user information database write failed");
+            }
+        }
+        return user;
+    }
+
+    //----------------------------------------------------------------------------------------------
+
+    public Boolean saveUser(User user) {
+        Cursor userData = db.rawQuery("select * from " + USER_TABLE + " where " + USER_COLUMN1 + " = ?;", new String[] {user.getUsername()});
+
+        if (userData != null) {
+            userData.moveToFirst();
             Date date = getDateNoTime();
 
-            //todo handle exception here
-            //todo check if this fires incorrectly because of time but not date
             SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
             Date dataDate = null;
+
             try {
-                dataDate = format.parse(cursor.getString(8));
+                dataDate = format.parse(userData.getString(8));
             } catch (ParseException e) {
                 e.printStackTrace();
                 System.out.println("tried to retrieve an incorrectly formatted date from the user database (Table users)");
                 //todo fix the broken date if possible
+                return false;
             }
-
             if (date.after(dataDate)) {
                 updateHistoricDB(user);
                 user.updateSteps(0);
@@ -170,16 +197,16 @@ public class UserDatabase {
             }
             updateUserDB(user);
         }
-        return user;
+        return true;
     }
 
-    public void updateUserDB(User user) {//todo handle exception here
+    public void updateUserDB(User user) {
         Date date = getDateNoTime();
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
         String currentDate = format.format(date);
 
-        Cursor cursor = db.rawQuery("select * from " + USER_TABLE + " where " + USER_COLUMN1 + " = ?;", new String[] {user.getUsername()});
-        if (cursor != null) {
+        Cursor UserData = db.rawQuery("select * from " + USER_TABLE + " where " + USER_COLUMN1 + " = ?;", new String[] {user.getUsername()});
+        if (UserData != null) {
             ContentValues values = new ContentValues();
             values.put(USER_COLUMN1, user.getUsername());
             values.put(USER_COLUMN2, user.getSteps());
@@ -207,30 +234,29 @@ public class UserDatabase {
     }
 
     public void updateHistoricDB(User user) {
-        Cursor cursor = db.rawQuery("select * from " + USER_TABLE + " where " + USER_COLUMN1 + " = ?;", new String[] {user.getUsername()});
-        cursor.moveToFirst();
-        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ?" + " and " + HISTORIC_COLUMN2 + " = ?;", new String[] {user.getUsername(), cursor.getString(8)});
+        Cursor userData = db.rawQuery("select * from " + USER_TABLE + " where " + USER_COLUMN1 + " = ?;", new String[] {user.getUsername()});
+        userData.moveToFirst();
+        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ?" + " and " + HISTORIC_COLUMN2 + " = ?;", new String[] {user.getUsername(), userData.getString(8)});
         if (hist != null) {
             if(hist.getCount() == 1) {
-                //todo dont know if casting all variables as objects instead of strings will work
                 ContentValues values = new ContentValues();
                 values.put(HISTORIC_COLUMN1, user.getUsername());
-                values.put(HISTORIC_COLUMN2, cursor.getString(8));
-                values.put(HISTORIC_COLUMN3, cursor.getInt(1));
-                values.put(HISTORIC_COLUMN4, cursor.getInt(2));
-                values.put(HISTORIC_COLUMN5, cursor.getInt(3));
-                values.put(HISTORIC_COLUMN6, cursor.getFloat(4));
-                values.put(HISTORIC_COLUMN8, cursor.getFloat(7));
-                db.update(HISTORIC_TABLE, values, HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " = ?", new String[] {user.getUsername(), cursor.getString(8)});
+                values.put(HISTORIC_COLUMN2, userData.getString(8));
+                values.put(HISTORIC_COLUMN3, userData.getInt(1));
+                values.put(HISTORIC_COLUMN4, userData.getInt(2));
+                values.put(HISTORIC_COLUMN5, userData.getInt(3));
+                values.put(HISTORIC_COLUMN6, userData.getFloat(4));
+                values.put(HISTORIC_COLUMN8, userData.getFloat(7));
+                db.update(HISTORIC_TABLE, values, HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " = ?", new String[] {user.getUsername(), userData.getString(8)});
             } else if (hist.getCount() == 0) {
                 ContentValues values = new ContentValues();
                 values.put(HISTORIC_COLUMN1, user.getUsername());
-                values.put(HISTORIC_COLUMN2, cursor.getString(8));
-                values.put(HISTORIC_COLUMN3, cursor.getInt(1));
-                values.put(HISTORIC_COLUMN4, cursor.getInt(2));
-                values.put(HISTORIC_COLUMN5, cursor.getInt(3));
-                values.put(HISTORIC_COLUMN6, cursor.getFloat(4));
-                values.put(HISTORIC_COLUMN8, cursor.getFloat(7));
+                values.put(HISTORIC_COLUMN2, userData.getString(8));
+                values.put(HISTORIC_COLUMN3, userData.getInt(1));
+                values.put(HISTORIC_COLUMN4, userData.getInt(2));
+                values.put(HISTORIC_COLUMN5, userData.getInt(3));
+                values.put(HISTORIC_COLUMN6, userData.getFloat(4));
+                values.put(HISTORIC_COLUMN8, userData.getFloat(7));
                 db.insert(HISTORIC_TABLE, null, values);
 
             } else {
@@ -239,32 +265,14 @@ public class UserDatabase {
         }
     }
 
-    public User populateUserData(String username) {
-        User user = new User();
-        //todo fetch user info add to user object
-        Cursor cursor = db.rawQuery("select * from " + USER_TABLE + " where " + USER_COLUMN1 + " = ?;", new String[] {username});
-        if (cursor != null) {
-            cursor.moveToFirst();
-            user.updateUsername(username);
-            user.updateSteps(cursor.getInt(1));
-            user.updateCalories(cursor.getInt(2));
-            user.updateDistance(cursor.getInt(3));
-            user.updateWeight(cursor.getFloat(4));
-            user.updateHeight(cursor.getInt(5));
-            user.updateAge(cursor.getInt(6));
-            user.updateExerciseTime(cursor.getFloat(7));
-
-            user = saveUser(user);
-        }
-        return user;
-    }
+    //----------------------------------------------------------------------------------------------
 
     public boolean changeUsername(String oldUsername, String newUsername, User user) {
-        Cursor result = db.rawQuery("select * from " + LOGIN_TABLE + " where " + LOGIN_COLUMN1 + " = ?;", new String[]{newUsername});
+        Cursor accounts = db.rawQuery("select * from " + LOGIN_TABLE + " where " + LOGIN_COLUMN1 + " = ?;", new String[]{newUsername});
         Boolean cont = false;
 
-        if (result != null) {
-            if(result.getCount() == 0)
+        if (accounts != null) {
+            if(accounts.getCount() == 0)
             {
                 cont = true;
             }else {
@@ -272,11 +280,11 @@ public class UserDatabase {
             }
         }
         if (cont) {
-            Cursor cursor = db.rawQuery("select * from " + USER_TABLE + " where " + USER_COLUMN1 + " = ?;", new String[] {oldUsername});
-            cursor.moveToFirst();
+            Cursor userData = db.rawQuery("select * from " + USER_TABLE + " where " + USER_COLUMN1 + " = ?;", new String[] {oldUsername});
+            userData.moveToFirst();
             ContentValues values = new ContentValues();
             values.put(LOGIN_COLUMN1, newUsername);
-            values.put(LOGIN_COLUMN2, result.getString(1));
+            values.put(LOGIN_COLUMN2, accounts.getString(1));
             db.update(LOGIN_TABLE, values, LOGIN_COLUMN1 + " = ?", new String[] {oldUsername});
 
             values = new ContentValues();
@@ -288,7 +296,7 @@ public class UserDatabase {
         return true;
     }
 
-    //gets the date without the time
+    //gets the date without the time value
     private Date getDateNoTime() {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -296,5 +304,124 @@ public class UserDatabase {
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
         return calendar.getTime();
+    }
+
+    //----------------------------------------------------------------------------------------------
+
+    public int getWeeklySteps(User user) {
+        Date date = getDateNoTime();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+        String currentDate = format.format(date);
+        date = new Date(getDateNoTime().getTime() - (7 * DAY_IN_MS));
+        String previousDate = format.format(date);
+
+        //todo check the between statement is correctly bound
+        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between " + currentDate + " and " + previousDate + ";", new String[] {user.getUsername()});
+        hist.moveToFirst();
+        int total = 0;
+        int i = 0;
+
+        while (i > hist.getCount()) {
+            total = total + hist.getInt(2);
+            hist.moveToNext();
+        }
+        return total;
+    }
+    public int getMonthlySteps(User user) {
+        Date date = getDateNoTime();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+        String currentDate = format.format(date);
+        date = new Date(getDateNoTime().getTime() - (30 * DAY_IN_MS));
+        String previousDate = format.format(date);
+
+        //todo check the between statement is correctly bound
+        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between " + currentDate + " and " + previousDate + ";", new String[] {user.getUsername()});
+        hist.moveToFirst();
+        int total = 0;
+        int i = 0;
+
+        while (i > hist.getCount()) {
+            total = total + hist.getInt(2);
+            hist.moveToNext();
+        }
+        return total;
+    }
+
+    public int getWeeklyCalories(User user) {
+        Date date = getDateNoTime();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+        String currentDate = format.format(date);
+        date = new Date(getDateNoTime().getTime() - (7 * DAY_IN_MS));
+        String previousDate = format.format(date);
+
+        //todo check the between statement is correctly bound
+        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between " + currentDate + " and " + previousDate + ";", new String[] {user.getUsername()});
+        hist.moveToFirst();
+        int total = 0;
+        int i = 0;
+
+        while (i > hist.getCount()) {
+            total = total + hist.getInt(3);
+            hist.moveToNext();
+        }
+        return total;
+    }
+    public int getMonthlyCalories(User user) {
+        Date date = getDateNoTime();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+        String currentDate = format.format(date);
+        date = new Date(getDateNoTime().getTime() - (30 * DAY_IN_MS));
+        String previousDate = format.format(date);
+
+        //todo check the between statement is correctly bound
+        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between " + currentDate + " and " + previousDate + ";", new String[] {user.getUsername()});
+        hist.moveToFirst();
+        int total = 0;
+        int i = 0;
+
+        while (i > hist.getCount()) {
+            total = total + hist.getInt(3);
+            hist.moveToNext();
+        }
+        return total;
+    }
+
+    public int getWeeklyDistance(User user) {
+        Date date = getDateNoTime();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+        String currentDate = format.format(date);
+        date = new Date(getDateNoTime().getTime() - (7 * DAY_IN_MS));
+        String previousDate = format.format(date);
+
+        //todo check the between statement is correctly bound
+        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between " + currentDate + " and " + previousDate + ";", new String[] {user.getUsername()});
+        hist.moveToFirst();
+        int total = 0;
+        int i = 0;
+
+        while (i > hist.getCount()) {
+            total = total + hist.getInt(4);
+            hist.moveToNext();
+        }
+        return total;
+    }
+    public int getMonthlyDistance(User user) {
+        Date date = getDateNoTime();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+        String currentDate = format.format(date);
+        date = new Date(getDateNoTime().getTime() - (30 * DAY_IN_MS));
+        String previousDate = format.format(date);
+
+        //todo check the between statement is correctly bound
+        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between " + currentDate + " and " + previousDate + ";", new String[] {user.getUsername()});
+        hist.moveToFirst();
+        int total = 0;
+        int i = 0;
+
+        while (i > hist.getCount()) {
+            total = total + hist.getInt(4);
+            hist.moveToNext();
+        }
+        return total;
     }
 }

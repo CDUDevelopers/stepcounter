@@ -65,12 +65,12 @@ public class Profile extends AppCompatActivity {
                 user.updateHeight(height);
             }
         }
+
         db.saveUser(user);
         db.close();
+
         Intent intent = new Intent(this, Main.class);
         intent.putExtra("userData", user);
         startActivity(intent);
     }
-
-
 }
