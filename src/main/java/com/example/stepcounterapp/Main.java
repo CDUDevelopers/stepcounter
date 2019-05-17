@@ -107,13 +107,12 @@ public class Main extends AppCompatActivity {
     //-------------------------------------------------------------------------------
 
     //todo move bluetooth button to a better place
-    public void bluetoothPage(View view) {//todo add and link the button for this
+    public void bluetoothPage(View view) {
         Intent intent = new Intent(this, BluetoothConnectionSetup.class);
         intent.putExtra("userData", user);
         startActivity(intent);
     }
     //------------------------------------------------------------------------------------
-    //Todo Check Null pointer exceptions handling
     private void updateWeightIndication() {
         TextView weightView = findViewById(R.id.weightDisplay);
         if (user.getWeight() != -1) {
@@ -139,7 +138,7 @@ public class Main extends AppCompatActivity {
         }
     }
     //----------------------------------------------------------------
-    //Todo auto updating step counter(add monthly)
+    //Todo auto updating step counter(add weekly and monthly)
     private void updateStepDisplay() {
        TextView dailyStepView = findViewById(R.id.daliyStepsTextbox);
        dailyStepView.setText("Steps Today:\n" + user.getSteps());

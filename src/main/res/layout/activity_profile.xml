@@ -35,45 +35,45 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint="Name"
             android:inputType="textPersonName"
-            android:padding="20dp"
-            android:text="Name" />
+            android:padding="20dp" />
 
         <EditText
             android:id="@+id/genderChangeTextbox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint="Gender"
             android:inputType="text"
-            android:padding="20dp"
-            android:text="Gender" />
+            android:padding="20dp" />
 
         <EditText
             android:id="@+id/ageChangeTextbox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint="Age"
             android:inputType="number"
-            android:padding="20dp"
-            android:text="Age" />
+            android:padding="20dp" />
 
         <EditText
             android:id="@+id/weightChangeTextbox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint="Weight(kg)"
             android:inputType="numberDecimal"
-            android:padding="20dp"
-            android:text="Weight" />
+            android:padding="20dp" />
 
         <EditText
             android:id="@+id/heightChangeTextbox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint="Height(cm)"
             android:inputType="numberDecimal"
-            android:padding="20dp"
-            android:text="Height" />
+            android:padding="20dp" />
 
         <Button
             android:id="@+id/profileUpdateButton"

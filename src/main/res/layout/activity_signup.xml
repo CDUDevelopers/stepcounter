@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".SignUp">
 
+    <!-- todo change edittext contents to hints -->
+
     <LinearLayout
         android:layout_width="395dp"
         android:layout_height="715dp"

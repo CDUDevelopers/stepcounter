@@ -22,6 +22,7 @@ public class UserDatabase {
     private static final String LOGIN_COLUMN1 = "username";
     private static final String LOGIN_COLUMN2 = "password";
 
+    //todo add gender to the relevant places
     private static final String USER_TABLE = "users";
     private static final String USER_COLUMN1 = "username";
     private static final String USER_COLUMN2 = "steps";
@@ -42,6 +43,8 @@ public class UserDatabase {
     private static final String HISTORIC_COLUMN6 = "weight";
     private static final String HISTORIC_COLUMN7 = "id";
     private static final String HISTORIC_COLUMN8 = "exerciseTime";
+
+    //todo add exercise and map path tables
 
     private static final int DATABASE_VERSION = 5;
 
@@ -104,15 +107,12 @@ public class UserDatabase {
             ContentValues values = new ContentValues();
             values.put(LOGIN_COLUMN1, username);
             values.put(LOGIN_COLUMN2, password);
-            //todo depide on and add any more data that will be required for login
             db.insert(LOGIN_TABLE, null, values);
 
-            //todo check the formatting on the date (think its fine double check)
             Date date = getDateNoTime();
             SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
             String currentDate = format.format(date);
 
-            //todo if a value is -1 it has not been provided
             values = new ContentValues();
             values.put(USER_COLUMN1, username);
             values.put(USER_COLUMN2, 0);
@@ -123,7 +123,6 @@ public class UserDatabase {
             values.put(USER_COLUMN7, -1);
             values.put(USER_COLUMN8, 0.0);
             values.put(USER_COLUMN9, currentDate);
-            //todo same as above
             db.insert(USER_TABLE, null, values);
 
             return 0;
@@ -143,7 +142,7 @@ public class UserDatabase {
         return false;
     }
 
-    public User saveUser(User user) throws ParseException {
+    public User saveUser(User user) {
         Cursor cursor = db.rawQuery("select * from " + USER_TABLE + " where " + USER_COLUMN1 + " = ?;", new String[] {user.getUsername()});
 
         if (cursor != null) {
@@ -153,7 +152,14 @@ public class UserDatabase {
             //todo handle exception here
             //todo check if this fires incorrectly because of time but not date
             SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-            Date dataDate = format.parse(cursor.getString(8));
+            Date dataDate = null;
+            try {
+                dataDate = format.parse(cursor.getString(8));
+            } catch (ParseException e) {
+                e.printStackTrace();
+                System.out.println("tried to retrieve an incorrectly formatted date from the user database (Table users)");
+                //todo fix the broken date if possible
+            }
 
             if (date.after(dataDate)) {
                 updateHistoricDB(user);
@@ -167,7 +173,7 @@ public class UserDatabase {
         return user;
     }
 
-    public void updateUserDB(User user) throws ParseException {//todo handle exception here
+    public void updateUserDB(User user) {//todo handle exception here
         Date date = getDateNoTime();
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
         String currentDate = format.format(date);
@@ -233,7 +239,7 @@ public class UserDatabase {
         }
     }
 
-    public User populateUserData(String username) throws ParseException {
+    public User populateUserData(String username) {
         User user = new User();
         //todo fetch user info add to user object
         Cursor cursor = db.rawQuery("select * from " + USER_TABLE + " where " + USER_COLUMN1 + " = ?;", new String[] {username});
@@ -277,12 +283,7 @@ public class UserDatabase {
             values.put(USER_COLUMN1, newUsername);
 
             user.updateUsername(newUsername);
-            try {
-                saveUser(user);
-            } catch (ParseException e) {
-                e.printStackTrace();
-                return false;
-            }
+            saveUser(user);
         }
         return true;
     }

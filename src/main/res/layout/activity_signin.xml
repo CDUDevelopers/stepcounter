@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".SignIn">
 
+    <!-- todo change edittext contents to hints -->
 
     <FrameLayout
         android:layout_width="395dp"
