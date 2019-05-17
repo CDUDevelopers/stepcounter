@@ -1,21 +1,20 @@
 package com.example.stepcounterapp;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-
-import java.util.ArrayList;
+import android.widget.Button;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
+
+import java.util.ArrayList;
 public class Walking extends AppCompatActivity {
-
-
-
+    private User user;
 
     BarChart chart ;
     ArrayList<BarEntry> BARENTRY ;
@@ -23,10 +22,16 @@ public class Walking extends AppCompatActivity {
     BarDataSet Bardataset ;
     BarData BARDATA ;
 
+    private int startSteps;
+    private int startCalories;
+    private int startDistance;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_walking);
+        Intent i = getIntent();
+        user = (User)i.getSerializableExtra("userData");
 
         chart = (BarChart) findViewById(R.id.chart1);
 
@@ -48,6 +53,22 @@ public class Walking extends AppCompatActivity {
 
         chart.animateY(3000);
 
+        //------------------------------------------------------------------------------------------
+
+        final Button toggleExerciseButton = findViewById(R.id.toggleWalkingButton);
+        toggleExerciseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (toggleExerciseButton.getText().toString().equals("Start")) {
+
+                }
+                toggleExerciseButton.setText("Pause");
+                startSteps = user.getSteps();
+                startCalories = user.getCalories();
+                startDistance = user.getDistance();
+
+            }
+        });
     }
     public void AddValuesToBARENTRY(){
 
@@ -72,6 +93,13 @@ public class Walking extends AppCompatActivity {
     public void checkin(View v) {
         Intent i = new Intent(Walking.this,MapsActivity2.class);
         startActivity(i);
+
+    }
+
+    private void startExercise() {
+
+    }
+    private void stopExercise() {
 
     }
 }

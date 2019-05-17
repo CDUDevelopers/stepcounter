@@ -39,7 +39,7 @@ public class Main extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //todo override the onBackPressed to disable using the ack button on relevant pages
+        //todo override the onBackPressed to disable using the back button on relevant pages
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent i = getIntent();

@@ -44,6 +44,23 @@ public class UserDatabase {
     private static final String HISTORIC_COLUMN7 = "id";
     private static final String HISTORIC_COLUMN8 = "exerciseTime";
 
+    private static final String EXERCISE_TABLE = "exercise";
+    private static final String EXERCISE_COLUMN1 = "username";
+    private static final String EXERCISE_COLUMN2 = "date";
+    private static final String EXERCISE_COLUMN3 = "steps";
+    private static final String EXERCISE_COLUMN4 = "calories";
+    private static final String EXERCISE_COLUMN5 = "distance";
+    private static final String EXERCISE_COLUMN6 = "id";
+    private static final String EXERCISE_COLUMN7 = "exerciseTime";
+
+    private static final String MAP_TABLE = "mapRoute";
+    private static final String MAP_COLUMN1 = "id";
+    private static final String MAP_COLUMN2 = "routeID";
+    private static final String MAP_COLUMN3 = "latCoord";
+    private static final String MAP_COLUMN4 = "longCoord";
+    private static final String MAP_COLUMN5 = "distance";
+    private static final String MAP_COLUMN6 = "time";
+
     //todo add exercise and map path tables
 
     private static final int DATABASE_VERSION = 5;
@@ -308,6 +325,34 @@ public class UserDatabase {
 
     //----------------------------------------------------------------------------------------------
 
+    //todo test day fetch
+    public int getDaysSteps(User user, int offset) {
+        Boolean cont = false;
+        int total = 0;
+        Date date;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+
+        if (offset > 0) {
+            cont =true;
+        } else if (offset == 0) {
+            return user.getSteps();
+        }
+        if (cont) {
+            date = new Date(getDateNoTime().getTime() - (offset * DAY_IN_MS));
+            String targetDate = format.format(date);
+
+            //todo check the between statement is correctly bound
+            Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " = ?;", new String[] {user.getUsername(), targetDate});
+            hist.moveToFirst();
+
+            int i = 0;
+            while (i > hist.getCount()) {
+                total = total + hist.getInt(2);
+                hist.moveToNext();
+            }
+        }
+        return total;
+    }
     public int getWeeklySteps(User user) {
         Date date = getDateNoTime();
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
@@ -347,6 +392,33 @@ public class UserDatabase {
         return total;
     }
 
+    public int getDaysCalories(User user, int offset) {
+        Boolean cont = false;
+        int total = 0;
+        Date date;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+
+        if (offset > 0) {
+            cont =true;
+        } else if (offset == 0) {
+            return user.getCalories();
+        }
+        if (cont) {
+            date = new Date(getDateNoTime().getTime() - (offset * DAY_IN_MS));
+            String targetDate = format.format(date);
+
+            //todo check the between statement is correctly bound
+            Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " = ?;", new String[] {user.getUsername(), targetDate});
+            hist.moveToFirst();
+
+            int i = 0;
+            while (i > hist.getCount()) {
+                total = total + hist.getInt(3);
+                hist.moveToNext();
+            }
+        }
+        return total;
+    }
     public int getWeeklyCalories(User user) {
         Date date = getDateNoTime();
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
@@ -386,6 +458,33 @@ public class UserDatabase {
         return total;
     }
 
+    public int getDaysDistance(User user, int offset) {
+        Boolean cont = false;
+        int total = 0;
+        Date date;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+
+        if (offset > 0) {
+            cont =true;
+        } else if (offset == 0) {
+            return user.getDistance();
+        }
+        if (cont) {
+            date = new Date(getDateNoTime().getTime() - (offset * DAY_IN_MS));
+            String targetDate = format.format(date);
+
+            //todo check the between statement is correctly bound
+            Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " = ?;", new String[] {user.getUsername(), targetDate});
+            hist.moveToFirst();
+
+            int i = 0;
+            while (i > hist.getCount()) {
+                total = total + hist.getInt(4);
+                hist.moveToNext();
+            }
+        }
+        return total;
+    }
     public int getWeeklyDistance(User user) {
         Date date = getDateNoTime();
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
