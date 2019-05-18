@@ -9,7 +9,7 @@ public class User implements Serializable {
     private float weight;
     private int height;
     private int age;
-    private float exerciseTime;
+    private long exerciseTime;
     private String username;
     private String gender;
 
@@ -20,7 +20,7 @@ public class User implements Serializable {
 
     }
 
-    public User(int steps, int calories, int distance, float weight, int height, int age, float exerciseTime, String username, String gender) {
+    public User(int steps, int calories, int distance, float weight, int height, int age, long exerciseTime, String username, String gender) {
         this.steps = steps;
         this.calories = calories;
         this.distance = distance;
@@ -61,10 +61,10 @@ public class User implements Serializable {
     public int getAge() {
         return age;
     }
-    public void updateExerciseTime(float exerciseTime) {
+    public void updateExerciseTime(long exerciseTime) {
         this.exerciseTime = exerciseTime;
     }
-    public float getExerciseTime() {
+    public long getExerciseTime() {
         return exerciseTime;
     }
     public void updateUsername(String username) {

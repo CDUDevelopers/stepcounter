@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 
 public class UserDatabase {
@@ -59,8 +60,6 @@ public class UserDatabase {
     private static final String MAP_COLUMN2 = "routeID";
     private static final String MAP_COLUMN3 = "latCoord";
     private static final String MAP_COLUMN4 = "longCoord";
-    private static final String MAP_COLUMN5 = "distance";
-    private static final String MAP_COLUMN6 = "time";
 
     private static final long DAY_IN_MS = 1000 * 60 * 60 * 24;
 
@@ -82,9 +81,10 @@ public class UserDatabase {
         @Override
         public void onCreate(SQLiteDatabase db) {
             db.execSQL("create table if not exists " + LOGIN_TABLE + " (" + LOGIN_COLUMN1 + " text primary key not null, " + LOGIN_COLUMN2 + " text not null);");
-            db.execSQL("create table if not exists " + USER_TABLE + " (" + USER_COLUMN1 + " text primary key not null, " + USER_COLUMN2 + " integer, " + USER_COLUMN3 +" integer, " + USER_COLUMN4 + " integer, " + USER_COLUMN5 + " real, " + USER_COLUMN6 + " integer, " + USER_COLUMN7 + " integer, " + USER_COLUMN8 + " real, " + USER_COLUMN9 + " text);");
-            db.execSQL("create table if not exists " + HISTORIC_TABLE + " (" + HISTORIC_COLUMN7 + " integer primary key, " + HISTORIC_COLUMN1 + " text not null, " + HISTORIC_COLUMN2 + " text not null, " + HISTORIC_COLUMN3 + " integer, " + HISTORIC_COLUMN4 +" integer, " + HISTORIC_COLUMN5 + " integer, " + HISTORIC_COLUMN6 + " real, "  + HISTORIC_COLUMN8 + " real);");
-
+            db.execSQL("create table if not exists " + USER_TABLE + " (" + USER_COLUMN1 + " text primary key not null, " + USER_COLUMN2 + " integer, " + USER_COLUMN3 +" integer, " + USER_COLUMN4 + " integer, " + USER_COLUMN5 + " real, " + USER_COLUMN6 + " integer, " + USER_COLUMN7 + " integer, " + USER_COLUMN8 + " integer, " + USER_COLUMN9 + " text);");
+            db.execSQL("create table if not exists " + HISTORIC_TABLE + " (" + HISTORIC_COLUMN7 + " integer primary key, " + HISTORIC_COLUMN1 + " text not null, " + HISTORIC_COLUMN2 + " text not null, " + HISTORIC_COLUMN3 + " integer, " + HISTORIC_COLUMN4 +" integer, " + HISTORIC_COLUMN5 + " integer, " + HISTORIC_COLUMN6 + " real, "  + HISTORIC_COLUMN8 + " integer);");
+            db.execSQL("create table if not exists " + EXERCISE_TABLE + " (" + EXERCISE_COLUMN6 + " integer primary key, " + EXERCISE_COLUMN1 + " text not null, " + EXERCISE_COLUMN2 + " text not null, " + EXERCISE_COLUMN3 + " integer, " + EXERCISE_COLUMN4 +" integer, " + EXERCISE_COLUMN5 + " integer, " + EXERCISE_COLUMN7 + " integer);");
+            db.execSQL("create table if not exists " + MAP_TABLE + " (" + MAP_COLUMN1 + " integer primary key not null, " + MAP_COLUMN2 + " integer not null, " + MAP_COLUMN3 + " integer, " + MAP_COLUMN4 + " integer);");
         }
 
         @Override
@@ -93,6 +93,8 @@ public class UserDatabase {
             db.execSQL("DROP TABLE IF EXISTS " + LOGIN_TABLE  + ";");
             db.execSQL("DROP TABLE IF EXISTS " + USER_TABLE + ";");
             db.execSQL("DROP TABLE IF EXISTS "  + HISTORIC_TABLE + ";");
+            db.execSQL("DROP TABLE IF EXISTS "  + EXERCISE_TABLE + ";");
+            db.execSQL("DROP TABLE IF EXISTS "  + MAP_TABLE + ";");
             onCreate(db);
         }
     }
@@ -139,7 +141,7 @@ public class UserDatabase {
             values.put(USER_COLUMN5, -1);
             values.put(USER_COLUMN6, -1);
             values.put(USER_COLUMN7, -1);
-            values.put(USER_COLUMN8, 0.0);
+            values.put(USER_COLUMN8, 0);
             values.put(USER_COLUMN9, currentDate);
             db.insert(USER_TABLE, null, values);
 
@@ -173,7 +175,7 @@ public class UserDatabase {
             user.updateWeight(userData.getFloat(4));
             user.updateHeight(userData.getInt(5));
             user.updateAge(userData.getInt(6));
-            user.updateExerciseTime(userData.getFloat(7));
+            user.updateExerciseTime(userData.getLong(7));
 
             if (!saveUser(user)) {
                 System.out.println("user information database write failed");
@@ -276,6 +278,42 @@ public class UserDatabase {
             } else {
                 System.out.println("historic table returned more than 1 entry for a person on the same day");
             }
+        }
+    }
+
+    public void updateExerciseDB(String username, int steps, int calories, int distance, long exerciseTime, List<Integer> lat, List<Integer> lon) {
+        Date date = getDateNoTime();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+        String currentDate = format.format(date);
+
+        ContentValues values = new ContentValues();
+        values.put(EXERCISE_COLUMN1, username);
+        values.put(EXERCISE_COLUMN2, currentDate);
+        values.put(EXERCISE_COLUMN3, steps);
+        values.put(EXERCISE_COLUMN4, calories);
+        values.put(EXERCISE_COLUMN5, distance);
+        values.put(EXERCISE_COLUMN7, exerciseTime);
+        db.insert(EXERCISE_TABLE, null, values);
+
+        //todo test this query
+        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN6 +" = (select max(" + EXERCISE_COLUMN6 + ") from " + EXERCISE_TABLE + ");", new String[] {});
+        exerc.moveToFirst();
+        int routeID = exerc.getInt(5);
+        updateMapDB(routeID, lat, lon);
+
+    }
+
+    private void updateMapDB(int routeID, List<Integer> lat, List<Integer> lon) {
+        ContentValues values;
+        int i = 0;
+
+        while (i > lat.size()) {
+            values = new ContentValues();
+            values.put(MAP_COLUMN2, routeID);
+            values.put(MAP_COLUMN3, lat.get(i));
+            values.put(MAP_COLUMN4, lon.get(i));
+            db.insert(MAP_TABLE, null, values);
+            i++;
         }
     }
 

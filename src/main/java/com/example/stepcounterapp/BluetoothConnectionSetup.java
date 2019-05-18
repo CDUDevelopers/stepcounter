@@ -13,13 +13,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,7 +30,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class BluetoothConnectionSetup extends AppCompatActivity implements BluetoothAdapter.LeScanCallback{
     private User user;
@@ -47,14 +46,6 @@ public class BluetoothConnectionSetup extends AppCompatActivity implements Bluet
     Button scanButton;
 
     private static final int stepCountUpdate = 1;
-
-    private final static UUID configDescriptor = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
-    private final static UUID rcsService = UUID.fromString("00001814-0000-1000-8000-00805f9b34fb");
-    private final static UUID rcsMeasurment = UUID.fromString("00002a53-0000-1000-8000-00805f9b34fb");
-    private final static UUID stepCounterBasedCount = UUID.fromString("00001068-0000-1000-8000-00805f9b34fb");
-    private final static UUID batteryService = UUID.fromString("0000180f-0000-1000-8000-00805f9b34fb");
-    private final static UUID stepService = UUID.fromString("0000feea-0000-1000-8000-00805f9b34fb");
-    private final static UUID stepChar = UUID.fromString("0000fee1-0000-1000-8000-00805f9b34fb");
 
     /*  **/
 
