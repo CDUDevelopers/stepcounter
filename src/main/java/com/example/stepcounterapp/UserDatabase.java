@@ -17,6 +17,7 @@ import java.util.Date;
 public class UserDatabase {
     private static final String TAG = "User Database";
     private static final String DB_NAME = "UserDatabase.db";
+    private static final int DATABASE_VERSION = 5;
 
     private static final String LOGIN_TABLE = "logins";
     private static final String LOGIN_COLUMN1 = "username";
@@ -60,10 +61,6 @@ public class UserDatabase {
     private static final String MAP_COLUMN4 = "longCoord";
     private static final String MAP_COLUMN5 = "distance";
     private static final String MAP_COLUMN6 = "time";
-
-    //todo add exercise and map path tables
-
-    private static final int DATABASE_VERSION = 5;
 
     private static final long DAY_IN_MS = 1000 * 60 * 60 * 24;
 
@@ -285,6 +282,7 @@ public class UserDatabase {
     //----------------------------------------------------------------------------------------------
 
     public boolean changeUsername(String oldUsername, String newUsername, User user) {
+        //todo fix this to account for extra tables
         Cursor accounts = db.rawQuery("select * from " + LOGIN_TABLE + " where " + LOGIN_COLUMN1 + " = ?;", new String[]{newUsername});
         Boolean cont = false;
 
@@ -523,4 +521,8 @@ public class UserDatabase {
         }
         return total;
     }
+
+    //----------------------------------------------------------------------------------------------
+
+
 }
