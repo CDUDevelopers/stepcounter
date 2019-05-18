@@ -18,7 +18,7 @@ import java.util.List;
 public class UserDatabase {
     private static final String TAG = "User Database";
     private static final String DB_NAME = "UserDatabase.db";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
 
     private static final String LOGIN_TABLE = "logins";
     private static final String LOGIN_COLUMN1 = "username";
@@ -281,7 +281,7 @@ public class UserDatabase {
         }
     }
 
-    public void updateExerciseDB(String username, int steps, int calories, int distance, long exerciseTime, List<Integer> lat, List<Integer> lon) {
+    public void updateExerciseDB(String username, int steps, int calories, int distance, long exerciseTime/*, List<Integer> lat, List<Integer> lon**/) {
         Date date = getDateNoTime();
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
         String currentDate = format.format(date);
@@ -293,14 +293,10 @@ public class UserDatabase {
         values.put(EXERCISE_COLUMN4, calories);
         values.put(EXERCISE_COLUMN5, distance);
         values.put(EXERCISE_COLUMN7, exerciseTime);
-        db.insert(EXERCISE_TABLE, null, values);
+        long routeID = db.insert(EXERCISE_TABLE, null, values);
 
-        //todo test this query
-        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN6 +" = (select max(" + EXERCISE_COLUMN6 + ") from " + EXERCISE_TABLE + ");", new String[] {});
-        exerc.moveToFirst();
-        int routeID = exerc.getInt(5);
-        updateMapDB(routeID, lat, lon);
-
+        //todo uncomment this method when rajan get the maps working
+        //updateMapDB(routeID, lat, lon);
     }
 
     private void updateMapDB(int routeID, List<Integer> lat, List<Integer> lon) {

@@ -21,6 +21,8 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
+import java.util.Date;
+
 public class Walking extends AppCompatActivity {
     private User user;
     private BTService btService;
@@ -34,6 +36,7 @@ public class Walking extends AppCompatActivity {
     private int startSteps;
     private int startCalories;
     private int startDistance;
+    private long startTime;
     private Boolean isExercising;
     TextView stepCount;
     TextView calorieCount;
@@ -161,6 +164,7 @@ public class Walking extends AppCompatActivity {
     }
 
     private void startExercise() {
+        startTime = new Date().getTime();
         startSteps = user.getSteps();
         startCalories = user.getCalories();
         startDistance = user.getDistance();
@@ -168,6 +172,7 @@ public class Walking extends AppCompatActivity {
         //todo add any code to track gps path
     }
     private void stopExercise() {
+        long endTime = new Date().getTime() - startTime;
         int endSteps = user.getSteps() - startSteps;
         int endCalories =  user.getCalories() - startCalories;
         int endDistance =  user.getDistance() - startDistance;
@@ -176,6 +181,9 @@ public class Walking extends AppCompatActivity {
 
         UserDatabase db = new UserDatabase(this);
         db.open();
+
+        //todo add the map path to the update
+        db.updateExerciseDB(user.getUsername(), endSteps, endCalories, endDistance, endTime);
 
         db.close();
     }
