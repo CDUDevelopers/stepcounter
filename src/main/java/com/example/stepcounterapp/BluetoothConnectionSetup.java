@@ -1,5 +1,6 @@
 package com.example.stepcounterapp;
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
@@ -12,12 +13,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -28,7 +30,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class BluetoothConnectionSetup extends AppCompatActivity implements BluetoothAdapter.LeScanCallback{
     private User user;
@@ -45,14 +46,6 @@ public class BluetoothConnectionSetup extends AppCompatActivity implements Bluet
     Button scanButton;
 
     private static final int stepCountUpdate = 1;
-
-    private final static UUID configDescriptor = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
-    private final static UUID rcsService = UUID.fromString("00001814-0000-1000-8000-00805f9b34fb");
-    private final static UUID rcsMeasurment = UUID.fromString("00002a53-0000-1000-8000-00805f9b34fb");
-    private final static UUID stepCounterBasedCount = UUID.fromString("00001068-0000-1000-8000-00805f9b34fb");
-    private final static UUID batteryService = UUID.fromString("0000180f-0000-1000-8000-00805f9b34fb");
-    private final static UUID stepService = UUID.fromString("0000feea-0000-1000-8000-00805f9b34fb");
-    private final static UUID stepChar = UUID.fromString("0000fee1-0000-1000-8000-00805f9b34fb");
 
     /*  **/
 
@@ -137,10 +130,16 @@ public class BluetoothConnectionSetup extends AppCompatActivity implements Bluet
                     }
                     startActivity(intent);
                 }
-                //todo set device name page element to the devices name after the connection succeeds
-                //todo at some point try to connect to the watch and update the step count late at night so the data isnt lost
+                //todo remove device name textbox as it is not used
             }
         });
+
+        //if location access is not given request it
+        //todo test permission requesting
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
+
     }
 
     //runs when the page is brought to the foreground of the device screen
@@ -148,23 +147,26 @@ public class BluetoothConnectionSetup extends AppCompatActivity implements Bluet
     protected void onResume() {
         super.onResume();
 
-        registerReceiver(updateReciver, generateIntentFilter());
-        if (btService != null) {
-            btService.gattConnect(btService.getDeviceAddress());
-        }
         //todo add this to all onResume callbacks
-        if(btadapter == null || !btadapter.isEnabled()){//check bluetooth
+        //check bluetooth
+        if(btadapter == null || !btadapter.isEnabled()){
             Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivity(intent);
             finish();
         }
-        if(!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)){//check LE bluetooth
+        //check LE bluetooth
+        if(!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)){
             Toast.makeText(this, "Low Energy Bluetooth not Supported", Toast.LENGTH_SHORT).show();
             finish();
         }
+        //rebind the BT service and attempt to connect to gatt server
+        registerReceiver(updateReciver, generateIntentFilter());
+        if (btService != null) {
+            btService.gattConnect(btService.getDeviceAddress());
+        }
     }
 
-    //runs when the page is removed from te foreground of the device screen
+    //runs when the page is removed from the foreground of the device screen
     @Override
     protected void onPause() {
         //todo add this to all onPause callbacks

@@ -39,6 +39,7 @@ public class Main extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //todo override the onBackPressed to disable using the back button on relevant pages
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent i = getIntent();
@@ -50,6 +51,8 @@ public class Main extends AppCompatActivity {
 
         //update the numbers on screen to the users stored values
         updateWeightIndication();
+        updateHeightIndication();
+        updateAgeIndication();
         updateStepDisplay();
         updateCalorieDisplay();
         updateDistanceDisplay();
@@ -97,25 +100,45 @@ public class Main extends AppCompatActivity {
     }
     public void edit(View v) {
         Intent i = new Intent(Main.this, Profile.class);
-        i.putExtra("userData", user);//todo other side
+        i.putExtra("userData", user);
         startActivity(i);
 
     }
     //-------------------------------------------------------------------------------
 
-    public void bluetoothPage(View view) {//todo add and link the button for this
+    //todo move bluetooth button to a better place
+    public void bluetoothPage(View view) {
         Intent intent = new Intent(this, BluetoothConnectionSetup.class);
         intent.putExtra("userData", user);
         startActivity(intent);
     }
     //------------------------------------------------------------------------------------
-
     private void updateWeightIndication() {
         TextView weightView = findViewById(R.id.weightDisplay);
-        //Todo Check Null pointer exceptions handling
-        weightView.setText(user.getWeight() + "kg");
+        if (user.getWeight() != -1) {
+            weightView.setText("Weight: " + user.getWeight() + "kg");
+        } else {
+            weightView.setText("Weight not recorded yet.");
+        }
     }
-    //Todo auto updating step counter(add monthly)
+    private void updateHeightIndication() {
+        TextView weightView = findViewById(R.id.heightDisplay);
+        if (user.getWeight() != -1) {
+            weightView.setText("Height: " + user.getHeight() + "cm");
+        } else {
+            weightView.setText("Height not recorded yet.");
+        }
+    }
+    private void updateAgeIndication() {
+        TextView weightView = findViewById(R.id.ageDisplay);
+        if (user.getWeight() != -1) {
+            weightView.setText("Age: " + user.getAge());
+        } else {
+            weightView.setText("Age not recorded yet.");
+        }
+    }
+    //----------------------------------------------------------------
+    //Todo auto updating step counter(add weekly and monthly)
     private void updateStepDisplay() {
        TextView dailyStepView = findViewById(R.id.daliyStepsTextbox);
        dailyStepView.setText("Steps Today:\n" + user.getSteps());

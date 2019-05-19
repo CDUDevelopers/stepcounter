@@ -53,6 +53,19 @@
             android:textAlignment="center"
             android:textSize="32dp" />
 
+        <Button
+            android:id="@+id/bluetoothButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="bluetoothPage"
+            android:text="Bluetooth" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="edit"
+            android:text="Edit" />
+
         <TextView
             android:id="@+id/textView4"
             android:layout_width="match_parent"
@@ -126,27 +139,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <Button
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="false"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginStart="150dp"
-                        android:layout_marginLeft="147dp"
-                        android:layout_marginTop="209dp"
-                        android:layout_marginEnd="157dp"
-
-                        android:layout_marginRight="160dp"
-                        android:layout_marginBottom="132dp"
-                        android:onClick="edit"
-                        android:text="Edit" />
                 </RelativeLayout>
             </FrameLayout>
 
         </FrameLayout>
 
     </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>

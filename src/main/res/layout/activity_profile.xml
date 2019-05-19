@@ -31,56 +31,57 @@
             android:text="Profile" />
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/nameChangeTextbox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint="Name"
             android:inputType="textPersonName"
-            android:padding="20dp"
-            android:text="Name" />
+            android:padding="20dp" />
 
         <EditText
-            android:id="@+id/editText5"
+            android:id="@+id/genderChangeTextbox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:padding="20dp"
-            android:text="Gender" />
+            android:hint="Gender"
+            android:inputType="text"
+            android:padding="20dp" />
 
         <EditText
-            android:id="@+id/editText6"
+            android:id="@+id/ageChangeTextbox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:padding="20dp"
-            android:text="Age" />
+            android:hint="Age"
+            android:inputType="number"
+            android:padding="20dp" />
 
         <EditText
-            android:id="@+id/editText7"
+            android:id="@+id/weightChangeTextbox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:padding="20dp"
-            android:text="Weight" />
+            android:hint="Weight(kg)"
+            android:inputType="numberDecimal"
+            android:padding="20dp" />
 
         <EditText
-            android:id="@+id/editText8"
+            android:id="@+id/heightChangeTextbox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:padding="20dp"
-            android:text="Height" />
+            android:hint="Height(cm)"
+            android:inputType="numberDecimal"
+            android:padding="20dp" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/profileUpdateButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
+            android:onClick="submitProfileUpdate"
             android:padding="20dp"
-            android:text="Button" />
+            android:text="Update Profile" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

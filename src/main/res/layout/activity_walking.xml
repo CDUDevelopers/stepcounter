@@ -14,13 +14,13 @@
         tools:layout_editor_absoluteY="8dp">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/walkingPageTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
+            android:text="Walking"
             android:textAlignment="center"
-            android:textSize="25dp"
-            android:text="walking" />
+            android:textSize="25dp" />
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -41,49 +41,37 @@
 
         </FrameLayout>
 
-        <FrameLayout
+        <TextView
+            android:id="@+id/stepCountWalking"
             android:layout_width="match_parent"
-            android:layout_height="177dp">
+            android:layout_height="wrap_content"
+            android:text="Steps" />
 
-            <EditText
-                android:id="@+id/editText2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:padding="20dp"
-                android:text="Steps" />
+        <TextView
+            android:id="@+id/calorieCountWalking"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Caloires" />
 
-            <EditText
-                android:id="@+id/editText3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:paddingTop="70dp"
-                android:paddingBottom="20dp"
-                android:paddingLeft="20dp"
-                android:text="Calaroies" />
+        <TextView
+            android:id="@+id/distanceCountWalking"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Distance" />
 
-            <EditText
-                android:id="@+id/editText4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:paddingTop="120dp"
-                android:paddingLeft="20dp"
-                android:text="Distane" />
+        <Button
+            android:id="@+id/toggleWalkingButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Start" />
 
-        </FrameLayout>
-
-        <fragment
+        <!--  <fragment
 
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.MapFragment"
             android:layout_width="match_parent"
             android:layout_marginLeft="10dp"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent" /> -->
     </LinearLayout>
 
 

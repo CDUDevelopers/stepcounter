@@ -32,16 +32,18 @@ public class SignUp extends AppCompatActivity {
             userCreateReturn = db.AddUser(username, password);
 
             if (userCreateReturn == -1) {
-                Toast.makeText(this, "Username already taken please try another", Toast.LENGTH_SHORT);
+                Toast.makeText(this, "Username already taken please try another", Toast.LENGTH_SHORT).show();
             } else if (userCreateReturn == 0) {
-                Toast.makeText(this, "Account successful created", Toast.LENGTH_SHORT);
+                Toast.makeText(this, "Account successful created", Toast.LENGTH_SHORT).show();
+                db.close();
                 Intent intent = new Intent(this, SignIn.class);
                 startActivity(intent);
             } else {
                 System.out.println("unknown user login table error");
             }
         } else {
-            Toast.makeText(this, "Passwords do not match please try again", Toast.LENGTH_SHORT);
+            Toast.makeText(this, "Passwords do not match please try again", Toast.LENGTH_SHORT).show();
         }
+        db.close();
     }
 }
