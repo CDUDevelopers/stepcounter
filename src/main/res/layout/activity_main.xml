@@ -67,7 +67,7 @@
             android:text="Edit" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/hikingTextview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="20dp"
@@ -75,7 +75,7 @@
             android:text="Hiking" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/walkingTextview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="20dp"
@@ -83,7 +83,7 @@
             android:text="walking" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/runningTextview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="20dp"

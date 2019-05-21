@@ -81,20 +81,23 @@ public class Main extends AppCompatActivity {
 
     //----------------------------------------------------------------------------
     public void walking(View v) {
-        Intent i = new Intent(Main.this, Walking.class);
+        Intent i = new Intent(Main.this, ExerciseInformation.class);
         i.putExtra("userData", user);//todo other side
+        i.putExtra("exerciseType", "Walking");
         startActivity(i);
 
     }
     public void hiking(View v) {
-        Intent i = new Intent(Main.this, Hiking.class);
+        Intent i = new Intent(Main.this, ExerciseInformation.class);
         i.putExtra("userData", user);//todo other side
+        i.putExtra("exerciseType", "Hiking");
         startActivity(i);
 
     }
     public void running(View v) {
-        Intent i = new Intent(Main.this, Running.class);
+        Intent i = new Intent(Main.this, ExerciseInformation.class);
         i.putExtra("userData", user);//todo other side
+        i.putExtra("exerciseType", "Running");
         startActivity(i);
 
     }

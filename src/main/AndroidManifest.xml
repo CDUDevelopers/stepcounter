@@ -17,12 +17,10 @@
         android:theme="@style/AppTheme">
         <activity android:name=".BluetoothConnectionSetup"></activity>
         <activity android:name=".Graph" />
-        <activity android:name=".Hiking" />
-        <activity android:name=".Walking" />
+        <activity android:name=".ExerciseInformation" />
         <activity android:name=".MapsActivity" />
         <activity android:name=".MapsActivity2" />
         <activity android:name=".Profile" />
-        <activity android:name=".Running" />
         <activity android:name=".Main" />
         <activity android:name=".SignUp" />
         <activity android:name=".SignIn" >
