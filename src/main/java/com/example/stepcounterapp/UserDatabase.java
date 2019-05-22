@@ -10,6 +10,7 @@ import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -86,7 +87,7 @@ public class UserDatabase {
             db.execSQL("create table if not exists " + USER_TABLE + " (" + USER_COLUMN1 + " text primary key not null, " + USER_COLUMN2 + " integer, " + USER_COLUMN3 +" integer, " + USER_COLUMN4 + " integer, " + USER_COLUMN5 + " real, " + USER_COLUMN6 + " integer, " + USER_COLUMN7 + " integer, " + USER_COLUMN8 + " integer, " + USER_COLUMN9 + " text);");
             db.execSQL("create table if not exists " + HISTORIC_TABLE + " (" + HISTORIC_COLUMN7 + " integer primary key, " + HISTORIC_COLUMN1 + " text not null, " + HISTORIC_COLUMN2 + " text not null, " + HISTORIC_COLUMN3 + " integer, " + HISTORIC_COLUMN4 +" integer, " + HISTORIC_COLUMN5 + " integer, " + HISTORIC_COLUMN6 + " real, "  + HISTORIC_COLUMN8 + " integer);");
             db.execSQL("create table if not exists " + EXERCISE_TABLE + " (" + EXERCISE_COLUMN6 + " integer primary key, " + EXERCISE_COLUMN1 + " text not null, " + EXERCISE_COLUMN2 + " text not null, " + EXERCISE_COLUMN3 + " integer, " + EXERCISE_COLUMN4 +" integer, " + EXERCISE_COLUMN5 + " integer, " + EXERCISE_COLUMN7 + " integer," + EXERCISE_COLUMN8 + " text);");
-            db.execSQL("create table if not exists " + MAP_TABLE + " (" + MAP_COLUMN1 + " integer primary key not null, " + MAP_COLUMN2 + " integer not null, " + MAP_COLUMN3 + " integer, " + MAP_COLUMN4 + " integer);");
+            db.execSQL("create table if not exists " + MAP_TABLE + " (" + MAP_COLUMN1 + " integer primary key not null, " + MAP_COLUMN2 + " integer not null, " + MAP_COLUMN3 + " real, " + MAP_COLUMN4 + " real);");
         }
 
         @Override
@@ -283,7 +284,7 @@ public class UserDatabase {
         }
     }
 
-    public void updateExerciseDB(String username, int steps, int calories, int distance, long exerciseTime, String exerciseType/*, List<Integer> lat, List<Integer> lon**/) {
+    public void updateExerciseDB(String username, int steps, int calories, int distance, long exerciseTime, String exerciseType, ArrayList<Double> lat, ArrayList<Double> lng) {
         Date date = getDateNoTime();
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
         String currentDate = format.format(date);
@@ -299,10 +300,10 @@ public class UserDatabase {
         long routeID = db.insert(EXERCISE_TABLE, null, values);
 
         //todo uncomment this method when rajan get the maps working
-        //updateMapDB(routeID, lat, lon);
+        updateMapDB(routeID, lat, lng);
     }
 
-    private void updateMapDB(int routeID, List<Integer> lat, List<Integer> lon) {
+    private void updateMapDB(long routeID, ArrayList<Double> lat, ArrayList<Double> lon) {
         ContentValues values;
         int i = 0;
 

@@ -112,6 +112,8 @@ public class ExerciseInformation extends AppCompatActivity {
         unregisterReceiver(updateReciver);
     }
 
+    //todo override OnBackPressed() to go to home
+
     private void setPageContent() {
         TextView stepDay, stepWeek, stepMonth, calDay, calWeek, calMonth, distDay, distWeek, distMonth;
         stepDay = findViewById(R.id.stepCountDay);

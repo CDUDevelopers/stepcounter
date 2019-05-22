@@ -115,6 +115,25 @@ public class Main extends AppCompatActivity {
         intent.putExtra("userData", user);
         startActivity(intent);
     }
+
+    public void stepInfo(View view) {
+        Intent intent = new Intent(this, AdditionalInfo.class);
+        intent.putExtra("userData", user);
+        intent.putExtra("dataType", "Step");
+        startActivity(intent);
+    }
+    public void calInfo(View view) {
+        Intent intent = new Intent(this, AdditionalInfo.class);
+        intent.putExtra("userData", user);
+        intent.putExtra("dataType", "Calorie");
+        startActivity(intent);
+    }
+    public void distInfo(View view) {
+        Intent intent = new Intent(this, AdditionalInfo.class);
+        intent.putExtra("userData", user);
+        intent.putExtra("dataType", "Distance");
+        startActivity(intent);
+    }
     //------------------------------------------------------------------------------------
     private void updateWeightIndication() {
         TextView weightView = findViewById(R.id.weightDisplay);
@@ -148,11 +167,11 @@ public class Main extends AppCompatActivity {
     }
     private void updateCalorieDisplay() {
         TextView dailyCalorieView = findViewById(R.id.daliyCaloriesTextbox);
-        dailyCalorieView.setText("Calories Today:\n" + user.getCalories());
+        dailyCalorieView.setText("Calories Today:\n" + user.getCalories() + "kcal");
     }
     private void updateDistanceDisplay() {
         TextView dailyDistanceView = findViewById(R.id.daliyDistanceTextbox);
-        dailyDistanceView.setText("Distance Today(m):\n" + user.getDistance());
+        dailyDistanceView.setText("Distance Today:\n" + user.getDistance() + "m");
     }
 
 

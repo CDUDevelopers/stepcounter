@@ -214,56 +214,6 @@ public class BluetoothConnectionSetup extends AppCompatActivity implements Bluet
 
     }
 
-    //the callback that allows us to override the methods the gatt server will call
-   /* private BluetoothGattCallback gattCallback = new BluetoothGattCallback() {
-
-        //runs when the connection state changes i.e. connects disconnects or fails
-        @Override
-        public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
-            if (newState == BluetoothProfile.STATE_CONNECTED) {
-                Log.i(tag, "Gatt server connection successful");
-
-                btGatt.discoverServices();
-            }else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
-                Log.i(tag, "Gatt server disconnected");
-
-            }
-            //todo what happens when the connection fails
-        }
-
-        //runs when the gatt server successfully finishes discovering services(might be when they are discovered but it gets them all at once)
-        @Override
-        public void onServicesDiscovered(BluetoothGatt gatt, int status) {
-            BluetoothGattCharacteristic characteristic;
-            characteristic = gatt.getService(stepService).getCharacteristic(stepChar);
-            //local notifications
-            gatt.setCharacteristicNotification(characteristic, true);
-            //remote notifications
-            BluetoothGattDescriptor descriptor = characteristic.getDescriptor(configDescriptor);
-            descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
-            gatt.writeDescriptor(descriptor);
-        }
-    //runs when a characteristic is read by the client
-        @Override
-        public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-            super.onCharacteristicRead(gatt, characteristic, status);
-            //todo is this override necessary(i dont think it gets called for us)?
-        }
-
-        //runs when a characteristic that is set to notify changes(server calls client)
-        @Override
-        public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
-            if(characteristic.getUuid().equals(stepChar)){
-                //todo test variables(remove)
-                byte[] data = characteristic.getValue();
-                int steps = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 0);
-
-                //resynchronises the characteristic callback to the main thread so the program can use it
-                handler.sendMessage(Message.obtain(null, stepCountUpdate, characteristic));
-            }
-        }
-    };**/
-
     //runnable function calls that can be delayed as required
     //todo might get rid of runnable start method dont think i use it anywhere
     private Runnable runnableStopScan = new Runnable() {
