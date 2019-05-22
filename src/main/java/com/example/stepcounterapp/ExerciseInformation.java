@@ -142,7 +142,7 @@ public class ExerciseInformation extends AppCompatActivity {
         db.close();
     }
 
-    private void goToExerciseRecordPage(View view) {
+    public void goToExerciseRecordPage(View view) {
         Intent intent = new Intent(this, Exercise1.class);
         intent.putExtra("userData", user);
         intent.putExtra("exerciseType", pageTitle.getText().toString());

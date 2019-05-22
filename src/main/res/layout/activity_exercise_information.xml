@@ -114,6 +114,7 @@
             android:id="@+id/gotoExercisePageButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="goToExerciseRecordPage"
             android:text="Record Exercise" />
 
         <!--  <fragment

@@ -117,7 +117,12 @@ public class Exercise1 extends AppCompatActivity {
         startDistance = user.getDistance();
 
         //todo add any code to track gps path
+
+        stepCount.setText(String.valueOf(user.getSteps() - startSteps));
+        calorieCount.setText(String.valueOf(user.getCalories() - startCalories));
+        distanceCount.setText(String.valueOf(user.getDistance() - startDistance));
     }
+
     private void stopExercise() {
         long endTime = new Date().getTime() - startTime;
         int endSteps = user.getSteps() - startSteps;
@@ -134,6 +139,13 @@ public class Exercise1 extends AppCompatActivity {
 
         db.close();
     }
+
+    public void goBack(View view) {
+        //todo decide on target location
+        Intent intent = new Intent(this, ExerciseInformation.class);
+        intent.putExtra("userData", user);
+        startActivity(intent);
+    }
 //--------------------------------------------------------------------------------------------------
     private final BroadcastReceiver updateReciver = new BroadcastReceiver() {
         @Override
@@ -147,9 +159,9 @@ public class Exercise1 extends AppCompatActivity {
 
                 if (isExercising) {
                     //todo check these output correctly
-                    stepCount.setText(user.getSteps() - startSteps);
-                    calorieCount.setText(user.getCalories() - startCalories);
-                    distanceCount.setText(user.getDistance() - startDistance);
+                    stepCount.setText(String.valueOf(user.getSteps() - startSteps));
+                    calorieCount.setText(String.valueOf(user.getCalories() - startCalories));
+                    distanceCount.setText(String.valueOf(user.getDistance() - startDistance));
                 }
             }else {
                 System.out.println("broadcast receiver 'Unknown broadcast error'");

@@ -82,21 +82,21 @@ public class Main extends AppCompatActivity {
     //----------------------------------------------------------------------------
     public void walking(View v) {
         Intent i = new Intent(Main.this, ExerciseInformation.class);
-        i.putExtra("userData", user);//todo other side
+        i.putExtra("userData", user);
         i.putExtra("exerciseType", "Walking");
         startActivity(i);
 
     }
     public void hiking(View v) {
         Intent i = new Intent(Main.this, ExerciseInformation.class);
-        i.putExtra("userData", user);//todo other side
+        i.putExtra("userData", user);
         i.putExtra("exerciseType", "Hiking");
         startActivity(i);
 
     }
     public void running(View v) {
         Intent i = new Intent(Main.this, ExerciseInformation.class);
-        i.putExtra("userData", user);//todo other side
+        i.putExtra("userData", user);
         i.putExtra("exerciseType", "Running");
         startActivity(i);
 
@@ -109,7 +109,7 @@ public class Main extends AppCompatActivity {
     }
     //-------------------------------------------------------------------------------
 
-    //todo move bluetooth button to a better place
+    //todo move bluetooth button to a better place on page
     public void bluetoothPage(View view) {
         Intent intent = new Intent(this, BluetoothConnectionSetup.class);
         intent.putExtra("userData", user);

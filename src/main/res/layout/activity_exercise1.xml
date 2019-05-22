@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="title" />
-
+<!--
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:map="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
@@ -36,7 +36,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginBottom="20dp"
             tools:context=".Maps" />
-
+-->
         <Button
             android:id="@+id/toggleExerciseButton"
             android:layout_width="match_parent"
