@@ -382,9 +382,10 @@ public class UserDatabase {
             hist.moveToFirst();
 
             int i = 0;
-            while (i > hist.getCount()) {
+            while (i < hist.getCount()) {
                 total = total + hist.getInt(2);
                 hist.moveToNext();
+                i++;
             }
         }
         return total;
@@ -402,9 +403,10 @@ public class UserDatabase {
         int total = 0;
         int i = 0;
 
-        while (i > hist.getCount()) {
+        while (i < hist.getCount()) {
             total = total + hist.getInt(2);
             hist.moveToNext();
+            i++;
         }
         return total;
     }
@@ -421,9 +423,10 @@ public class UserDatabase {
         int total = 0;
         int i = 0;
 
-        while (i > hist.getCount()) {
+        while (i < hist.getCount()) {
             total = total + hist.getInt(2);
             hist.moveToNext();
+            i++;
         }
         return total;
     }
@@ -448,9 +451,10 @@ public class UserDatabase {
             hist.moveToFirst();
 
             int i = 0;
-            while (i > hist.getCount()) {
+            while (i < hist.getCount()) {
                 total = total + hist.getInt(3);
                 hist.moveToNext();
+                i++;
             }
         }
         return total;
@@ -468,9 +472,10 @@ public class UserDatabase {
         int total = 0;
         int i = 0;
 
-        while (i > hist.getCount()) {
+        while (i < hist.getCount()) {
             total = total + hist.getInt(3);
             hist.moveToNext();
+            i++;
         }
         return total;
     }
@@ -487,9 +492,10 @@ public class UserDatabase {
         int total = 0;
         int i = 0;
 
-        while (i > hist.getCount()) {
+        while (i < hist.getCount()) {
             total = total + hist.getInt(3);
             hist.moveToNext();
+            i++;
         }
         return total;
     }
@@ -514,9 +520,10 @@ public class UserDatabase {
             hist.moveToFirst();
 
             int i = 0;
-            while (i > hist.getCount()) {
+            while (i < hist.getCount()) {
                 total = total + hist.getInt(4);
                 hist.moveToNext();
+                i++;
             }
         }
         return total;
@@ -534,9 +541,10 @@ public class UserDatabase {
         int total = 0;
         int i = 0;
 
-        while (i > hist.getCount()) {
+        while (i < hist.getCount()) {
             total = total + hist.getInt(4);
             hist.moveToNext();
+            i++;
         }
         return total;
     }
@@ -553,9 +561,10 @@ public class UserDatabase {
         int total = 0;
         int i = 0;
 
-        while (i > hist.getCount()) {
+        while (i < hist.getCount()) {
             total = total + hist.getInt(4);
             hist.moveToNext();
+            i++;
         }
         return total;
     }
@@ -571,7 +580,7 @@ public class UserDatabase {
         exerc.moveToFirst();
 
         int i = 0;
-        while (i > exerc.getCount()) {
+        while (i < exerc.getCount()) {
             total = total + exerc.getInt(2);
             exerc.moveToNext();
             i++;
@@ -592,7 +601,7 @@ public class UserDatabase {
         int total = 0;
         int i = 0;
 
-        while (i > exerc.getCount()) {
+        while (i < exerc.getCount()) {
             total = total + exerc.getInt(2);
             exerc.moveToNext();
         }
@@ -611,7 +620,7 @@ public class UserDatabase {
         int total = 0;
         int i = 0;
 
-        while (i > exerc.getCount()) {
+        while (i < exerc.getCount()) {
             total = total + exerc.getInt(2);
             exerc.moveToNext();
         }
@@ -627,7 +636,7 @@ public class UserDatabase {
         exerc.moveToFirst();
 
         int i = 0;
-        while (i > exerc.getCount()) {
+        while (i < exerc.getCount()) {
             total = total + exerc.getInt(3);
             exerc.moveToNext();
             i++;
@@ -648,7 +657,7 @@ public class UserDatabase {
         int total = 0;
         int i = 0;
 
-        while (i > exerc.getCount()) {
+        while (i < exerc.getCount()) {
             total = total + exerc.getInt(3);
             exerc.moveToNext();
         }
@@ -667,7 +676,7 @@ public class UserDatabase {
         int total = 0;
         int i = 0;
 
-        while (i > exerc.getCount()) {
+        while (i < exerc.getCount()) {
             total = total + exerc.getInt(3);
             exerc.moveToNext();
         }
@@ -683,7 +692,7 @@ public class UserDatabase {
         exerc.moveToFirst();
 
         int i = 0;
-        while (i > exerc.getCount()) {
+        while (i < exerc.getCount()) {
             total = total + exerc.getInt(4);
             exerc.moveToNext();
             i++;
@@ -704,7 +713,7 @@ public class UserDatabase {
         int total = 0;
         int i = 0;
 
-        while (i > exerc.getCount()) {
+        while (i < exerc.getCount()) {
             total = total + exerc.getInt(4);
             exerc.moveToNext();
         }
@@ -723,10 +732,28 @@ public class UserDatabase {
         int total = 0;
         int i = 0;
 
-        while (i > exerc.getCount()) {
+        while (i < exerc.getCount()) {
             total = total + exerc.getInt(4);
             exerc.moveToNext();
         }
         return total;
+    }
+
+    //----------------------------------------------------------------------------------------------
+
+    public void stepCheat(int steps, int cal, int dist, int offset) {
+        Date date = new Date(getDateNoTime().getTime() - (offset * DAY_IN_MS));
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+        String currentDate = format.format(date);
+
+        ContentValues values = new ContentValues();
+        values.put(HISTORIC_COLUMN1, "username");
+        values.put(HISTORIC_COLUMN2, currentDate);
+        values.put(HISTORIC_COLUMN3, steps);
+        values.put(HISTORIC_COLUMN4, cal);
+        values.put(HISTORIC_COLUMN5, dist);
+        values.put(HISTORIC_COLUMN6, -1);
+        values.put(HISTORIC_COLUMN8, 300000);
+        db.insert(HISTORIC_TABLE, null, values);
     }
 }

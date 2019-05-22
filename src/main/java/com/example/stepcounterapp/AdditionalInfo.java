@@ -154,23 +154,56 @@ public class AdditionalInfo extends AppCompatActivity {
 
     //todo add data to these bar charts
     public void AddValuesToBARENTRY(){
+        UserDatabase db = new UserDatabase(this);
+        db.open();
 
-        BARENTRY.add(new BarEntry(2f, 0));
-        BARENTRY.add(new BarEntry(4f, 1));
-        BARENTRY.add(new BarEntry(6f, 2));
-        BARENTRY.add(new BarEntry(8f, 3));
-        BARENTRY.add(new BarEntry(7f, 4));
-        BARENTRY.add(new BarEntry(3f, 5));
+       /* db.stepCheat(100, 43, 5, 0);
+        db.stepCheat(456, 1, 63, 1);
+        db.stepCheat(243, 543, 916, 2);
+        db.stepCheat(8, 871, 231, 3);
+        db.stepCheat(45, 4397, 1735, 4);
+        db.stepCheat(1209, 215, 23813, 5);
+        db.stepCheat(24876, 21, 0, 6);**/
 
+       if (pageTitle.getText().toString().equals("Step")) {
+           BARENTRY.add(new BarEntry(db.getDaysSteps(user, 0), 0));
+           BARENTRY.add(new BarEntry(db.getDaysSteps(user, 1), 1));
+           BARENTRY.add(new BarEntry(db.getDaysSteps(user, 2), 2));
+           BARENTRY.add(new BarEntry(db.getDaysSteps(user, 3), 3));
+           BARENTRY.add(new BarEntry(db.getDaysSteps(user, 4), 4));
+           BARENTRY.add(new BarEntry(db.getDaysSteps(user, 5), 5));
+           BARENTRY.add(new BarEntry(db.getDaysSteps(user, 6), 6));
+       } else if (pageTitle.getText().toString().equals("Calorie")) {
+           BARENTRY.add(new BarEntry(db.getDaysCalories(user, 0), 0));
+           BARENTRY.add(new BarEntry(db.getDaysCalories(user, 1), 1));
+           BARENTRY.add(new BarEntry(db.getDaysCalories(user, 2), 2));
+           BARENTRY.add(new BarEntry(db.getDaysCalories(user, 3), 3));
+           BARENTRY.add(new BarEntry(db.getDaysCalories(user, 4), 4));
+           BARENTRY.add(new BarEntry(db.getDaysCalories(user, 5), 5));
+           BARENTRY.add(new BarEntry(db.getDaysCalories(user, 6), 6));
+       } else if (pageTitle.getText().toString().equals("Distance")) {
+           BARENTRY.add(new BarEntry(db.getDaysDistance(user, 0), 0));
+           BARENTRY.add(new BarEntry(db.getDaysDistance(user, 1), 1));
+           BARENTRY.add(new BarEntry(db.getDaysDistance(user, 2), 2));
+           BARENTRY.add(new BarEntry(db.getDaysDistance(user, 3), 3));
+           BARENTRY.add(new BarEntry(db.getDaysDistance(user, 4), 4));
+           BARENTRY.add(new BarEntry(db.getDaysDistance(user, 5), 5));
+           BARENTRY.add(new BarEntry(db.getDaysDistance(user, 6), 6));
+       }
+
+
+        db.close();
     }
+
     public void AddValuesToBarEntryLabels(){
 
-        BarEntryLabels.add("January");
-        BarEntryLabels.add("February");
-        BarEntryLabels.add("March");
-        BarEntryLabels.add("April");
-        BarEntryLabels.add("May");
-        BarEntryLabels.add("June");
+        BarEntryLabels.add("Today");
+        BarEntryLabels.add("Yesterday");
+        BarEntryLabels.add("3 Days Ago");
+        BarEntryLabels.add("4 Days Ago");
+        BarEntryLabels.add("5 Days Ago");
+        BarEntryLabels.add("6 Days Ago");
+        BarEntryLabels.add("7 Days Ago");
 
     }
 
