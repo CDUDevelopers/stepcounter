@@ -19,7 +19,7 @@ import java.util.List;
 public class UserDatabase {
     private static final String TAG = "User Database";
     private static final String DB_NAME = "UserDatabase.db";
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 8;
     //todo dont forget to increment version every time the tables are changed
 
     private static final String LOGIN_TABLE = "logins";
@@ -195,7 +195,6 @@ public class UserDatabase {
         if (userData != null) {
             userData.moveToFirst();
             Date date = getDateNoTime();
-
             SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
             Date dataDate = null;
 
@@ -335,16 +334,29 @@ public class UserDatabase {
         if (cont) {
             Cursor userData = db.rawQuery("select * from " + USER_TABLE + " where " + USER_COLUMN1 + " = ?;", new String[] {oldUsername});
             userData.moveToFirst();
+            accounts = db.rawQuery("select * from " + LOGIN_TABLE + " where " + LOGIN_COLUMN1 + " = ?;", new String[]{oldUsername});
+            accounts.moveToFirst();
             ContentValues values = new ContentValues();
             values.put(LOGIN_COLUMN1, newUsername);
             values.put(LOGIN_COLUMN2, accounts.getString(1));
             db.update(LOGIN_TABLE, values, LOGIN_COLUMN1 + " = ?", new String[] {oldUsername});
 
-            values = new ContentValues();
-            values.put(USER_COLUMN1, newUsername);
+            Date date = getDateNoTime();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+            String currentDate = format.format(date);
 
-            user.updateUsername(newUsername);
-            saveUser(user);
+            values = new ContentValues();
+            values.put(USER_COLUMN1, user.getUsername());
+            values.put(USER_COLUMN2, user.getSteps());
+            values.put(USER_COLUMN3, user.getCalories());
+            values.put(USER_COLUMN4, user.getDistance());
+            values.put(USER_COLUMN5, user.getWeight());
+            values.put(USER_COLUMN6, user.getHeight());
+            values.put(USER_COLUMN7, user.getAge());
+            values.put(USER_COLUMN8, user.getExerciseTime());
+            values.put(USER_COLUMN9, currentDate);
+            db.update(USER_TABLE, values, USER_COLUMN1 + " = ?", new String[] {oldUsername});
+
         }
         return true;
     }
