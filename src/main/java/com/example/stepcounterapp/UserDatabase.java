@@ -604,6 +604,7 @@ public class UserDatabase {
         while (i < exerc.getCount()) {
             total = total + exerc.getInt(2);
             exerc.moveToNext();
+            i++;
         }
         return total;
     }
@@ -623,6 +624,7 @@ public class UserDatabase {
         while (i < exerc.getCount()) {
             total = total + exerc.getInt(2);
             exerc.moveToNext();
+            i++;
         }
         return total;
     }
@@ -660,6 +662,7 @@ public class UserDatabase {
         while (i < exerc.getCount()) {
             total = total + exerc.getInt(3);
             exerc.moveToNext();
+            i++;
         }
         return total;
     }
@@ -679,6 +682,7 @@ public class UserDatabase {
         while (i < exerc.getCount()) {
             total = total + exerc.getInt(3);
             exerc.moveToNext();
+            i++;
         }
         return total;
     }
@@ -716,6 +720,7 @@ public class UserDatabase {
         while (i < exerc.getCount()) {
             total = total + exerc.getInt(4);
             exerc.moveToNext();
+            i++;
         }
         return total;
     }
@@ -735,6 +740,7 @@ public class UserDatabase {
         while (i < exerc.getCount()) {
             total = total + exerc.getInt(4);
             exerc.moveToNext();
+            i++;
         }
         return total;
     }
