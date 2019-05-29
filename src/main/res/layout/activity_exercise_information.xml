@@ -25,7 +25,7 @@
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/chart1"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="229dp">
 
         </com.github.mikephil.charting.charts.BarChart>
 
@@ -37,23 +37,25 @@
             <TextView
                 android:id="@+id/stepCountDay"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="step day" />
+                android:text="Daily Steps" />
 
             <TextView
                 android:id="@+id/calorieCountDay"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Caloires day" />
+                android:text="Daily Calories" />
 
             <TextView
                 android:id="@+id/distanceCountDay"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Distance day" />
+                android:contentDescription="Monthly Distance"
+                android:text="Daily Distance"
+                tools:text="Weekly Distance" />
         </LinearLayout>
 
         <LinearLayout
@@ -64,23 +66,23 @@
             <TextView
                 android:id="@+id/stepCountWeek"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="step week" />
+                android:text="Weekly Step" />
 
             <TextView
                 android:id="@+id/calorieCountWeek"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="cal week" />
+                android:text="Weekly Calories" />
 
             <TextView
                 android:id="@+id/distanceCountWeek"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="distance week" />
+                android:text="Weekly Distance" />
         </LinearLayout>
 
         <LinearLayout
@@ -91,23 +93,23 @@
             <TextView
                 android:id="@+id/stepCountMonth"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="step month" />
+                android:text="Monthly Step" />
 
             <TextView
                 android:id="@+id/calorieCountMonth"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="cal month" />
+                android:text="Monthly Calories" />
 
             <TextView
                 android:id="@+id/distanceCountMonth"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="distance month" />
+                android:text="Monthly Distance" />
         </LinearLayout>
 
         <Button

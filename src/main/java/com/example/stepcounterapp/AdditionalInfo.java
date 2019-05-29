@@ -104,6 +104,17 @@ public class AdditionalInfo extends AppCompatActivity {
         unregisterReceiver(updateReciver);
     }
 
+    @Override
+    public void onBackPressed() {
+        UserDatabase db = new UserDatabase(this);
+        db.open();
+        db.saveUser(user);
+        db.close();
+        Intent intent = new Intent(this, Main.class);
+        intent.putExtra("userData", user);
+        startActivity(intent);
+    }
+
     //----------------------------------------------------------------------------------------------
 
     private void setPageConent() {

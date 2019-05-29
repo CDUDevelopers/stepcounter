@@ -2,18 +2,43 @@ package com.example.stepcounterapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 public class SignIn extends AppCompatActivity {
+    private Boolean exitCheck;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
+
+        exitCheck = false;
     }
+
+    @Override
+    public void onBackPressed() {
+        if (exitCheck) {
+            moveTaskToBack(true);
+            android.os.Process.killProcess(android.os.Process.myPid());
+            System.exit(1);
+        }
+        Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT).show();
+        exitCheck = true;
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (exitCheck != null) {
+                    exitCheck = false;
+                }
+            }
+        }, 10000);
+    }
+
 // Change back to private after login fixed
     public void homePage(View view, User user) {
         //Todo add SQL login and pull data from memory then add to the user object to pass

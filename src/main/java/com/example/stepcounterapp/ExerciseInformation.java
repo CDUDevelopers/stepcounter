@@ -17,6 +17,9 @@ import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
@@ -92,6 +95,22 @@ public class ExerciseInformation extends AppCompatActivity {
         //------------------------------------------------------------------------------------------
 
         setPageContent();
+
+        chart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
+                Intent intent = new Intent(ExerciseInformation.this, MonthlySummary.class);
+                intent.putExtra("userData", user);
+                intent.putExtra("exerciseType", pageTitle.getText().toString());
+                intent.putExtra("selectedMonth", BarEntryLabels.get(e.getXIndex()));
+                startActivity(intent);
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
     }
 
     //runs when the page is brought to the foreground of the device screen
@@ -112,7 +131,16 @@ public class ExerciseInformation extends AppCompatActivity {
         unregisterReceiver(updateReciver);
     }
 
-    //todo override OnBackPressed() to go to home
+    @Override
+    public void onBackPressed() {
+        UserDatabase db = new UserDatabase(this);
+        db.open();
+        db.saveUser(user);
+        db.close();
+        Intent intent = new Intent(this, Main.class);
+        intent.putExtra("userData", user);
+        startActivity(intent);
+    }
 
     private void setPageContent() {
         TextView stepDay, stepWeek, stepMonth, calDay, calWeek, calMonth, distDay, distWeek, distMonth;
@@ -154,7 +182,13 @@ public class ExerciseInformation extends AppCompatActivity {
     //----------------------------------------------------------------------------------------------
 
     public void AddValuesToBARENTRY(){
-
+//todo add exercise time to this chart
+        BARENTRY.add(new BarEntry(2f, 0));
+        BARENTRY.add(new BarEntry(4f, 1));
+        BARENTRY.add(new BarEntry(6f, 2));
+        BARENTRY.add(new BarEntry(8f, 3));
+        BARENTRY.add(new BarEntry(7f, 4));
+        BARENTRY.add(new BarEntry(3f, 5));
         BARENTRY.add(new BarEntry(2f, 0));
         BARENTRY.add(new BarEntry(4f, 1));
         BARENTRY.add(new BarEntry(6f, 2));
@@ -171,6 +205,13 @@ public class ExerciseInformation extends AppCompatActivity {
         BarEntryLabels.add("April");
         BarEntryLabels.add("May");
         BarEntryLabels.add("June");
+        BarEntryLabels.add("July");
+        BarEntryLabels.add("August");
+        BarEntryLabels.add("September");
+        BarEntryLabels.add("October");
+        BarEntryLabels.add("November");
+        BarEntryLabels.add("December");
+
 
     }
 

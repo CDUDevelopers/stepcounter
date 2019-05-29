@@ -24,7 +24,7 @@
                 <TextView
                     android:id="@+id/daliyStepsTextbox"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="71dp"
                     android:layout_weight="1"
                     android:onClick="stepInfo"
                     android:padding="5dp"
@@ -37,7 +37,7 @@
                     android:layout_weight="1"
                     android:onClick="calInfo"
                     android:padding="5dp"
-                    android:text="calories" />
+                    android:text="Calories" />
 
                 <TextView
                     android:id="@+id/daliyDistanceTextbox"
@@ -46,7 +46,7 @@
                     android:layout_weight="1"
                     android:onClick="distInfo"
                     android:padding="5dp"
-                    android:text="distance" />
+                    android:text="Distance" />
 
             </LinearLayout>
 
@@ -81,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:onClick="walking"
                 android:padding="20dp"
-                android:text="walking" />
+                android:text="Walking" />
 
             <Button
                 android:id="@+id/bluetoothButton"
