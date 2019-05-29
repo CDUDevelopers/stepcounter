@@ -759,6 +759,182 @@ public class UserDatabase {
 
     //----------------------------------------------------------------------------------------------
 
+    public int getMonthSteps(User user, String month) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        int currentMonth = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        if (month.equals("January")) {
+            calendar.set(Calendar.MONTH, 1);
+        } else if (month.equals("February")) {
+            calendar.set(Calendar.MONTH, 2);
+        } else if (month.equals("March")) {
+            calendar.set(Calendar.MONTH, 3);
+        } else if (month.equals("April")) {
+            calendar.set(Calendar.MONTH, 4);
+        } else if (month.equals("May")) {
+            calendar.set(Calendar.MONTH, 5);
+        } else if (month.equals("June")) {
+            calendar.set(Calendar.MONTH, 6);
+        } else if (month.equals("July")) {
+            calendar.set(Calendar.MONTH, 7);
+        } else if (month.equals("August")) {
+            calendar.set(Calendar.MONTH, 8);
+        } else if (month.equals("September")) {
+            calendar.set(Calendar.MONTH, 9);
+        } else if (month.equals("October")) {
+            calendar.set(Calendar.MONTH, 10);
+        } else if (month.equals("November")) {
+            calendar.set(Calendar.MONTH, 11);
+        } else if (month.equals("December")) {
+            calendar.set(Calendar.MONTH, 12);
+        }
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+
+        Date startDate = calendar.getTime();
+        String firstDate = format.format(startDate);
+        //todo account for variable month lengths
+        Date endDate = new Date(startDate.getTime() + (30 * DAY_IN_MS));
+        String previousDate = format.format(endDate);
+
+        //todo check the between statement is correctly bound
+        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between " + firstDate + " and " + previousDate + ";", new String[] {user.getUsername()});
+        hist.moveToFirst();
+        int total = 0;
+        int i = 0;
+
+        while (i < hist.getCount()) {
+            total = total + hist.getInt(2);
+            hist.moveToNext();
+            i++;
+        }
+        return total;
+    }
+
+    public int getMonthCalories(User user, String month) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        int currentMonth = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        if (month.equals("January")) {
+            calendar.set(Calendar.MONTH, 1);
+        } else if (month.equals("February")) {
+            calendar.set(Calendar.MONTH, 2);
+        } else if (month.equals("March")) {
+            calendar.set(Calendar.MONTH, 3);
+        } else if (month.equals("April")) {
+            calendar.set(Calendar.MONTH, 4);
+        } else if (month.equals("May")) {
+            calendar.set(Calendar.MONTH, 5);
+        } else if (month.equals("June")) {
+            calendar.set(Calendar.MONTH, 6);
+        } else if (month.equals("July")) {
+            calendar.set(Calendar.MONTH, 7);
+        } else if (month.equals("August")) {
+            calendar.set(Calendar.MONTH, 8);
+        } else if (month.equals("September")) {
+            calendar.set(Calendar.MONTH, 9);
+        } else if (month.equals("October")) {
+            calendar.set(Calendar.MONTH, 10);
+        } else if (month.equals("November")) {
+            calendar.set(Calendar.MONTH, 11);
+        } else if (month.equals("December")) {
+            calendar.set(Calendar.MONTH, 12);
+        }
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+
+        Date startDate = calendar.getTime();
+        String firstDate = format.format(startDate);
+        //todo account for variable month lengths
+        Date endDate = new Date(startDate.getTime() + (30 * DAY_IN_MS));
+        String previousDate = format.format(endDate);
+
+        //todo check the between statement is correctly bound
+        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between " + firstDate + " and " + previousDate + ";", new String[] {user.getUsername()});
+        hist.moveToFirst();
+        int total = 0;
+        int i = 0;
+
+        while (i < hist.getCount()) {
+            total = total + hist.getInt(3);
+            hist.moveToNext();
+            i++;
+        }
+        return total;
+    }
+
+    public int getMonthDistance(User user, String month) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        int currentMonth = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        if (month.equals("January")) {
+            calendar.set(Calendar.MONTH, 1);
+        } else if (month.equals("February")) {
+            calendar.set(Calendar.MONTH, 2);
+        } else if (month.equals("March")) {
+            calendar.set(Calendar.MONTH, 3);
+        } else if (month.equals("April")) {
+            calendar.set(Calendar.MONTH, 4);
+        } else if (month.equals("May")) {
+            calendar.set(Calendar.MONTH, 5);
+        } else if (month.equals("June")) {
+            calendar.set(Calendar.MONTH, 6);
+        } else if (month.equals("July")) {
+            calendar.set(Calendar.MONTH, 7);
+        } else if (month.equals("August")) {
+            calendar.set(Calendar.MONTH, 8);
+        } else if (month.equals("September")) {
+            calendar.set(Calendar.MONTH, 9);
+        } else if (month.equals("October")) {
+            calendar.set(Calendar.MONTH, 10);
+        } else if (month.equals("November")) {
+            calendar.set(Calendar.MONTH, 11);
+        } else if (month.equals("December")) {
+            calendar.set(Calendar.MONTH, 12);
+        }
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+
+        Date startDate = calendar.getTime();
+        String firstDate = format.format(startDate);
+        //todo account for variable month lengths
+        Date endDate = new Date(startDate.getTime() + (30 * DAY_IN_MS));
+        String previousDate = format.format(endDate);
+
+        //todo check the between statement is correctly bound
+        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between " + firstDate + " and " + previousDate + ";", new String[] {user.getUsername()});
+        hist.moveToFirst();
+        int total = 0;
+        int i = 0;
+
+        while (i < hist.getCount()) {
+            total = total + hist.getInt(4);
+            hist.moveToNext();
+            i++;
+        }
+        return total;
+    }
+
+    //----------------------------------------------------------------------------------------------
+
     public void stepCheat(int steps, int cal, int dist, int offset) {
         Date date = new Date(getDateNoTime().getTime() - (offset * DAY_IN_MS));
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");

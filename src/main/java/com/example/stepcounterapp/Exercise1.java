@@ -162,6 +162,15 @@ public class Exercise1 extends FragmentActivity implements OnMapReadyCallback, G
         unregisterReceiver(updateReciver);
     }
 
+    @Override
+    public void onBackPressed() {
+        UserDatabase db = new UserDatabase(this);
+        db.open();
+        db.saveUser(user);
+        db.close();
+        super.onBackPressed();
+    }
+
     private void startExercise() {
         startTime = new Date().getTime();
         startSteps = user.getSteps();
@@ -199,6 +208,7 @@ public class Exercise1 extends FragmentActivity implements OnMapReadyCallback, G
     public void goBack(View view) {
         Intent intent = new Intent(this, ExerciseInformation.class);
         intent.putExtra("userData", user);
+        //todo add title support
         startActivity(intent);
     }
 //--------------------------------------------------------------------------------------------------

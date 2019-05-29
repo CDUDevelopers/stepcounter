@@ -76,6 +76,16 @@ public class Main extends AppCompatActivity {
         unregisterReceiver(updateReciver);
     }
 
+    @Override
+    public void onBackPressed() {
+        UserDatabase db = new UserDatabase(this);
+        db.open();
+        db.saveUser(user);
+        db.close();
+        Intent intent = new Intent(this, SignIn.class);
+        startActivity(intent);
+    }
+
     //todo add onStop() or onDestroy() override
     //todo include database update in them to save data
 

@@ -191,6 +191,17 @@ public class BluetoothConnectionSetup extends AppCompatActivity implements Bluet
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        UserDatabase db = new UserDatabase(this);
+        db.open();
+        db.saveUser(user);
+        db.close();
+        Intent intent = new Intent(this, Main.class);
+        intent.putExtra("userData", user);
+        startActivity(intent);
+    }
+
     //runs whenever a device is detected during a LE bluetooth scan
     @Override
     public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord) {//callback for whenever a new device is detected
