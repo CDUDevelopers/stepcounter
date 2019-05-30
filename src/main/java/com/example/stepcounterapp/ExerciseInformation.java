@@ -81,9 +81,9 @@ public class ExerciseInformation extends AppCompatActivity {
 
         BarEntryLabels = new ArrayList<String>();
 
-        AddValuesToBARENTRY();
-
         AddValuesToBarEntryLabels();
+
+        AddValuesToBARENTRY();
 
         Bardataset = new BarDataSet(BARENTRY, "Projects");
 
@@ -235,18 +235,23 @@ public class ExerciseInformation extends AppCompatActivity {
 
     public void AddValuesToBARENTRY(){
 //todo add exercise time to this chart
-        BARENTRY.add(new BarEntry(2f, 0));
-        BARENTRY.add(new BarEntry(4f, 1));
-        BARENTRY.add(new BarEntry(6f, 2));
-        BARENTRY.add(new BarEntry(8f, 3));
-        BARENTRY.add(new BarEntry(7f, 4));
-        BARENTRY.add(new BarEntry(3f, 5));
-        BARENTRY.add(new BarEntry(2f, 0));
-        BARENTRY.add(new BarEntry(4f, 1));
-        BARENTRY.add(new BarEntry(6f, 2));
-        BARENTRY.add(new BarEntry(8f, 3));
-        BARENTRY.add(new BarEntry(7f, 4));
-        BARENTRY.add(new BarEntry(3f, 5));
+        UserDatabase db = new UserDatabase(this);
+        db.open();
+
+        BARENTRY.add(new BarEntry(db.getMonthExerciseTime(user, BarEntryLabels.get(0), pageTitle.getText().toString()), 0));
+        BARENTRY.add(new BarEntry(db.getMonthExerciseTime(user, BarEntryLabels.get(1), pageTitle.getText().toString()), 1));
+        BARENTRY.add(new BarEntry(db.getMonthExerciseTime(user, BarEntryLabels.get(2), pageTitle.getText().toString()), 2));
+        BARENTRY.add(new BarEntry(db.getMonthExerciseTime(user, BarEntryLabels.get(3), pageTitle.getText().toString()), 3));
+        BARENTRY.add(new BarEntry(db.getMonthExerciseTime(user, BarEntryLabels.get(4), pageTitle.getText().toString()), 4));
+        BARENTRY.add(new BarEntry(db.getMonthExerciseTime(user, BarEntryLabels.get(5), pageTitle.getText().toString()), 5));
+        BARENTRY.add(new BarEntry(db.getMonthExerciseTime(user, BarEntryLabels.get(6), pageTitle.getText().toString()), 6));
+        BARENTRY.add(new BarEntry(db.getMonthExerciseTime(user, BarEntryLabels.get(7), pageTitle.getText().toString()), 7));
+        BARENTRY.add(new BarEntry(db.getMonthExerciseTime(user, BarEntryLabels.get(8), pageTitle.getText().toString()), 8));
+        BARENTRY.add(new BarEntry(db.getMonthExerciseTime(user, BarEntryLabels.get(9), pageTitle.getText().toString()), 9));
+        BARENTRY.add(new BarEntry(db.getMonthExerciseTime(user, BarEntryLabels.get(10), pageTitle.getText().toString()), 10));
+        BARENTRY.add(new BarEntry(db.getMonthExerciseTime(user, BarEntryLabels.get(11), pageTitle.getText().toString()), 11));
+
+        db.close();
 
     }
     public void AddValuesToBarEntryLabels(){

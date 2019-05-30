@@ -13,7 +13,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 
 public class UserDatabase {
@@ -981,7 +980,7 @@ public class UserDatabase {
         return total;
     }
 
-    public int getMonthExerciseTime(User user, String month) {
+    public long getMonthExerciseTime(User user, String month, String exerciseType) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         calendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -992,29 +991,29 @@ public class UserDatabase {
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
         if (month.equals("January")) {
-            calendar.set(Calendar.MONTH, 1);
+            calendar.set(Calendar.MONTH, 0);
         } else if (month.equals("February")) {
-            calendar.set(Calendar.MONTH, 2);
+            calendar.set(Calendar.MONTH, 1);
         } else if (month.equals("March")) {
-            calendar.set(Calendar.MONTH, 3);
+            calendar.set(Calendar.MONTH, 2);
         } else if (month.equals("April")) {
-            calendar.set(Calendar.MONTH, 4);
+            calendar.set(Calendar.MONTH, 3);
         } else if (month.equals("May")) {
-            calendar.set(Calendar.MONTH, 5);
+            calendar.set(Calendar.MONTH, 4);
         } else if (month.equals("June")) {
-            calendar.set(Calendar.MONTH, 6);
+            calendar.set(Calendar.MONTH, 5);
         } else if (month.equals("July")) {
-            calendar.set(Calendar.MONTH, 7);
+            calendar.set(Calendar.MONTH, 6);
         } else if (month.equals("August")) {
-            calendar.set(Calendar.MONTH, 8);
+            calendar.set(Calendar.MONTH, 7);
         } else if (month.equals("September")) {
-            calendar.set(Calendar.MONTH, 9);
+            calendar.set(Calendar.MONTH, 8);
         } else if (month.equals("October")) {
-            calendar.set(Calendar.MONTH, 10);
+            calendar.set(Calendar.MONTH, 9);
         } else if (month.equals("November")) {
-            calendar.set(Calendar.MONTH, 11);
+            calendar.set(Calendar.MONTH, 10);
         } else if (month.equals("December")) {
-            calendar.set(Calendar.MONTH, 12);
+            calendar.set(Calendar.MONTH, 11);
         }
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
@@ -1026,14 +1025,14 @@ public class UserDatabase {
         String previousDate = format.format(endDate);
 
         //todo check the between statement is correctly bound
-        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between " + firstDate + " and " + previousDate + ";", new String[] {user.getUsername()});
-        hist.moveToFirst();
-        int total = 0;
+        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ? and " + EXERCISE_COLUMN2 + " between " + firstDate + " and " + previousDate + ";", new String[] {user.getUsername(), exerciseType});
+        exerc.moveToFirst();
+        long total = 0;
         int i = 0;
 
-        while (i < hist.getCount()) {
-            total = total + hist.getInt(3);
-            hist.moveToNext();
+        while (i < exerc.getCount()) {
+            total = total + exerc.getLong(6);
+            exerc.moveToNext();
             i++;
         }
         return total;
@@ -1054,7 +1053,7 @@ public class UserDatabase {
 
         if (exerc != null) {
             while (i < exerc.getCount()) {
-                temp = exerc.getString(1);
+                temp = exerc.getString(0);
                 if (!list.contains(temp)) {
                     list.add(temp);
                 }
