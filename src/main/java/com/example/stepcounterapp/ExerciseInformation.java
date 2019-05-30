@@ -11,6 +11,9 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
@@ -111,6 +114,37 @@ public class ExerciseInformation extends AppCompatActivity {
 
             }
         });
+
+        //------------------------------------------------------------------------------------------
+
+        setSpinnerContent();
+
+        Spinner spinner = findViewById(R.id.exerciseSpinner);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                TextView step, cal, dist;
+                step = findViewById(R.id.daySummarySteps);
+                cal = findViewById(R.id.daySummaryCal);
+                dist = findViewById(R.id.daySummaryDistance);
+
+                if (!parent.getItemAtPosition(position).toString().equals("No Exercise Records Found")) {
+                    UserDatabase db = new UserDatabase(ExerciseInformation.this);
+                    db.open();
+
+                    step.setText("Steps: " + db.getDaySteps(user,pageTitle.getText().toString(), parent.getItemAtPosition(position).toString()));
+                    cal.setText("Calories: " + db.getDayCalories(user,pageTitle.getText().toString(), parent.getItemAtPosition(position).toString()));
+                    dist.setText("Distance: " + db.getDayDistance(user,pageTitle.getText().toString(), parent.getItemAtPosition(position).toString()));
+
+                    db.close();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     //runs when the page is brought to the foreground of the device screen
@@ -177,6 +211,24 @@ public class ExerciseInformation extends AppCompatActivity {
         intent.putExtra("userData", user);
         intent.putExtra("exerciseType", pageTitle.getText().toString());
         startActivity(intent);
+    }
+
+    private void setSpinnerContent() {
+        Spinner spinner = findViewById(R.id.exerciseSpinner);
+
+        UserDatabase db = new UserDatabase(this);
+        db.open();
+        ArrayList list = db.getExerciseDateArray(user, pageTitle.getText().toString());
+        db.close();
+
+        if (list.get(0).equals("empty")) {
+            list.set(0, "No Exercise Records Found");
+        }
+
+        //todo check arraylist not causing problems (List instead)
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
     }
 
     //----------------------------------------------------------------------------------------------

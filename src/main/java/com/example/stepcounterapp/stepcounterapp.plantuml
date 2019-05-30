@@ -1,0 +1,429 @@
+@startuml
+
+title __STEPCOUNTERAPP's Class Diagram__\n
+
+  package com.example.stepcounterapp {
+    class AdditionalInfo {
+        - pageTitle : TextView
+        ~ chart : BarChart
+        ~ BARENTRY : ArrayList<BarEntry>
+        ~ BarEntryLabels : ArrayList<String>
+        ~ Bardataset : BarDataSet
+        ~ BARDATA : BarData
+        - serviceConnection : ServiceConnection
+        - updateReciver : BroadcastReceiver
+        # onCreate()
+        # onResume()
+        # onPause()
+        + onBackPressed()
+        - setPageConent()
+        - updateDayValues()
+        + AddValuesToBARENTRY()
+        + AddValuesToBarEntryLabels()
+        {static} - generateIntentFilter()
+    }
+  }
+  
+
+  package com.example.stepcounterapp {
+    class BTService {
+        - btManager : BluetoothManager
+        - btadapter : BluetoothAdapter
+        - btGatt : BluetoothGatt
+        - deviceAddress : String
+        - tag : String
+        {static} - stepCountUpdate : int
+        {static} + stepCountUpdateString : String
+        {static} - configDescriptor : UUID
+        {static} - rcsService : UUID
+        {static} - rcsMeasurment : UUID
+        {static} - stepCounterBasedCount : UUID
+        {static} - batteryService : UUID
+        {static} - stepService : UUID
+        {static} - stepChar : UUID
+        - gattCallback : BluetoothGattCallback
+        - binder : IBinder
+        - broadcastUpdate()
+        + onBind()
+        + onUnbind()
+        + start()
+        + needStart()
+        + gattConnect()
+        + gattDiscennect()
+        + close()
+        + setDeviceAddress()
+        + getDeviceAddress()
+        + isGattConnected()
+    }
+  }
+  
+
+  package com.example.stepcounterapp {
+    class LocalBinder {
+        ~ getService()
+    }
+  }
+  
+
+  package com.example.stepcounterapp {
+    class BluetoothConnectionSetup {
+        - btManager : BluetoothManager
+        - btadapter : BluetoothAdapter
+        - btGatt : BluetoothGatt
+        - deviceArray : ArrayList<BluetoothDevice>
+        - deviceNameArray : ArrayList<String>
+        - tag : String
+        ~ deviceList : ListView
+        ~ connectedDeviceName : TextView
+        ~ scanButton : Button
+        {static} - stepCountUpdate : int
+        - serviceConnection : ServiceConnection
+        - runnableStopScan : Runnable
+        - runnableStartScan : Runnable
+        - handler : Handler
+        - updateReciver : BroadcastReceiver
+        # onCreate()
+        # onResume()
+        # onPause()
+        # onStop()
+        + onBackPressed()
+        + onLeScan()
+        - startScan()
+        - stopScan()
+        {static} - generateIntentFilter()
+    }
+  }
+  
+
+  package com.example.stepcounterapp {
+    class Exercise1 {
+        - startSteps : int
+        - startCalories : int
+        - startDistance : int
+        - startTime : long
+        - isExercising : Boolean
+        - lat : ArrayList<Double>
+        - lng : ArrayList<Double>
+        - pageTitle : TextView
+        - stepCount : TextView
+        - calorieCount : TextView
+        - distanceCount : TextView
+        - mMap : GoogleMap
+        - client : GoogleApiClient
+        - locationRequest : LocationRequest
+        - lastlocation : Location
+        - currentLocationMarker : Marker
+        {static} + REQEST_LOCATION_CODE : int
+        {static} - TAG : String
+        - serviceConnection : ServiceConnection
+        - updateReciver : BroadcastReceiver
+        # onCreate()
+        # onResume()
+        # onPause()
+        + onBackPressed()
+        - startExercise()
+        - stopExercise()
+        + goBack()
+        {static} - generateIntentFilter()
+        + onRequestPermissionsResult()
+        + onMapReady()
+        # buildGoogleApiClient()
+        + onLocationChanged()
+        + onConnected()
+        + checkLocationPermission()
+        + onConnectionSuspended()
+        + onConnectionFailed()
+    }
+  }
+  
+
+  package com.example.stepcounterapp {
+    class ExerciseInformation {
+        - pageTitle : TextView
+        ~ chart : BarChart
+        ~ BARENTRY : ArrayList<BarEntry>
+        ~ BarEntryLabels : ArrayList<String>
+        ~ Bardataset : BarDataSet
+        ~ BARDATA : BarData
+        - serviceConnection : ServiceConnection
+        - updateReciver : BroadcastReceiver
+        # onCreate()
+        # onResume()
+        # onPause()
+        + onBackPressed()
+        - setPageContent()
+        + goToExerciseRecordPage()
+        + AddValuesToBARENTRY()
+        + AddValuesToBarEntryLabels()
+        {static} - generateIntentFilter()
+    }
+  }
+  
+
+  package com.example.stepcounterapp {
+    class Graph {
+        # onCreate()
+    }
+  }
+  
+
+  package com.example.stepcounterapp {
+    class Main {
+        - serviceConnection : ServiceConnection
+        - updateReciver : BroadcastReceiver
+        # onCreate()
+        # onResume()
+        # onPause()
+        + onBackPressed()
+        + walking()
+        + hiking()
+        + running()
+        + edit()
+        + bluetoothPage()
+        + stepInfo()
+        + calInfo()
+        + distInfo()
+        - updateWeightIndication()
+        - updateHeightIndication()
+        - updateAgeIndication()
+        - updateStepDisplay()
+        - updateCalorieDisplay()
+        - updateDistanceDisplay()
+        {static} - generateIntentFilter()
+    }
+  }
+  
+
+  package com.example.stepcounterapp {
+    class MonthlySummary {
+        - pageTitle : TextView
+        - month : String
+        - serviceConnection : ServiceConnection
+        - updateReciver : BroadcastReceiver
+        # onCreate()
+        # onResume()
+        # onPause()
+        + onBackPressed()
+        - setPageContent()
+        {static} - generateIntentFilter()
+    }
+  }
+  
+
+  package com.example.stepcounterapp {
+    class Profile {
+        - serviceConnection : ServiceConnection
+        - updateReciver : BroadcastReceiver
+        # onCreate()
+        # onResume()
+        # onPause()
+        + onBackPressed()
+        + submitProfileUpdate()
+        {static} - generateIntentFilter()
+    }
+  }
+  
+
+  package com.example.stepcounterapp {
+    class SignIn {
+        - exitCheck : Boolean
+        # onCreate()
+        + onBackPressed()
+        + homePage()
+        + submitLogin()
+        + skipLogin()
+        + createAccountPage()
+    }
+  }
+  
+
+  package com.example.stepcounterapp {
+    class SignUp {
+        # onCreate()
+        + submitNewUser()
+    }
+  }
+  
+
+  package com.example.stepcounterapp {
+    class User {
+        - steps : int
+        - calories : int
+        - distance : int
+        - weight : float
+        - height : int
+        - age : int
+        - exerciseTime : long
+        - username : String
+        - gender : String
+        + User()
+        + User()
+        + updateSteps()
+        + getSteps()
+        + updateCalories()
+        + getCalories()
+        + updateWeight()
+        + getWeight()
+        + updateHeight()
+        + getHeight()
+        + updateAge()
+        + getAge()
+        + updateExerciseTime()
+        + getExerciseTime()
+        + updateUsername()
+        + getUsername()
+        + updateDistance()
+        + getDistance()
+        + updateGender()
+        + getGender()
+    }
+  }
+  
+
+  package com.example.stepcounterapp {
+    class UserDatabase {
+        {static} - TAG : String
+        {static} - DB_NAME : String
+        {static} - DATABASE_VERSION : int
+        {static} - LOGIN_TABLE : String
+        {static} - LOGIN_COLUMN1 : String
+        {static} - LOGIN_COLUMN2 : String
+        {static} - USER_TABLE : String
+        {static} - USER_COLUMN1 : String
+        {static} - USER_COLUMN2 : String
+        {static} - USER_COLUMN3 : String
+        {static} - USER_COLUMN4 : String
+        {static} - USER_COLUMN5 : String
+        {static} - USER_COLUMN6 : String
+        {static} - USER_COLUMN7 : String
+        {static} - USER_COLUMN8 : String
+        {static} - USER_COLUMN9 : String
+        {static} - HISTORIC_TABLE : String
+        {static} - HISTORIC_COLUMN1 : String
+        {static} - HISTORIC_COLUMN2 : String
+        {static} - HISTORIC_COLUMN3 : String
+        {static} - HISTORIC_COLUMN4 : String
+        {static} - HISTORIC_COLUMN5 : String
+        {static} - HISTORIC_COLUMN6 : String
+        {static} - HISTORIC_COLUMN7 : String
+        {static} - HISTORIC_COLUMN8 : String
+        {static} - EXERCISE_TABLE : String
+        {static} - EXERCISE_COLUMN1 : String
+        {static} - EXERCISE_COLUMN2 : String
+        {static} - EXERCISE_COLUMN3 : String
+        {static} - EXERCISE_COLUMN4 : String
+        {static} - EXERCISE_COLUMN5 : String
+        {static} - EXERCISE_COLUMN6 : String
+        {static} - EXERCISE_COLUMN7 : String
+        {static} - EXERCISE_COLUMN8 : String
+        {static} - MAP_TABLE : String
+        {static} - MAP_COLUMN1 : String
+        {static} - MAP_COLUMN2 : String
+        {static} - MAP_COLUMN3 : String
+        {static} - MAP_COLUMN4 : String
+        {static} - DAY_IN_MS : long
+        - db : SQLiteDatabase
+        + UserDatabase()
+        + open()
+        + close()
+        + AddUser()
+        + Login()
+        + populateUserData()
+        + saveUser()
+        + updateUserDB()
+        + updateHistoricDB()
+        + updateExerciseDB()
+        - updateMapDB()
+        + changeUsername()
+        - getDateNoTime()
+        + getDaysSteps()
+        + getWeeklySteps()
+        + getMonthlySteps()
+        + getDaysCalories()
+        + getWeeklyCalories()
+        + getMonthlyCalories()
+        + getDaysDistance()
+        + getWeeklyDistance()
+        + getMonthlyDistance()
+        + getDayExerciseSteps()
+        + getWeekExerciseSteps()
+        + getMonthExerciseSteps()
+        + getDayExerciseCalories()
+        + getWeekExerciseCalories()
+        + getMonthExerciseCalories()
+        + getDayExerciseDistance()
+        + getWeekExerciseDistance()
+        + getMonthExerciseDistance()
+        + getMonthSteps()
+        + getMonthCalories()
+        + getMonthDistance()
+        + stepCheat()
+    }
+  }
+  
+
+  package com.example.stepcounterapp {
+    class DatabaseHelper {
+        ~ DatabaseHelper()
+        + onCreate()
+        + onUpgrade()
+    }
+  }
+  
+
+  AdditionalInfo -up-|> AppCompatActivity
+  AdditionalInfo o-- User : user
+  AdditionalInfo o-- BTService : btService
+  HostCallbacks -up-|> FragmentHostCallback
+  BTService -up-|> Service
+  BTService +-down- LocalBinder
+  LocalBinder -up-|> Binder
+  BluetoothConnectionSetup -up-|> LeScanCallback
+  BluetoothConnectionSetup -up-|> AppCompatActivity
+  BluetoothConnectionSetup o-- User : user
+  BluetoothConnectionSetup o-- BTService : btService
+  HostCallbacks -up-|> FragmentHostCallback
+  Exercise1 -up-|> OnMapReadyCallback
+  Exercise1 -up-|> ConnectionCallbacks
+  Exercise1 -up-|> OnConnectionFailedListener
+  Exercise1 -up-|> LocationListener
+  Exercise1 -up-|> FragmentActivity
+  Exercise1 o-- User : user
+  Exercise1 o-- BTService : btService
+  HostCallbacks -up-|> FragmentHostCallback
+  ExerciseInformation -up-|> AppCompatActivity
+  ExerciseInformation o-- User : user
+  ExerciseInformation o-- BTService : btService
+  HostCallbacks -up-|> FragmentHostCallback
+  Graph -up-|> AppCompatActivity
+  HostCallbacks -up-|> FragmentHostCallback
+  Main -up-|> AppCompatActivity
+  Main o-- User : user
+  Main o-- BTService : btService
+  HostCallbacks -up-|> FragmentHostCallback
+  MonthlySummary -up-|> AppCompatActivity
+  MonthlySummary o-- User : user
+  MonthlySummary o-- BTService : btService
+  HostCallbacks -up-|> FragmentHostCallback
+  Profile -up-|> AppCompatActivity
+  Profile o-- User : user
+  Profile o-- BTService : btService
+  HostCallbacks -up-|> FragmentHostCallback
+  SignIn -up-|> AppCompatActivity
+  HostCallbacks -up-|> FragmentHostCallback
+  SignUp -up-|> AppCompatActivity
+  HostCallbacks -up-|> FragmentHostCallback
+  User -up-|> Serializable
+  UserDatabase o-- DatabaseHelper : DBHelper
+  UserDatabase +-down- DatabaseHelper
+  DatabaseHelper -up-|> SQLiteOpenHelper
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

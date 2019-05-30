@@ -44,6 +44,8 @@ public class Main extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Intent i = getIntent();
         user = (User)i.getSerializableExtra("userData");
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setIcon(R.drawable.logo);
 
         //bind the service that handles the bluetooth
         Intent gattServiceIntent = new Intent(this, BTService.class);
