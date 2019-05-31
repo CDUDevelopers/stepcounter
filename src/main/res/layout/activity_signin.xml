@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".SignIn">
 
-    <!-- todo change edittext contents to hints -->
+    <!-- todo remove edit text contents after testing -->
 
     <FrameLayout
         android:layout_width="395dp"
@@ -36,7 +36,8 @@
                 android:hint="Username"
                 android:inputType="textPersonName"
                 android:paddingLeft="20dp"
-                android:paddingTop="230dp" />
+                android:paddingTop="230dp"
+                android:text="a" />
 
             <EditText
                 android:id="@+id/passwordTextbox"
@@ -45,7 +46,8 @@
                 android:ems="10"
                 android:hint="Password"
                 android:inputType="textPersonName"
-                android:padding="20dp" />
+                android:padding="20dp"
+                android:text="d" />
 
             <Button
                 android:id="@+id/signInButton"

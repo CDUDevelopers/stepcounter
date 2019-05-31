@@ -49,8 +49,6 @@ public class BTService extends Service {
         Intent intent = new Intent(action);
 
         if (action.equals(stepCountUpdateString)) {
-            //todo test variables(remove)
-            byte[] data = characteristic.getValue();
             int steps = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, 0);
             int calories = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, 6);
             int distance = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, 3);
@@ -59,7 +57,6 @@ public class BTService extends Service {
             intent.putExtra("Calories", calories);
             intent.putExtra("Distance", distance);
         }else {
-            //todo error check (remove)
             System.out.println("error");
         }
 
@@ -78,7 +75,8 @@ public class BTService extends Service {
                 btGatt.discoverServices();
             }else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 Log.i(tag, "Gatt server disconnected");
-
+                Intent intent = new Intent("btDisconnected");
+                sendBroadcast(intent);
             }
             //todo what happens when the connection fails
         }
@@ -113,32 +111,6 @@ public class BTService extends Service {
             }
         }
     };
-
-    /*private Handler handler = new Handler(Looper.getMainLooper()) {
-        //runs when a message is broadcast through the handler
-        @Override
-        public void handleMessage(Message inputMessage) {
-            BluetoothGattCharacteristic characteristic;
-            //check the message has contents
-            if(inputMessage.obj != null){
-                //extract the message contents
-                characteristic = (BluetoothGattCharacteristic)inputMessage.obj;
-
-                //depending on when the message says do something
-                if (inputMessage.what == stepCountUpdate){
-                    if(characteristic.getValue() == null) {
-                        Log.i(tag, "Failed to obtain step data");
-                        return;
-                    }
-                    //todo what happens when we get the step data(function call)
-                }else {
-                    //todo error checking for message contents(remove)
-                    System.out.println("handler.what error");
-                }
-            }
-
-        }
-    };**/
 
 
     public class LocalBinder extends Binder {
@@ -182,7 +154,6 @@ public class BTService extends Service {
             BluetoothDevice device = btadapter.getRemoteDevice(address);
             if(device != null) {
                 btGatt = device.connectGatt(this, true, gattCallback);
-                //todo change auto connect to true
             }
         }
     }

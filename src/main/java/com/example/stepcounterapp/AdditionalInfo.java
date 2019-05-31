@@ -138,13 +138,13 @@ public class AdditionalInfo extends AppCompatActivity {
             weekCount.setText("Weekly:\n" + db.getWeeklySteps(user));
             monthCount.setText("Monthly:\n" + db.getMonthlySteps(user));
         } else if (pageTitle.getText().toString().equals("Calorie")) {
-            dayCount.setText("Daily:\n" + user.getCalories());
-            weekCount.setText("Weekly:\n" + db.getWeeklyCalories(user));
-            monthCount.setText("Monthly:\n" + db.getMonthlyCalories(user));
+            dayCount.setText("Daily:\n" + user.getCalories() + " kcal");
+            weekCount.setText("Weekly:\n" + db.getWeeklyCalories(user) + " kcal");
+            monthCount.setText("Monthly:\n" + db.getMonthlyCalories(user) + " kcal");
         } else if (pageTitle.getText().toString().equals("Distance")) {
-            dayCount.setText("Daily:\n" + user.getDistance());
-            weekCount.setText("Weekly:\n" + db.getWeeklyDistance(user));
-            monthCount.setText("Monthly:\n" + db.getMonthlyDistance(user));
+            dayCount.setText("Daily:\n" + user.getKM(user.getDistance()) + " km");
+            weekCount.setText("Weekly:\n" + user.getKM(db.getWeeklyDistance(user)) + " km");
+            monthCount.setText("Monthly:\n" + user.getKM(db.getMonthlyDistance(user)) + " km");
         } else {
             System.out.println("Page header pass was an unexpected value");
         }
@@ -159,9 +159,9 @@ public class AdditionalInfo extends AppCompatActivity {
         if (pageTitle.getText().toString().equals("Step")) {
             dayCount.setText("Daily:\n" + user.getSteps());
         } else if (pageTitle.getText().toString().equals("Calorie")) {
-            dayCount.setText("Daily:\n" + user.getCalories());
+            dayCount.setText("Daily:\n" + user.getCalories() + " kcal");
         } else if (pageTitle.getText().toString().equals("Distance")) {
-            dayCount.setText("Daily:\n" + user.getDistance());
+            dayCount.setText("Daily:\n" + user.getKM(user.getDistance()) + " km");
         } else {
             System.out.println("Day value data type was an unexpected value");
         }
@@ -191,13 +191,13 @@ public class AdditionalInfo extends AppCompatActivity {
            BARENTRY.add(new BarEntry(db.getDaysCalories(user, 5), 5));
            BARENTRY.add(new BarEntry(db.getDaysCalories(user, 6), 6));
        } else if (pageTitle.getText().toString().equals("Distance")) {
-           BARENTRY.add(new BarEntry(db.getDaysDistance(user, 0), 0));
-           BARENTRY.add(new BarEntry(db.getDaysDistance(user, 1), 1));
-           BARENTRY.add(new BarEntry(db.getDaysDistance(user, 2), 2));
-           BARENTRY.add(new BarEntry(db.getDaysDistance(user, 3), 3));
-           BARENTRY.add(new BarEntry(db.getDaysDistance(user, 4), 4));
-           BARENTRY.add(new BarEntry(db.getDaysDistance(user, 5), 5));
-           BARENTRY.add(new BarEntry(db.getDaysDistance(user, 6), 6));
+           BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 0)), 0));
+           BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 1)), 1));
+           BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 2)), 2));
+           BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 3)), 3));
+           BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 4)), 4));
+           BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 5)), 5));
+           BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 6)), 6));
        }
 
 

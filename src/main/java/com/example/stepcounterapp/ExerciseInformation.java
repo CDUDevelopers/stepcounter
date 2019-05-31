@@ -7,14 +7,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
@@ -37,6 +40,8 @@ public class ExerciseInformation extends AppCompatActivity {
     ArrayList<String> BarEntryLabels ;
     BarDataSet Bardataset ;
     BarData BARDATA ;
+
+    boolean firstTime;
 
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
@@ -119,25 +124,31 @@ public class ExerciseInformation extends AppCompatActivity {
 
         setSpinnerContent();
 
+        firstTime = true;
+
         Spinner spinner = findViewById(R.id.exerciseSpinner);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                TextView step, cal, dist;
-                step = findViewById(R.id.daySummarySteps);
-                cal = findViewById(R.id.daySummaryCal);
-                dist = findViewById(R.id.daySummaryDistance);
+                if (!firstTime) {
+                    Toast.makeText(ExerciseInformation.this, "item selected", Toast.LENGTH_SHORT).show();
+                    TextView step, cal, dist;
+                    step = findViewById(R.id.daySummarySteps);
+                    cal = findViewById(R.id.daySummaryCal);
+                    dist = findViewById(R.id.daySummaryDistance);
 
-                if (!parent.getItemAtPosition(position).toString().equals("No Exercise Records Found")) {
-                    UserDatabase db = new UserDatabase(ExerciseInformation.this);
-                    db.open();
+                    if (!parent.getItemAtPosition(position).toString().equals("No Exercise Records Found")) {
+                        UserDatabase db = new UserDatabase(ExerciseInformation.this);
+                        db.open();
 
-                    step.setText("Steps: " + db.getDaySteps(user,pageTitle.getText().toString(), parent.getItemAtPosition(position).toString()));
-                    cal.setText("Calories: " + db.getDayCalories(user,pageTitle.getText().toString(), parent.getItemAtPosition(position).toString()));
-                    dist.setText("Distance: " + db.getDayDistance(user,pageTitle.getText().toString(), parent.getItemAtPosition(position).toString()));
+                        step.setText("Steps: " + db.getDaySteps(user,pageTitle.getText().toString(), parent.getItemAtPosition(position).toString()));
+                        cal.setText("Calories: " + db.getDayCalories(user,pageTitle.getText().toString(), parent.getItemAtPosition(position).toString()));
+                        dist.setText("Distance: " + db.getDayDistance(user,pageTitle.getText().toString(), parent.getItemAtPosition(position).toString()));
 
-                    db.close();
+                        db.close();
+                    }
                 }
+                firstTime = false;
             }
 
             @Override
@@ -201,13 +212,13 @@ public class ExerciseInformation extends AppCompatActivity {
         stepWeek.setText("Steps This Week:\n" + db.getWeekExerciseSteps(user, pageTitle.getText().toString()));
         stepMonth.setText("Steps This Month:\n" + db.getMonthExerciseSteps(user, pageTitle.getText().toString()));
 
-        calDay.setText("Calories Today:\n" + db.getDayExerciseCalories(user, pageTitle.getText().toString()));
-        calWeek.setText("Calories This Week:\n" + db.getWeekExerciseCalories(user, pageTitle.getText().toString()));
-        calMonth.setText("Calories This Month:\n" + db.getMonthExerciseCalories(user, pageTitle.getText().toString()));
+        calDay.setText("Calories Today:\n" + db.getDayExerciseCalories(user, pageTitle.getText().toString()) + " kcal");
+        calWeek.setText("Calories This Week:\n" + db.getWeekExerciseCalories(user, pageTitle.getText().toString()) + " kcal");
+        calMonth.setText("Calories This Month:\n" + db.getMonthExerciseCalories(user, pageTitle.getText().toString()) + " kcal");
 
-        distDay.setText("Distance Today:\n" + db.getDayExerciseDistance(user, pageTitle.getText().toString()));
-        distWeek.setText("Distance This Week:\n" + db.getWeekExerciseDistance(user, pageTitle.getText().toString()));
-        distMonth.setText("Distance This Month:\n" + db.getMonthExerciseDistance(user, pageTitle.getText().toString()));
+        distDay.setText("Distance Today:\n" + user.getKM(db.getDayExerciseDistance(user, pageTitle.getText().toString())) + " km");
+        distWeek.setText("Distance This Week:\n" + user.getKM(db.getWeekExerciseDistance(user, pageTitle.getText().toString())) + " km");
+        distMonth.setText("Distance This Month:\n" + user.getKM(db.getMonthExerciseDistance(user, pageTitle.getText().toString())) + " km");
 
         db.close();
     }
@@ -231,7 +242,6 @@ public class ExerciseInformation extends AppCompatActivity {
             list.set(0, "No Exercise Records Found");
         }
 
-        //todo check arraylist not causing problems (List instead)
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -240,22 +250,21 @@ public class ExerciseInformation extends AppCompatActivity {
     //----------------------------------------------------------------------------------------------
 
     public void AddValuesToBARENTRY(){
-//todo add exercise time to this chart
         UserDatabase db = new UserDatabase(this);
         db.open();
 
-        BARENTRY.add(new BarEntry(db.getMonthExerciseTime(user, BarEntryLabels.get(0), pageTitle.getText().toString()), 0));
-        BARENTRY.add(new BarEntry(db.getMonthExerciseTime(user, BarEntryLabels.get(1), pageTitle.getText().toString()), 1));
-        BARENTRY.add(new BarEntry(db.getMonthExerciseTime(user, BarEntryLabels.get(2), pageTitle.getText().toString()), 2));
-        BARENTRY.add(new BarEntry(db.getMonthExerciseTime(user, BarEntryLabels.get(3), pageTitle.getText().toString()), 3));
-        BARENTRY.add(new BarEntry(db.getMonthExerciseTime(user, BarEntryLabels.get(4), pageTitle.getText().toString()), 4));
-        BARENTRY.add(new BarEntry(db.getMonthExerciseTime(user, BarEntryLabels.get(5), pageTitle.getText().toString()), 5));
-        BARENTRY.add(new BarEntry(db.getMonthExerciseTime(user, BarEntryLabels.get(6), pageTitle.getText().toString()), 6));
-        BARENTRY.add(new BarEntry(db.getMonthExerciseTime(user, BarEntryLabels.get(7), pageTitle.getText().toString()), 7));
-        BARENTRY.add(new BarEntry(db.getMonthExerciseTime(user, BarEntryLabels.get(8), pageTitle.getText().toString()), 8));
-        BARENTRY.add(new BarEntry(db.getMonthExerciseTime(user, BarEntryLabels.get(9), pageTitle.getText().toString()), 9));
-        BARENTRY.add(new BarEntry(db.getMonthExerciseTime(user, BarEntryLabels.get(10), pageTitle.getText().toString()), 10));
-        BARENTRY.add(new BarEntry(db.getMonthExerciseTime(user, BarEntryLabels.get(11), pageTitle.getText().toString()), 11));
+        BARENTRY.add(new BarEntry(user.getMinutes(db.getMonthExerciseTime(user, BarEntryLabels.get(0), pageTitle.getText().toString())), 0));
+        BARENTRY.add(new BarEntry(user.getMinutes(db.getMonthExerciseTime(user, BarEntryLabels.get(1), pageTitle.getText().toString())), 1));
+        BARENTRY.add(new BarEntry(user.getMinutes(db.getMonthExerciseTime(user, BarEntryLabels.get(2), pageTitle.getText().toString())), 2));
+        BARENTRY.add(new BarEntry(user.getMinutes(db.getMonthExerciseTime(user, BarEntryLabels.get(3), pageTitle.getText().toString())), 3));
+        BARENTRY.add(new BarEntry(user.getMinutes(db.getMonthExerciseTime(user, BarEntryLabels.get(4), pageTitle.getText().toString())), 4));
+        BARENTRY.add(new BarEntry(user.getMinutes(db.getMonthExerciseTime(user, BarEntryLabels.get(5), pageTitle.getText().toString())), 5));
+        BARENTRY.add(new BarEntry(user.getMinutes(db.getMonthExerciseTime(user, BarEntryLabels.get(6), pageTitle.getText().toString())), 6));
+        BARENTRY.add(new BarEntry(user.getMinutes(db.getMonthExerciseTime(user, BarEntryLabels.get(7), pageTitle.getText().toString())), 7));
+        BARENTRY.add(new BarEntry(user.getMinutes(db.getMonthExerciseTime(user, BarEntryLabels.get(8), pageTitle.getText().toString())), 8));
+        BARENTRY.add(new BarEntry(user.getMinutes(db.getMonthExerciseTime(user, BarEntryLabels.get(9), pageTitle.getText().toString())), 9));
+        BARENTRY.add(new BarEntry(user.getMinutes(db.getMonthExerciseTime(user, BarEntryLabels.get(10), pageTitle.getText().toString())), 10));
+        BARENTRY.add(new BarEntry(user.getMinutes(db.getMonthExerciseTime(user, BarEntryLabels.get(11), pageTitle.getText().toString())), 11));
 
         db.close();
 

@@ -11,11 +11,15 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Main extends AppCompatActivity {
     private User user;
     private BTService btService;
+    private boolean successfulConnection;
+
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -39,11 +43,13 @@ public class Main extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //todo override the onBackPressed to disable using the back button on relevant pages
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent i = getIntent();
         user = (User)i.getSerializableExtra("userData");
+        if (i.hasExtra("SuccessfulConnection")) {
+            successfulConnection = i.getBooleanExtra("SuccessfulConnection", false);
+        }
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //getSupportActionBar().setIcon(R.drawable.logo);
 
@@ -58,6 +64,12 @@ public class Main extends AppCompatActivity {
         updateStepDisplay();
         updateCalorieDisplay();
         updateDistanceDisplay();
+
+        if (successfulConnection) {
+            Button btButton = findViewById(R.id.bluetoothButton);
+            btButton.setText("Bluetooth Connected");
+            //todo what if the connection fails
+        }
     }
 
     //runs when the page is brought to the foreground of the device screen
@@ -124,7 +136,7 @@ public class Main extends AppCompatActivity {
     }
     //-------------------------------------------------------------------------------
 
-    //todo move bluetooth button to a better place on page
+    //todo provide bluetooth connection feedback
     public void bluetoothPage(View view) {
         Intent intent = new Intent(this, BluetoothConnectionSetup.class);
         intent.putExtra("userData", user);
@@ -175,7 +187,7 @@ public class Main extends AppCompatActivity {
         }
     }
     //----------------------------------------------------------------
-    //Todo auto updating step counter(add weekly and monthly)
+
     private void updateStepDisplay() {
        TextView dailyStepView = findViewById(R.id.daliyStepsTextbox);
        dailyStepView.setText("Steps Today:\n" + user.getSteps());
@@ -186,7 +198,7 @@ public class Main extends AppCompatActivity {
     }
     private void updateDistanceDisplay() {
         TextView dailyDistanceView = findViewById(R.id.daliyDistanceTextbox);
-        dailyDistanceView.setText("Distance Today:\n" + user.getDistance() + "m");
+        dailyDistanceView.setText("Distance Today:\n" + user.getKM(user.getDistance()) + "km");
     }
 
 
@@ -198,14 +210,17 @@ public class Main extends AppCompatActivity {
                 user.updateSteps(intent.getIntExtra("Steps", 0));
                 user.updateCalories(intent.getIntExtra("Calories", 0));
                 user.updateDistance(intent.getIntExtra("Distance", 0));
-                //todo use step data
+
                 updateStepDisplay();
                 updateCalorieDisplay();
                 updateDistanceDisplay();
-            }else {
+            } else if (action.equals("btDisconnected")) {
+                Toast.makeText(Main.this, "Bluetooth device disconnected", Toast.LENGTH_SHORT).show();
+                Button btButton = findViewById(R.id.bluetoothButton);
+                btButton.setText("Connect Bluetooth");
+            } else {
                 System.out.println("broadcast receiver error");
             }
-            //todo on successful connect go home
         }
     };
 

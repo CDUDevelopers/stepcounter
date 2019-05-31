@@ -18,14 +18,13 @@ import java.util.Date;
 public class UserDatabase {
     private static final String TAG = "User Database";
     private static final String DB_NAME = "UserDatabase.db";
-    private static final int DATABASE_VERSION = 11;
+    private static final int DATABASE_VERSION = 13;
     //todo dont forget to increment version every time the tables are changed
 
     private static final String LOGIN_TABLE = "logins";
     private static final String LOGIN_COLUMN1 = "username";
     private static final String LOGIN_COLUMN2 = "password";
 
-    //todo add gender to the relevant places
     private static final String USER_TABLE = "users";
     private static final String USER_COLUMN1 = "username";
     private static final String USER_COLUMN2 = "steps";
@@ -180,6 +179,7 @@ public class UserDatabase {
             user.updateHeight(userData.getInt(5));
             user.updateAge(userData.getInt(6));
             user.updateExerciseTime(userData.getLong(7));
+            user.updateGender(userData.getString(9));
 
             if (!saveUser(user)) {
                 System.out.println("user information database write failed");
@@ -204,7 +204,6 @@ public class UserDatabase {
             } catch (ParseException e) {
                 e.printStackTrace();
                 System.out.println("tried to retrieve an incorrectly formatted date from the user database (Table users)");
-                //todo fix the broken date if possible
                 return false;
             }
             if (date.after(dataDate)) {
@@ -213,6 +212,8 @@ public class UserDatabase {
                 user.updateCalories(0);
                 user.updateDistance(0);
                 user.updateExerciseTime(0);
+            } else {
+                //updateHistoricDB(user);
             }
             updateUserDB(user);
         }
@@ -415,7 +416,7 @@ public class UserDatabase {
         //todo check the between statement is correctly bound
         Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between '" + previousDate + "' and '" + currentDate + "';", new String[] {user.getUsername()});
         hist.moveToFirst();
-        int total = 0;
+        int total = user.getSteps();
         int i = 0;
 
         while (i < hist.getCount()) {
@@ -435,7 +436,7 @@ public class UserDatabase {
         //todo check the between statement is correctly bound
         Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between '" + previousDate + "' and '" + currentDate + "';", new String[] {user.getUsername()});
         hist.moveToFirst();
-        int total = 0;
+        int total = user.getSteps();
         int i = 0;
 
         while (i < hist.getCount()) {
@@ -484,7 +485,7 @@ public class UserDatabase {
         //todo check the between statement is correctly bound
         Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between '" + previousDate + "' and '" + currentDate + "';", new String[] {user.getUsername()});
         hist.moveToFirst();
-        int total = 0;
+        int total = user.getCalories();
         int i = 0;
 
         while (i < hist.getCount()) {
@@ -504,7 +505,7 @@ public class UserDatabase {
         //todo check the between statement is correctly bound
         Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between '" + previousDate + "' and '" + currentDate + "';", new String[] {user.getUsername()});
         hist.moveToFirst();
-        int total = 0;
+        int total = user.getCalories();
         int i = 0;
 
         while (i < hist.getCount()) {
@@ -553,7 +554,7 @@ public class UserDatabase {
         //todo check the between statement is correctly bound
         Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between '" + previousDate + "' and '" + currentDate + "';", new String[] {user.getUsername()});
         hist.moveToFirst();
-        int total = 0;
+        int total = user.getDistance();;
         int i = 0;
 
         while (i < hist.getCount()) {
@@ -573,7 +574,7 @@ public class UserDatabase {
         //todo check the between statement is correctly bound
         Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between '" + previousDate + "' and '" + currentDate + "';", new String[] {user.getUsername()});
         hist.moveToFirst();
-        int total = 0;
+        int total = user.getDistance();
         int i = 0;
 
         while (i < hist.getCount()) {
@@ -763,7 +764,7 @@ public class UserDatabase {
     //----------------------------------------------------------------------------------------------
 
     public int getDaySteps(User user, String exerciseType, String targetDay) {
-        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ? and " + EXERCISE_COLUMN2 + " = ?;", new String[] {user.getUsername(), targetDay, exerciseType});
+        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ? and " + EXERCISE_COLUMN2 + " = ?;", new String[] {user.getUsername(), exerciseType, targetDay});
         exerc.moveToFirst();
 
         int total = 0;
@@ -837,7 +838,7 @@ public class UserDatabase {
     }
 
     public int getDayCalories(User user, String exerciseType, String targetDay) {
-        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ? and " + EXERCISE_COLUMN2 + " = ?;", new String[] {user.getUsername(), targetDay, exerciseType});
+        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ? and " + EXERCISE_COLUMN2 + " = ?;", new String[] {user.getUsername(), exerciseType, targetDay});
         exerc.moveToFirst();
 
         int total = 0;
@@ -911,7 +912,7 @@ public class UserDatabase {
     }
 
     public int getDayDistance(User user, String exerciseType, String targetDay) {
-        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ? and " + EXERCISE_COLUMN2 + " = ?;", new String[] {user.getUsername(), targetDay, exerciseType});
+        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ? and " + EXERCISE_COLUMN2 + " = ?;", new String[] {user.getUsername(), exerciseType, targetDay});
         exerc.moveToFirst();
 
         int total = 0;

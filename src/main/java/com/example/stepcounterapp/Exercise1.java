@@ -186,7 +186,6 @@ public class Exercise1 extends FragmentActivity implements OnMapReadyCallback, G
         startCalories = user.getCalories();
         startDistance = user.getDistance();
 
-        //todo add any code to track gps path
         lat = new ArrayList<Double>();
         lng = new ArrayList<Double>();
 
@@ -195,9 +194,9 @@ public class Exercise1 extends FragmentActivity implements OnMapReadyCallback, G
             LocationServices.FusedLocationApi.requestLocationUpdates(client, locationRequest, this);
         }
 
-        stepCount.setText(String.valueOf(user.getSteps() - startSteps));
-        calorieCount.setText(String.valueOf(user.getCalories() - startCalories));
-        distanceCount.setText(String.valueOf(user.getDistance() - startDistance));
+        stepCount.setText("Steps: " + (user.getSteps() - startSteps));
+        calorieCount.setText("Calories: " + (user.getCalories() - startCalories) + " kcal");
+        distanceCount.setText("Distance: " + user.getKM(user.getDistance() - startDistance) + " km");
     }
 
     private void stopExercise() {
@@ -223,12 +222,11 @@ public class Exercise1 extends FragmentActivity implements OnMapReadyCallback, G
                 user.updateSteps(intent.getIntExtra("Steps", 0));
                 user.updateCalories(intent.getIntExtra("Calories", 0));
                 user.updateDistance(intent.getIntExtra("Distance", 0));
-                //todo use step data
 
                 if (isExercising) {
                     stepCount.setText("Steps: " + (user.getSteps() - startSteps));
-                    calorieCount.setText("Calories: " + (user.getCalories() - startCalories));
-                    distanceCount.setText("Distance: " + (user.getDistance() - startDistance));
+                    calorieCount.setText("Calories: " + (user.getCalories() - startCalories) + " kcal");
+                    distanceCount.setText("Distance: " + user.getKM(user.getDistance() - startDistance) + " km");
                 }
             }else {
                 System.out.println("broadcast receiver 'Unknown broadcast error'");
