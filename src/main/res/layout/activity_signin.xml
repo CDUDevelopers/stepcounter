@@ -33,19 +33,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:hint="Username"
                 android:inputType="textPersonName"
                 android:paddingLeft="20dp"
-                android:paddingTop="230dp"
-                android:text="Username" />
+                android:paddingTop="230dp" />
 
             <EditText
                 android:id="@+id/passwordTextbox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:hint="Password"
                 android:inputType="textPersonName"
-                android:padding="20dp"
-                android:text="Password" />
+                android:padding="20dp" />
 
             <Button
                 android:id="@+id/signInButton"

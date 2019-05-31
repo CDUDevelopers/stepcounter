@@ -16,6 +16,13 @@ public class SignUp extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, SignIn.class);
+        startActivity(intent);
+        finish();
+    }
+
     public void submitNewUser(View view) {
         EditText usernameEntry = findViewById(R.id.newUserUesrnameTextbox);
         String username = usernameEntry.getText().toString();

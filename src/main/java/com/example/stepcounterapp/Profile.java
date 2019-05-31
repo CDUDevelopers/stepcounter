@@ -67,14 +67,20 @@ public class Profile extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
+    protected void onStop() {
         UserDatabase db = new UserDatabase(this);
         db.open();
         db.saveUser(user);
         db.close();
+        super.onStop();
+    }
+
+    @Override
+    public void onBackPressed() {
         Intent intent = new Intent(this, Main.class);
         intent.putExtra("userData", user);
         startActivity(intent);
+        finish();
     }
 
     public void submitProfileUpdate(View view) {
@@ -130,6 +136,11 @@ public class Profile extends AppCompatActivity {
         Intent intent = new Intent(this, Main.class);
         intent.putExtra("userData", user);
         startActivity(intent);
+        finish();
+    }
+
+    public void addDataToTable(View view) {
+        user.testData(this);
     }
 
     //--------------------------------------------------------------------------------------------------

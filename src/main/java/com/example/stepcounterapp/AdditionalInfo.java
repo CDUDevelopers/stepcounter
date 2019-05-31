@@ -105,14 +105,20 @@ public class AdditionalInfo extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
+    protected void onStop() {
         UserDatabase db = new UserDatabase(this);
         db.open();
         db.saveUser(user);
         db.close();
+        super.onStop();
+    }
+
+    @Override
+    public void onBackPressed() {
         Intent intent = new Intent(this, Main.class);
         intent.putExtra("userData", user);
         startActivity(intent);
+        finish();
     }
 
     //----------------------------------------------------------------------------------------------
@@ -167,14 +173,6 @@ public class AdditionalInfo extends AppCompatActivity {
     public void AddValuesToBARENTRY(){
         UserDatabase db = new UserDatabase(this);
         db.open();
-
-       /* db.stepCheat(100, 43, 5, 0);
-        db.stepCheat(456, 1, 63, 1);
-        db.stepCheat(243, 543, 916, 2);
-        db.stepCheat(8, 871, 231, 3);
-        db.stepCheat(45, 4397, 1735, 4);
-        db.stepCheat(1209, 215, 23813, 5);
-        db.stepCheat(24876, 21, 0, 6);**/
 
        if (pageTitle.getText().toString().equals("Step")) {
            BARENTRY.add(new BarEntry(db.getDaysSteps(user, 0), 0));
