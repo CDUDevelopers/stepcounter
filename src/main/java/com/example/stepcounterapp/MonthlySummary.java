@@ -15,7 +15,7 @@ import android.widget.TextView;
 public class MonthlySummary extends AppCompatActivity {
     private User user;
     private BTService btService;
-    private TextView pageTitle;
+    private String pageTitle;
     private String month;
 
 
@@ -46,6 +46,7 @@ public class MonthlySummary extends AppCompatActivity {
         Intent i = getIntent();
         user = (User)i.getSerializableExtra("userData");
         month = (String)i.getSerializableExtra("selectedMonth");
+        pageTitle = (String)i.getSerializableExtra("exerciseType");
 
         setPageContent();
     }
@@ -68,12 +69,21 @@ public class MonthlySummary extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
+    protected void onStop() {
         UserDatabase db = new UserDatabase(this);
         db.open();
         db.saveUser(user);
         db.close();
-        super.onBackPressed();
+        super.onStop();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, ExerciseInformation.class);
+        intent.putExtra("userData", user);
+        intent.putExtra("exerciseType", pageTitle);
+        startActivity(intent);
+        finish();
     }
 
     private void setPageContent() {

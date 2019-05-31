@@ -59,7 +59,7 @@ public class Main extends AppCompatActivity {
         updateCalorieDisplay();
         updateDistanceDisplay();
     }
-    //todo update onResume and onPause methods to account for broadcast reciver
+
     //runs when the page is brought to the foreground of the device screen
     @Override
     protected void onResume() {
@@ -79,17 +79,20 @@ public class Main extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
+    protected void onStop() {
         UserDatabase db = new UserDatabase(this);
         db.open();
         db.saveUser(user);
         db.close();
-        Intent intent = new Intent(this, SignIn.class);
-        startActivity(intent);
+        super.onStop();
     }
 
-    //todo add onStop() or onDestroy() override
-    //todo include database update in them to save data
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, SignIn.class);
+        startActivity(intent);
+        finish();
+    }
 
     //----------------------------------------------------------------------------
     public void walking(View v) {

@@ -92,6 +92,7 @@
                     android:id="@+id/imageView4"
                     android:layout_width="55dp"
                     android:layout_height="match_parent"
+                    android:onClick="running"
                     app:srcCompat="@drawable/running" />
 
                 <TextView
@@ -113,6 +114,7 @@
                     android:id="@+id/imageView7"
                     android:layout_width="55dp"
                     android:layout_height="match_parent"
+                    android:onClick="walking"
                     app:srcCompat="@drawable/walking" />
 
                 <TextView

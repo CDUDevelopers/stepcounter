@@ -181,8 +181,12 @@ public class BluetoothConnectionSetup extends AppCompatActivity implements Bluet
     //runs when the activity is closed either trough the app closing or navigating to another screen
     @Override
     protected void onStop() {
-        //todo possibly remove this if decide to move bt code somewhere else
+        UserDatabase db = new UserDatabase(this);
+        db.open();
+        db.saveUser(user);
+        db.close();
 
+        //todo possibly remove this if decide to move bt code somewhere else
         super.onStop();
         //if still connected to a gatt server disconnect
         if (btGatt != null) {
@@ -193,13 +197,10 @@ public class BluetoothConnectionSetup extends AppCompatActivity implements Bluet
 
     @Override
     public void onBackPressed() {
-        UserDatabase db = new UserDatabase(this);
-        db.open();
-        db.saveUser(user);
-        db.close();
         Intent intent = new Intent(this, Main.class);
         intent.putExtra("userData", user);
         startActivity(intent);
+        finish();
     }
 
     //runs whenever a device is detected during a LE bluetooth scan

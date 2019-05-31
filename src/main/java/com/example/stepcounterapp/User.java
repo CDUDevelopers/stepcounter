@@ -1,5 +1,7 @@
 package com.example.stepcounterapp;
 
+import android.content.Context;
+
 import java.io.Serializable;
 
 public class User implements Serializable {
@@ -97,4 +99,12 @@ public class User implements Serializable {
 
     //----------------------------------------------------------------------------------------------
 
+    public void testData(Context context) {
+        UserDatabase db = new UserDatabase(context);
+        db.open();
+
+        db.historicTableCheat(new User(steps, calories, distance, weight, height, age, exerciseTime, username, gender), 7);
+
+        db.close();
+    }
 }

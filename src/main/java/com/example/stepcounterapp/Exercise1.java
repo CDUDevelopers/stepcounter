@@ -163,12 +163,21 @@ public class Exercise1 extends FragmentActivity implements OnMapReadyCallback, G
     }
 
     @Override
-    public void onBackPressed() {
+    protected void onStop() {
         UserDatabase db = new UserDatabase(this);
         db.open();
         db.saveUser(user);
         db.close();
-        super.onBackPressed();
+        super.onStop();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, ExerciseInformation.class);
+        intent.putExtra("userData", user);
+        intent.putExtra("exerciseType", pageTitle.getText().toString());
+        startActivity(intent);
+        finish();
     }
 
     private void startExercise() {
@@ -205,12 +214,6 @@ public class Exercise1 extends FragmentActivity implements OnMapReadyCallback, G
         db.close();
     }
 
-    public void goBack(View view) {
-        Intent intent = new Intent(this, ExerciseInformation.class);
-        intent.putExtra("userData", user);
-        //todo add title support
-        startActivity(intent);
-    }
 //--------------------------------------------------------------------------------------------------
     private final BroadcastReceiver updateReciver = new BroadcastReceiver() {
         @Override
@@ -223,10 +226,9 @@ public class Exercise1 extends FragmentActivity implements OnMapReadyCallback, G
                 //todo use step data
 
                 if (isExercising) {
-                    //todo check these output correctly
-                    stepCount.setText(String.valueOf(user.getSteps() - startSteps));
-                    calorieCount.setText(String.valueOf(user.getCalories() - startCalories));
-                    distanceCount.setText(String.valueOf(user.getDistance() - startDistance));
+                    stepCount.setText("Steps: " + (user.getSteps() - startSteps));
+                    calorieCount.setText("Calories: " + (user.getCalories() - startCalories));
+                    distanceCount.setText("Distance: " + (user.getDistance() - startDistance));
                 }
             }else {
                 System.out.println("broadcast receiver 'Unknown broadcast error'");
@@ -345,7 +347,7 @@ public class Exercise1 extends FragmentActivity implements OnMapReadyCallback, G
         currentLocationMarker = mMap.addMarker(markerOptions);
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomBy(10));
+        mMap.animateCamera(CameraUpdateFactory.zoomBy(5));
 
         if(!isExercising)
         {
