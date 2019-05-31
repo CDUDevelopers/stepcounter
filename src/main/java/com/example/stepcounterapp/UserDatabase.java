@@ -409,7 +409,7 @@ public class UserDatabase {
         String previousDate = format.format(date);
 
         //todo check the between statement is correctly bound
-        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between " + currentDate + " and " + previousDate + ";", new String[] {user.getUsername()});
+        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between '" + currentDate + "' and '" + previousDate + "';", new String[] {user.getUsername()});
         hist.moveToFirst();
         int total = 0;
         int i = 0;
@@ -429,7 +429,7 @@ public class UserDatabase {
         String previousDate = format.format(date);
 
         //todo check the between statement is correctly bound
-        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between " + currentDate + " and " + previousDate + ";", new String[] {user.getUsername()});
+        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between '" + currentDate + "' and '" + previousDate + "';", new String[] {user.getUsername()});
         hist.moveToFirst();
         int total = 0;
         int i = 0;
@@ -478,7 +478,7 @@ public class UserDatabase {
         String previousDate = format.format(date);
 
         //todo check the between statement is correctly bound
-        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between " + currentDate + " and " + previousDate + ";", new String[] {user.getUsername()});
+        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between '" + currentDate + "' and '" + previousDate + "';", new String[] {user.getUsername()});
         hist.moveToFirst();
         int total = 0;
         int i = 0;
@@ -498,7 +498,7 @@ public class UserDatabase {
         String previousDate = format.format(date);
 
         //todo check the between statement is correctly bound
-        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between " + currentDate + " and " + previousDate + ";", new String[] {user.getUsername()});
+        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between '" + currentDate + "' and '" + previousDate + "';", new String[] {user.getUsername()});
         hist.moveToFirst();
         int total = 0;
         int i = 0;
@@ -547,7 +547,7 @@ public class UserDatabase {
         String previousDate = format.format(date);
 
         //todo check the between statement is correctly bound
-        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between " + currentDate + " and " + previousDate + ";", new String[] {user.getUsername()});
+        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between '" + currentDate + "' and '" + previousDate + "';", new String[] {user.getUsername()});
         hist.moveToFirst();
         int total = 0;
         int i = 0;
@@ -567,7 +567,7 @@ public class UserDatabase {
         String previousDate = format.format(date);
 
         //todo check the between statement is correctly bound
-        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between " + currentDate + " and " + previousDate + ";", new String[] {user.getUsername()});
+        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between '" + currentDate + "' and '" + previousDate + "';", new String[] {user.getUsername()});
         hist.moveToFirst();
         int total = 0;
         int i = 0;
@@ -607,7 +607,7 @@ public class UserDatabase {
         String previousDate = format.format(date);
 
         //todo check the between statement is correctly bound
-        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ? and " + EXERCISE_COLUMN2 + " between " + currentDate + " and " + previousDate + ";", new String[] {user.getUsername(), exerciseType});
+        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ? and " + EXERCISE_COLUMN2 + " between '" + previousDate + "' and '" + currentDate + "';", new String[] {user.getUsername(), exerciseType});
         exerc.moveToFirst();
         int total = 0;
         int i = 0;
@@ -627,7 +627,7 @@ public class UserDatabase {
         String previousDate = format.format(date);
 
         //todo check the between statement is correctly bound
-        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ? and " + EXERCISE_COLUMN2 + " between " + currentDate + " and " + previousDate + ";", new String[] {user.getUsername(), exerciseType});
+        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ? and " + EXERCISE_COLUMN2 + " between '" + previousDate + "' and '" + currentDate + "';", new String[] {user.getUsername(), exerciseType});
         exerc.moveToFirst();
         int total = 0;
         int i = 0;
@@ -665,7 +665,7 @@ public class UserDatabase {
         String previousDate = format.format(date);
 
         //todo check the between statement is correctly bound
-        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ? and " + EXERCISE_COLUMN2 + " between " + currentDate + " and " + previousDate + ";", new String[] {user.getUsername(), exerciseType});
+        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ? and " + EXERCISE_COLUMN2 + " between '" + previousDate + "' and '" + currentDate + "';", new String[] {user.getUsername(), exerciseType});
         exerc.moveToFirst();
         int total = 0;
         int i = 0;
@@ -685,7 +685,7 @@ public class UserDatabase {
         String previousDate = format.format(date);
 
         //todo check the between statement is correctly bound
-        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ? and " + EXERCISE_COLUMN2 + " between " + currentDate + " and " + previousDate + ";", new String[] {user.getUsername(), exerciseType});
+        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ? and " + EXERCISE_COLUMN2 + " between '" + currentDate + "' and '" + previousDate + "';", new String[] {user.getUsername(), exerciseType});
         exerc.moveToFirst();
         int total = 0;
         int i = 0;
@@ -723,7 +723,7 @@ public class UserDatabase {
         String previousDate = format.format(date);
 
         //todo check the between statement is correctly bound
-        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ? and " + EXERCISE_COLUMN2 + " between " + currentDate + " and " + previousDate + ";", new String[] {user.getUsername(), exerciseType});
+        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ? and " + EXERCISE_COLUMN2 + " between '" + currentDate + "' and '" + previousDate + "';", new String[] {user.getUsername(), exerciseType});
         exerc.moveToFirst();
         int total = 0;
         int i = 0;
@@ -743,7 +743,7 @@ public class UserDatabase {
         String previousDate = format.format(date);
 
         //todo check the between statement is correctly bound
-        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ? and " + EXERCISE_COLUMN2 + " between " + currentDate + " and " + previousDate + ";", new String[] {user.getUsername(), exerciseType});
+        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ? and " + EXERCISE_COLUMN2 + " between '" + currentDate + "' and '" + previousDate + "';", new String[] {user.getUsername(), exerciseType});
         exerc.moveToFirst();
         int total = 0;
         int i = 0;
@@ -819,7 +819,7 @@ public class UserDatabase {
         String previousDate = format.format(endDate);
 
         //todo check the between statement is correctly bound
-        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between " + firstDate + " and " + previousDate + ";", new String[] {user.getUsername()});
+        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between '" + firstDate + "' and '" + previousDate + "';", new String[] {user.getUsername()});
         hist.moveToFirst();
         int total = 0;
         int i = 0;
@@ -893,7 +893,7 @@ public class UserDatabase {
         String previousDate = format.format(endDate);
 
         //todo check the between statement is correctly bound
-        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between " + firstDate + " and " + previousDate + ";", new String[] {user.getUsername()});
+        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between '" + firstDate + "' and '" + previousDate + "';", new String[] {user.getUsername()});
         hist.moveToFirst();
         int total = 0;
         int i = 0;
@@ -967,7 +967,7 @@ public class UserDatabase {
         String previousDate = format.format(endDate);
 
         //todo check the between statement is correctly bound
-        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between " + firstDate + " and " + previousDate + ";", new String[] {user.getUsername()});
+        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between '" + firstDate + "' and '" + previousDate + "';", new String[] {user.getUsername()});
         hist.moveToFirst();
         int total = 0;
         int i = 0;
@@ -1025,7 +1025,7 @@ public class UserDatabase {
         String previousDate = format.format(endDate);
 
         //todo check the between statement is correctly bound
-        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ? and " + EXERCISE_COLUMN2 + " between " + firstDate + " and " + previousDate + ";", new String[] {user.getUsername(), exerciseType});
+        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ? and " + EXERCISE_COLUMN2 + " between '" + firstDate + "' and '" + previousDate + "';", new String[] {user.getUsername(), exerciseType});
         exerc.moveToFirst();
         long total = 0;
         int i = 0;
