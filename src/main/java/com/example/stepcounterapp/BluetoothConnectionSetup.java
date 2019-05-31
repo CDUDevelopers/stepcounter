@@ -128,14 +128,19 @@ public class BluetoothConnectionSetup extends AppCompatActivity implements Bluet
                     }else {
                         System.out.println("btService not initialised");
                     }
-                    startActivity(intent);
+                    if (btService.isGattConnected()) {
+                        intent.putExtra("SuccessfulConnection", true);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(BluetoothConnectionSetup.this, "Bluetooth connection fail to complete", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
                 //todo remove device name textbox as it is not used
             }
         });
 
         //if location access is not given request it
-        //todo test permission requesting
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
@@ -169,7 +174,6 @@ public class BluetoothConnectionSetup extends AppCompatActivity implements Bluet
     //runs when the page is removed from the foreground of the device screen
     @Override
     protected void onPause() {
-        //todo add this to all onPause callbacks
         super.onPause();
         unregisterReceiver(updateReciver);
         //stop any unfired callbacks and stop scanning
@@ -186,7 +190,6 @@ public class BluetoothConnectionSetup extends AppCompatActivity implements Bluet
         db.saveUser(user);
         db.close();
 
-        //todo possibly remove this if decide to move bt code somewhere else
         super.onStop();
         //if still connected to a gatt server disconnect
         if (btGatt != null) {

@@ -1,8 +1,11 @@
 package com.example.stepcounterapp;
 
 import android.content.Context;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 
 public class User implements Serializable {
     private int steps;
@@ -16,7 +19,6 @@ public class User implements Serializable {
     private String gender;
 
     //todo add linked bt device auto connect so can resume without reconnecting
-    //todo add age to user and to database
 
     public User() {
 
@@ -68,12 +70,23 @@ public class User implements Serializable {
         return age;
     }
 
-    //todo do we need to be able to return the exercise time as anything other than milliseconds?
     public void updateExerciseTime(long exerciseTime) {
         this.exerciseTime = exerciseTime;
     }
     public long getExerciseTime() {
         return exerciseTime;
+    }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public int getMinutes(long milliSeconds) {
+        DecimalFormat format = new DecimalFormat();
+        format.setMaximumFractionDigits(1);
+
+        int value;
+        long temp = milliSeconds / 1000 / 60;
+
+        value = Math.toIntExact(temp);
+
+        return value;
     }
 
     public void updateUsername(String username) {
@@ -88,6 +101,17 @@ public class User implements Serializable {
     }
     public int getDistance() {
         return distance;
+    }
+    public double getKM(int meters) {
+        DecimalFormat format = new DecimalFormat();
+        format.setMaximumFractionDigits(1);
+
+        double value;
+        double temp = meters / 1000.0;
+
+        value = Double.parseDouble(format.format(temp));
+
+        return value;
     }
 
     public void updateGender(String gender) {

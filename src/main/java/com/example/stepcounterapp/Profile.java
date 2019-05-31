@@ -46,6 +46,34 @@ public class Profile extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         Intent i = getIntent();
         user = (User)i.getSerializableExtra("userData");
+
+        EditText nameInput = findViewById(R.id.nameChangeTextbox);
+        EditText genderInput = findViewById(R.id.genderChangeTextbox);
+
+        EditText ageInput = findViewById(R.id.ageChangeTextbox);
+        EditText weightInput = findViewById(R.id.weightChangeTextbox);
+        EditText heightInput = findViewById(R.id.heightChangeTextbox);
+
+        nameInput.setHint(user.getUsername());
+        if (user.getAge() == -1) {
+            ageInput.setHint("Age Undefined");
+        } else {
+            ageInput.setHint(user.getAge() + " Years");
+        } if (user.getGender().equals("Undefined")) {
+            genderInput.setHint("Gender Undefined");
+        } else {
+            genderInput.setHint(user.getGender());
+        }
+        if (user.getHeight() == -1) {
+            heightInput.setHint("Height Undefined");
+        } else {
+            heightInput.setHint(user.getHeight() + " cm");
+        }
+        if (user.getWeight() == -1) {
+            weightInput.setHint("Weight Undefined");
+        }else {
+            weightInput.setHint(user.getWeight() + " kg");
+        }
     }
 
     //runs when the page is brought to the foreground of the device screen
@@ -153,7 +181,6 @@ public class Profile extends AppCompatActivity {
                 user.updateSteps(intent.getIntExtra("Steps", 0));
                 user.updateCalories(intent.getIntExtra("Calories", 0));
                 user.updateDistance(intent.getIntExtra("Distance", 0));
-                //todo use step data
             }else {
                 System.out.println("broadcast receiver 'Unknown broadcast error'");
             }

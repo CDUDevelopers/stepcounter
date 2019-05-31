@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 public class SignUp extends AppCompatActivity {
 
-    //todo the app banner cover the username entry textbox remove it from the page
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

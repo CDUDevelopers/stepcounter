@@ -41,14 +41,11 @@ public class SignIn extends AppCompatActivity {
 
 // Change back to private after login fixed
     public void homePage(View view, User user) {
-        //Todo add SQL login and pull data from memory then add to the user object to pass
-        //Todo add check for session in each onCreate call i.e. if (user.username = null) {go to login};
         Intent intent = new Intent(this, Main.class);
         intent.putExtra("userData", user);
         startActivity(intent);
     }
-//Todo method for validating the login (not tested yet)
-    public void submitLogin(View view) {//todo test login method
+    public void submitLogin(View view) {
         Boolean loginSuccess = false;
 
         EditText usernameEntry = findViewById(R.id.usernameTextbox);
