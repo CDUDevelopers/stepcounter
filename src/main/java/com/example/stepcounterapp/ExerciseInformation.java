@@ -104,7 +104,7 @@ public class ExerciseInformation extends AppCompatActivity {
 
         setPageContent();
 
-        chart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+       /* chart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
                 Intent intent = new Intent(ExerciseInformation.this, MonthlySummary.class);
@@ -118,11 +118,11 @@ public class ExerciseInformation extends AppCompatActivity {
             public void onNothingSelected() {
 
             }
-        });
+        }); **/
 
         //------------------------------------------------------------------------------------------
 
-        setSpinnerContent();
+     /*   setSpinnerContent();
 
         firstTime = true;
 
@@ -155,7 +155,7 @@ public class ExerciseInformation extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
-        });
+        });**/
     }
 
     //runs when the page is brought to the foreground of the device screen
@@ -230,7 +230,7 @@ public class ExerciseInformation extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void setSpinnerContent() {
+   /* private void setSpinnerContent() {
         Spinner spinner = findViewById(R.id.exerciseSpinner);
 
         UserDatabase db = new UserDatabase(this);
@@ -245,7 +245,7 @@ public class ExerciseInformation extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-    }
+    }**/
 
     //----------------------------------------------------------------------------------------------
 

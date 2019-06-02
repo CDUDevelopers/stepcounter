@@ -182,6 +182,29 @@ public class AdditionalInfo extends AppCompatActivity {
            BARENTRY.add(new BarEntry(db.getDaysSteps(user, 4), 4));
            BARENTRY.add(new BarEntry(db.getDaysSteps(user, 5), 5));
            BARENTRY.add(new BarEntry(db.getDaysSteps(user, 6), 6));
+           BARENTRY.add(new BarEntry(db.getDaysSteps(user, 7), 7));
+           BARENTRY.add(new BarEntry(db.getDaysSteps(user, 8), 8));
+           BARENTRY.add(new BarEntry(db.getDaysSteps(user, 9), 9));
+           BARENTRY.add(new BarEntry(db.getDaysSteps(user, 10), 10));
+           BARENTRY.add(new BarEntry(db.getDaysSteps(user, 11), 11));
+           BARENTRY.add(new BarEntry(db.getDaysSteps(user, 12), 12));
+           BARENTRY.add(new BarEntry(db.getDaysSteps(user, 13), 13));
+           BARENTRY.add(new BarEntry(db.getDaysSteps(user, 14), 14));
+           BARENTRY.add(new BarEntry(db.getDaysSteps(user, 15), 15));
+           BARENTRY.add(new BarEntry(db.getDaysSteps(user, 16), 16));
+           BARENTRY.add(new BarEntry(db.getDaysSteps(user, 17), 17));
+           BARENTRY.add(new BarEntry(db.getDaysSteps(user, 18), 18));
+           BARENTRY.add(new BarEntry(db.getDaysSteps(user, 19), 19));
+           BARENTRY.add(new BarEntry(db.getDaysSteps(user, 20), 20));
+           BARENTRY.add(new BarEntry(db.getDaysSteps(user, 21), 21));
+           BARENTRY.add(new BarEntry(db.getDaysSteps(user, 22), 22));
+           BARENTRY.add(new BarEntry(db.getDaysSteps(user, 23), 23));
+           BARENTRY.add(new BarEntry(db.getDaysSteps(user, 24), 24));
+           BARENTRY.add(new BarEntry(db.getDaysSteps(user, 25), 25));
+           BARENTRY.add(new BarEntry(db.getDaysSteps(user, 26), 26));
+           BARENTRY.add(new BarEntry(db.getDaysSteps(user, 27), 27));
+           BARENTRY.add(new BarEntry(db.getDaysSteps(user, 28), 28));
+           BARENTRY.add(new BarEntry(db.getDaysSteps(user, 29), 29));
        } else if (pageTitle.getText().toString().equals("Calorie")) {
            BARENTRY.add(new BarEntry(db.getDaysCalories(user, 0), 0));
            BARENTRY.add(new BarEntry(db.getDaysCalories(user, 1), 1));
@@ -190,6 +213,29 @@ public class AdditionalInfo extends AppCompatActivity {
            BARENTRY.add(new BarEntry(db.getDaysCalories(user, 4), 4));
            BARENTRY.add(new BarEntry(db.getDaysCalories(user, 5), 5));
            BARENTRY.add(new BarEntry(db.getDaysCalories(user, 6), 6));
+           BARENTRY.add(new BarEntry(db.getDaysCalories(user, 7), 7));
+           BARENTRY.add(new BarEntry(db.getDaysCalories(user, 8), 8));
+           BARENTRY.add(new BarEntry(db.getDaysCalories(user, 9), 9));
+           BARENTRY.add(new BarEntry(db.getDaysCalories(user, 10), 10));
+           BARENTRY.add(new BarEntry(db.getDaysCalories(user, 11), 11));
+           BARENTRY.add(new BarEntry(db.getDaysCalories(user, 12), 12));
+           BARENTRY.add(new BarEntry(db.getDaysCalories(user, 13), 13));
+           BARENTRY.add(new BarEntry(db.getDaysCalories(user, 14), 14));
+           BARENTRY.add(new BarEntry(db.getDaysCalories(user, 15), 15));
+           BARENTRY.add(new BarEntry(db.getDaysCalories(user, 16), 16));
+           BARENTRY.add(new BarEntry(db.getDaysCalories(user, 17), 17));
+           BARENTRY.add(new BarEntry(db.getDaysCalories(user, 18), 18));
+           BARENTRY.add(new BarEntry(db.getDaysCalories(user, 19), 19));
+           BARENTRY.add(new BarEntry(db.getDaysCalories(user, 20), 20));
+           BARENTRY.add(new BarEntry(db.getDaysCalories(user, 21), 21));
+           BARENTRY.add(new BarEntry(db.getDaysCalories(user, 22), 22));
+           BARENTRY.add(new BarEntry(db.getDaysCalories(user, 23), 23));
+           BARENTRY.add(new BarEntry(db.getDaysCalories(user, 24), 24));
+           BARENTRY.add(new BarEntry(db.getDaysCalories(user, 25), 25));
+           BARENTRY.add(new BarEntry(db.getDaysCalories(user, 26), 26));
+           BARENTRY.add(new BarEntry(db.getDaysCalories(user, 27), 27));
+           BARENTRY.add(new BarEntry(db.getDaysCalories(user, 28), 28));
+           BARENTRY.add(new BarEntry(db.getDaysCalories(user, 29), 29));
        } else if (pageTitle.getText().toString().equals("Distance")) {
            BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 0)), 0));
            BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 1)), 1));
@@ -198,6 +244,29 @@ public class AdditionalInfo extends AppCompatActivity {
            BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 4)), 4));
            BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 5)), 5));
            BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 6)), 6));
+           BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 7)), 7));
+           BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 8)), 8));
+           BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 9)), 9));
+           BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 10)), 10));
+           BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 11)), 11));
+           BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 12)), 12));
+           BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 13)), 13));
+           BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 14)), 14));
+           BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 15)), 15));
+           BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 16)), 16));
+           BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 17)), 17));
+           BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 18)), 18));
+           BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 19)), 19));
+           BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 20)), 20));
+           BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 21)), 21));
+           BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 22)), 22));
+           BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 23)), 23));
+           BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 24)), 24));
+           BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 25)), 25));
+           BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 26)), 26));
+           BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 27)), 27));
+           BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 28)), 28));
+           BARENTRY.add(new BarEntry((float) user.getKM(db.getDaysDistance(user, 29)), 29));
        }
 
 
@@ -213,7 +282,29 @@ public class AdditionalInfo extends AppCompatActivity {
         BarEntryLabels.add("5 Days Ago");
         BarEntryLabels.add("6 Days Ago");
         BarEntryLabels.add("7 Days Ago");
-
+        BarEntryLabels.add("8 Days Ago");
+        BarEntryLabels.add("9 Days Ago");
+        BarEntryLabels.add("10 Days Ago");
+        BarEntryLabels.add("11 Days Ago");
+        BarEntryLabels.add("12 Days Ago");
+        BarEntryLabels.add("13 Days Ago");
+        BarEntryLabels.add("14 Days Ago");
+        BarEntryLabels.add("15 Days Ago");
+        BarEntryLabels.add("16 Days Ago");
+        BarEntryLabels.add("17 Days Ago");
+        BarEntryLabels.add("18 Days Ago");
+        BarEntryLabels.add("19 Days Ago");
+        BarEntryLabels.add("20 Days Ago");
+        BarEntryLabels.add("21 Days Ago");
+        BarEntryLabels.add("22 Days Ago");
+        BarEntryLabels.add("23 Days Ago");
+        BarEntryLabels.add("24 Days Ago");
+        BarEntryLabels.add("25 Days Ago");
+        BarEntryLabels.add("26 Days Ago");
+        BarEntryLabels.add("27 Days Ago");
+        BarEntryLabels.add("28 Days Ago");
+        BarEntryLabels.add("29 Days Ago");
+        BarEntryLabels.add("30 Days Ago");
     }
 
     //----------------------------------------------------------------------------------------------

@@ -66,6 +66,11 @@
             android:paddingBottom="20dp"
             android:text="Start" />
 
+        <TextView
+            android:id="@+id/speedReading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
 
     z

@@ -186,6 +186,9 @@ public class Exercise1 extends FragmentActivity implements OnMapReadyCallback, G
         startCalories = user.getCalories();
         startDistance = user.getDistance();
 
+        TextView speedbox = findViewById(R.id.speedReading);
+        speedbox.setText("");
+
         lat = new ArrayList<Double>();
         lng = new ArrayList<Double>();
 
@@ -204,6 +207,12 @@ public class Exercise1 extends FragmentActivity implements OnMapReadyCallback, G
         int endSteps = user.getSteps() - startSteps;
         int endCalories =  user.getCalories() - startCalories;
         int endDistance =  user.getDistance() - startDistance;
+
+        double timeSec = endTime / 1000.0;
+        double avgSpeedMS = endDistance / timeSec;
+
+        TextView speedbox = findViewById(R.id.speedReading);
+        speedbox.setText(String.format("Average Speed Was: %.2f m/s", avgSpeedMS));
 
         UserDatabase db = new UserDatabase(this);
         db.open();

@@ -18,7 +18,7 @@ import java.util.Date;
 public class UserDatabase {
     private static final String TAG = "User Database";
     private static final String DB_NAME = "UserDatabase.db";
-    private static final int DATABASE_VERSION = 13;
+    private static final int DATABASE_VERSION = 14;
     //todo dont forget to increment version every time the tables are changed
 
     private static final String LOGIN_TABLE = "logins";
