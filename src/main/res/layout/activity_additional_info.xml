@@ -29,6 +29,11 @@
                 android:layout_height="wrap_content"
                 android:text="title" />
 
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/chart1"
+                android:layout_width="fill_parent"
+                android:layout_height="200dp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -56,10 +61,6 @@
                     android:text="month" />
             </LinearLayout>
 
-            <com.github.mikephil.charting.charts.BarChart
-                android:id="@+id/chart1"
-                android:layout_width="fill_parent"
-                android:layout_height="200dp" />
         </LinearLayout>
     </ScrollView>
 </android.support.constraint.ConstraintLayout>

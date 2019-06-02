@@ -84,11 +84,11 @@
             android:padding="20dp"
             android:text="Update Profile" />
 
-        <Button
+       <!-- <Button
             android:id="@+id/cheatButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="addDataToTable"
-            android:text="Add Test Data" />
+            android:text="Add Test Data" /> -->
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
