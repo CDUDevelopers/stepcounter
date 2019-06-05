@@ -11,11 +11,15 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Main extends AppCompatActivity {
     private User user;
     private BTService btService;
+    private boolean successfulConnection;
+
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -39,11 +43,15 @@ public class Main extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //todo override the onBackPressed to disable using the back button on relevant pages
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent i = getIntent();
         user = (User)i.getSerializableExtra("userData");
+        if (i.hasExtra("SuccessfulConnection")) {
+            successfulConnection = i.getBooleanExtra("SuccessfulConnection", false);
+        }
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setIcon(R.drawable.logo);
 
         //bind the service that handles the bluetooth
         Intent gattServiceIntent = new Intent(this, BTService.class);
@@ -56,8 +64,14 @@ public class Main extends AppCompatActivity {
         updateStepDisplay();
         updateCalorieDisplay();
         updateDistanceDisplay();
+
+        if (successfulConnection) {
+            Button btButton = findViewById(R.id.bluetoothButton);
+            btButton.setText("Bluetooth Connected");
+            //todo what if the connection fails
+        }
     }
-    //todo update onResume and onPause methods to account for broadcast reciver
+
     //runs when the page is brought to the foreground of the device screen
     @Override
     protected void onResume() {
@@ -76,25 +90,41 @@ public class Main extends AppCompatActivity {
         unregisterReceiver(updateReciver);
     }
 
-    //todo add onStop() or onDestroy() override
-    //todo include database update in them to save data
+    @Override
+    protected void onStop() {
+        UserDatabase db = new UserDatabase(this);
+        db.open();
+        db.saveUser(user);
+        db.close();
+        super.onStop();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, SignIn.class);
+        startActivity(intent);
+        finish();
+    }
 
     //----------------------------------------------------------------------------
     public void walking(View v) {
-        Intent i = new Intent(Main.this, Walking.class);
-        i.putExtra("userData", user);//todo other side
+        Intent i = new Intent(Main.this, ExerciseInformation.class);
+        i.putExtra("userData", user);
+        i.putExtra("exerciseType", "Walking");
         startActivity(i);
 
     }
     public void hiking(View v) {
-        Intent i = new Intent(Main.this, Hiking.class);
-        i.putExtra("userData", user);//todo other side
+        Intent i = new Intent(Main.this, ExerciseInformation.class);
+        i.putExtra("userData", user);
+        i.putExtra("exerciseType", "Hiking");
         startActivity(i);
 
     }
     public void running(View v) {
-        Intent i = new Intent(Main.this, Running.class);
-        i.putExtra("userData", user);//todo other side
+        Intent i = new Intent(Main.this, ExerciseInformation.class);
+        i.putExtra("userData", user);
+        i.putExtra("exerciseType", "Running");
         startActivity(i);
 
     }
@@ -106,10 +136,29 @@ public class Main extends AppCompatActivity {
     }
     //-------------------------------------------------------------------------------
 
-    //todo move bluetooth button to a better place
+    //todo provide bluetooth connection feedback
     public void bluetoothPage(View view) {
         Intent intent = new Intent(this, BluetoothConnectionSetup.class);
         intent.putExtra("userData", user);
+        startActivity(intent);
+    }
+
+    public void stepInfo(View view) {
+        Intent intent = new Intent(this, AdditionalInfo.class);
+        intent.putExtra("userData", user);
+        intent.putExtra("dataType", "Step");
+        startActivity(intent);
+    }
+    public void calInfo(View view) {
+        Intent intent = new Intent(this, AdditionalInfo.class);
+        intent.putExtra("userData", user);
+        intent.putExtra("dataType", "Calorie");
+        startActivity(intent);
+    }
+    public void distInfo(View view) {
+        Intent intent = new Intent(this, AdditionalInfo.class);
+        intent.putExtra("userData", user);
+        intent.putExtra("dataType", "Distance");
         startActivity(intent);
     }
     //------------------------------------------------------------------------------------
@@ -138,18 +187,18 @@ public class Main extends AppCompatActivity {
         }
     }
     //----------------------------------------------------------------
-    //Todo auto updating step counter(add weekly and monthly)
+
     private void updateStepDisplay() {
        TextView dailyStepView = findViewById(R.id.daliyStepsTextbox);
        dailyStepView.setText("Steps Today:\n" + user.getSteps());
     }
     private void updateCalorieDisplay() {
         TextView dailyCalorieView = findViewById(R.id.daliyCaloriesTextbox);
-        dailyCalorieView.setText("Calories Today:\n" + user.getCalories());
+        dailyCalorieView.setText("Calories Today:\n" + user.getCalories() + "kcal");
     }
     private void updateDistanceDisplay() {
         TextView dailyDistanceView = findViewById(R.id.daliyDistanceTextbox);
-        dailyDistanceView.setText("Distance Today(m):\n" + user.getDistance());
+        dailyDistanceView.setText("Distance Today:\n" + user.getKM(user.getDistance()) + "km");
     }
 
 
@@ -161,14 +210,17 @@ public class Main extends AppCompatActivity {
                 user.updateSteps(intent.getIntExtra("Steps", 0));
                 user.updateCalories(intent.getIntExtra("Calories", 0));
                 user.updateDistance(intent.getIntExtra("Distance", 0));
-                //todo use step data
+
                 updateStepDisplay();
                 updateCalorieDisplay();
                 updateDistanceDisplay();
-            }else {
+            } else if (action.equals("btDisconnected")) {
+                Toast.makeText(Main.this, "Bluetooth device disconnected", Toast.LENGTH_SHORT).show();
+                Button btButton = findViewById(R.id.bluetoothButton);
+                btButton.setText("Connect Bluetooth");
+            } else {
                 System.out.println("broadcast receiver error");
             }
-            //todo on successful connect go home
         }
     };
 

@@ -10,21 +10,21 @@ import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 
 public class UserDatabase {
     private static final String TAG = "User Database";
     private static final String DB_NAME = "UserDatabase.db";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 14;
+    //todo dont forget to increment version every time the tables are changed
 
     private static final String LOGIN_TABLE = "logins";
     private static final String LOGIN_COLUMN1 = "username";
     private static final String LOGIN_COLUMN2 = "password";
 
-    //todo add gender to the relevant places
     private static final String USER_TABLE = "users";
     private static final String USER_COLUMN1 = "username";
     private static final String USER_COLUMN2 = "steps";
@@ -35,6 +35,7 @@ public class UserDatabase {
     private static final String USER_COLUMN7 = "age";
     private static final String USER_COLUMN8 = "exerciseTime";
     private static final String USER_COLUMN9 = "date";
+    private static final String USER_COLUMN10 = "gender";
 
     private static final String HISTORIC_TABLE = "history";
     private static final String HISTORIC_COLUMN1 = "username";
@@ -54,6 +55,7 @@ public class UserDatabase {
     private static final String EXERCISE_COLUMN5 = "distance";
     private static final String EXERCISE_COLUMN6 = "id";
     private static final String EXERCISE_COLUMN7 = "exerciseTime";
+    private static final String EXERCISE_COLUMN8 = "exerciseType";
 
     private static final String MAP_TABLE = "mapRoute";
     private static final String MAP_COLUMN1 = "id";
@@ -81,10 +83,10 @@ public class UserDatabase {
         @Override
         public void onCreate(SQLiteDatabase db) {
             db.execSQL("create table if not exists " + LOGIN_TABLE + " (" + LOGIN_COLUMN1 + " text primary key not null, " + LOGIN_COLUMN2 + " text not null);");
-            db.execSQL("create table if not exists " + USER_TABLE + " (" + USER_COLUMN1 + " text primary key not null, " + USER_COLUMN2 + " integer, " + USER_COLUMN3 +" integer, " + USER_COLUMN4 + " integer, " + USER_COLUMN5 + " real, " + USER_COLUMN6 + " integer, " + USER_COLUMN7 + " integer, " + USER_COLUMN8 + " integer, " + USER_COLUMN9 + " text);");
+            db.execSQL("create table if not exists " + USER_TABLE + " (" + USER_COLUMN1 + " text primary key not null, " + USER_COLUMN2 + " integer, " + USER_COLUMN3 +" integer, " + USER_COLUMN4 + " integer, " + USER_COLUMN5 + " real, " + USER_COLUMN6 + " integer, " + USER_COLUMN7 + " integer, " + USER_COLUMN8 + " integer, " + USER_COLUMN9 + " text, " + USER_COLUMN10 + " text);");
             db.execSQL("create table if not exists " + HISTORIC_TABLE + " (" + HISTORIC_COLUMN7 + " integer primary key, " + HISTORIC_COLUMN1 + " text not null, " + HISTORIC_COLUMN2 + " text not null, " + HISTORIC_COLUMN3 + " integer, " + HISTORIC_COLUMN4 +" integer, " + HISTORIC_COLUMN5 + " integer, " + HISTORIC_COLUMN6 + " real, "  + HISTORIC_COLUMN8 + " integer);");
-            db.execSQL("create table if not exists " + EXERCISE_TABLE + " (" + EXERCISE_COLUMN6 + " integer primary key, " + EXERCISE_COLUMN1 + " text not null, " + EXERCISE_COLUMN2 + " text not null, " + EXERCISE_COLUMN3 + " integer, " + EXERCISE_COLUMN4 +" integer, " + EXERCISE_COLUMN5 + " integer, " + EXERCISE_COLUMN7 + " integer);");
-            db.execSQL("create table if not exists " + MAP_TABLE + " (" + MAP_COLUMN1 + " integer primary key not null, " + MAP_COLUMN2 + " integer not null, " + MAP_COLUMN3 + " integer, " + MAP_COLUMN4 + " integer);");
+            db.execSQL("create table if not exists " + EXERCISE_TABLE + " (" + EXERCISE_COLUMN6 + " integer primary key, " + EXERCISE_COLUMN1 + " text not null, " + EXERCISE_COLUMN2 + " text not null, " + EXERCISE_COLUMN3 + " integer, " + EXERCISE_COLUMN4 +" integer, " + EXERCISE_COLUMN5 + " integer, " + EXERCISE_COLUMN7 + " integer," + EXERCISE_COLUMN8 + " text);");
+            db.execSQL("create table if not exists " + MAP_TABLE + " (" + MAP_COLUMN1 + " integer primary key not null, " + MAP_COLUMN2 + " integer not null, " + MAP_COLUMN3 + " real, " + MAP_COLUMN4 + " real);");
         }
 
         @Override
@@ -143,6 +145,7 @@ public class UserDatabase {
             values.put(USER_COLUMN7, -1);
             values.put(USER_COLUMN8, 0);
             values.put(USER_COLUMN9, currentDate);
+            values.put(USER_COLUMN10, "Undefined");
             db.insert(USER_TABLE, null, values);
 
             return 0;
@@ -176,6 +179,7 @@ public class UserDatabase {
             user.updateHeight(userData.getInt(5));
             user.updateAge(userData.getInt(6));
             user.updateExerciseTime(userData.getLong(7));
+            user.updateGender(userData.getString(9));
 
             if (!saveUser(user)) {
                 System.out.println("user information database write failed");
@@ -192,7 +196,6 @@ public class UserDatabase {
         if (userData != null) {
             userData.moveToFirst();
             Date date = getDateNoTime();
-
             SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
             Date dataDate = null;
 
@@ -201,7 +204,6 @@ public class UserDatabase {
             } catch (ParseException e) {
                 e.printStackTrace();
                 System.out.println("tried to retrieve an incorrectly formatted date from the user database (Table users)");
-                //todo fix the broken date if possible
                 return false;
             }
             if (date.after(dataDate)) {
@@ -210,6 +212,8 @@ public class UserDatabase {
                 user.updateCalories(0);
                 user.updateDistance(0);
                 user.updateExerciseTime(0);
+            } else {
+                //updateHistoricDB(user);
             }
             updateUserDB(user);
         }
@@ -233,6 +237,7 @@ public class UserDatabase {
             values.put(USER_COLUMN7, user.getAge());
             values.put(USER_COLUMN8, user.getExerciseTime());
             values.put(USER_COLUMN9, currentDate);
+            values.put(USER_COLUMN10, user.getGender());
             db.update(USER_TABLE, values, USER_COLUMN1 + " = ?", new String[] {user.getUsername()});
         } else {
             ContentValues values = new ContentValues();
@@ -245,6 +250,7 @@ public class UserDatabase {
             values.put(USER_COLUMN7, user.getAge());
             values.put(USER_COLUMN8, user.getExerciseTime());
             values.put(USER_COLUMN9, currentDate);
+            values.put(USER_COLUMN10, user.getGender());
             db.insert(USER_TABLE, null, values);
         }
     }
@@ -281,7 +287,7 @@ public class UserDatabase {
         }
     }
 
-    public void updateExerciseDB(String username, int steps, int calories, int distance, long exerciseTime/*, List<Integer> lat, List<Integer> lon**/) {
+    public void updateExerciseDB(String username, int steps, int calories, int distance, long exerciseTime, String exerciseType, ArrayList<Double> lat, ArrayList<Double> lng) {
         Date date = getDateNoTime();
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
         String currentDate = format.format(date);
@@ -293,13 +299,13 @@ public class UserDatabase {
         values.put(EXERCISE_COLUMN4, calories);
         values.put(EXERCISE_COLUMN5, distance);
         values.put(EXERCISE_COLUMN7, exerciseTime);
+        values.put(EXERCISE_COLUMN8, exerciseType);
         long routeID = db.insert(EXERCISE_TABLE, null, values);
 
-        //todo uncomment this method when rajan get the maps working
-        //updateMapDB(routeID, lat, lon);
+        updateMapDB(routeID, lat, lng);
     }
 
-    private void updateMapDB(int routeID, List<Integer> lat, List<Integer> lon) {
+    private void updateMapDB(long routeID, ArrayList<Double> lat, ArrayList<Double> lon) {
         ContentValues values;
         int i = 0;
 
@@ -331,16 +337,30 @@ public class UserDatabase {
         if (cont) {
             Cursor userData = db.rawQuery("select * from " + USER_TABLE + " where " + USER_COLUMN1 + " = ?;", new String[] {oldUsername});
             userData.moveToFirst();
+            accounts = db.rawQuery("select * from " + LOGIN_TABLE + " where " + LOGIN_COLUMN1 + " = ?;", new String[]{oldUsername});
+            accounts.moveToFirst();
             ContentValues values = new ContentValues();
             values.put(LOGIN_COLUMN1, newUsername);
             values.put(LOGIN_COLUMN2, accounts.getString(1));
             db.update(LOGIN_TABLE, values, LOGIN_COLUMN1 + " = ?", new String[] {oldUsername});
 
-            values = new ContentValues();
-            values.put(USER_COLUMN1, newUsername);
+            Date date = getDateNoTime();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+            String currentDate = format.format(date);
 
-            user.updateUsername(newUsername);
-            saveUser(user);
+            values = new ContentValues();
+            values.put(USER_COLUMN1, user.getUsername());
+            values.put(USER_COLUMN2, user.getSteps());
+            values.put(USER_COLUMN3, user.getCalories());
+            values.put(USER_COLUMN4, user.getDistance());
+            values.put(USER_COLUMN5, user.getWeight());
+            values.put(USER_COLUMN6, user.getHeight());
+            values.put(USER_COLUMN7, user.getAge());
+            values.put(USER_COLUMN8, user.getExerciseTime());
+            values.put(USER_COLUMN9, currentDate);
+            values.put(USER_COLUMN10, user.getGender());
+            db.update(USER_TABLE, values, USER_COLUMN1 + " = ?", new String[] {oldUsername});
+
         }
         return true;
     }
@@ -357,7 +377,7 @@ public class UserDatabase {
 
     //----------------------------------------------------------------------------------------------
 
-    //todo test day fetch
+
     public int getDaysSteps(User user, int offset) {
         Boolean cont = false;
         int total = 0;
@@ -378,9 +398,10 @@ public class UserDatabase {
             hist.moveToFirst();
 
             int i = 0;
-            while (i > hist.getCount()) {
-                total = total + hist.getInt(2);
+            while (i < hist.getCount()) {
+                total = total + hist.getInt(3);
                 hist.moveToNext();
+                i++;
             }
         }
         return total;
@@ -393,14 +414,15 @@ public class UserDatabase {
         String previousDate = format.format(date);
 
         //todo check the between statement is correctly bound
-        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between " + currentDate + " and " + previousDate + ";", new String[] {user.getUsername()});
+        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between '" + previousDate + "' and '" + currentDate + "';", new String[] {user.getUsername()});
         hist.moveToFirst();
-        int total = 0;
+        int total = user.getSteps();
         int i = 0;
 
-        while (i > hist.getCount()) {
-            total = total + hist.getInt(2);
+        while (i < hist.getCount()) {
+            total = total + hist.getInt(3);
             hist.moveToNext();
+            i++;
         }
         return total;
     }
@@ -412,14 +434,15 @@ public class UserDatabase {
         String previousDate = format.format(date);
 
         //todo check the between statement is correctly bound
-        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between " + currentDate + " and " + previousDate + ";", new String[] {user.getUsername()});
+        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between '" + previousDate + "' and '" + currentDate + "';", new String[] {user.getUsername()});
         hist.moveToFirst();
-        int total = 0;
+        int total = user.getSteps();
         int i = 0;
 
-        while (i > hist.getCount()) {
-            total = total + hist.getInt(2);
+        while (i < hist.getCount()) {
+            total = total + hist.getInt(3);
             hist.moveToNext();
+            i++;
         }
         return total;
     }
@@ -444,9 +467,10 @@ public class UserDatabase {
             hist.moveToFirst();
 
             int i = 0;
-            while (i > hist.getCount()) {
-                total = total + hist.getInt(3);
+            while (i < hist.getCount()) {
+                total = total + hist.getInt(4);
                 hist.moveToNext();
+                i++;
             }
         }
         return total;
@@ -459,14 +483,15 @@ public class UserDatabase {
         String previousDate = format.format(date);
 
         //todo check the between statement is correctly bound
-        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between " + currentDate + " and " + previousDate + ";", new String[] {user.getUsername()});
+        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between '" + previousDate + "' and '" + currentDate + "';", new String[] {user.getUsername()});
         hist.moveToFirst();
-        int total = 0;
+        int total = user.getCalories();
         int i = 0;
 
-        while (i > hist.getCount()) {
-            total = total + hist.getInt(3);
+        while (i < hist.getCount()) {
+            total = total + hist.getInt(4);
             hist.moveToNext();
+            i++;
         }
         return total;
     }
@@ -478,14 +503,15 @@ public class UserDatabase {
         String previousDate = format.format(date);
 
         //todo check the between statement is correctly bound
-        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between " + currentDate + " and " + previousDate + ";", new String[] {user.getUsername()});
+        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between '" + previousDate + "' and '" + currentDate + "';", new String[] {user.getUsername()});
         hist.moveToFirst();
-        int total = 0;
+        int total = user.getCalories();
         int i = 0;
 
-        while (i > hist.getCount()) {
-            total = total + hist.getInt(3);
+        while (i < hist.getCount()) {
+            total = total + hist.getInt(4);
             hist.moveToNext();
+            i++;
         }
         return total;
     }
@@ -510,9 +536,10 @@ public class UserDatabase {
             hist.moveToFirst();
 
             int i = 0;
-            while (i > hist.getCount()) {
-                total = total + hist.getInt(4);
+            while (i < hist.getCount()) {
+                total = total + hist.getInt(5);
                 hist.moveToNext();
+                i++;
             }
         }
         return total;
@@ -525,14 +552,15 @@ public class UserDatabase {
         String previousDate = format.format(date);
 
         //todo check the between statement is correctly bound
-        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between " + currentDate + " and " + previousDate + ";", new String[] {user.getUsername()});
+        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between '" + previousDate + "' and '" + currentDate + "';", new String[] {user.getUsername()});
         hist.moveToFirst();
-        int total = 0;
+        int total = user.getDistance();;
         int i = 0;
 
-        while (i > hist.getCount()) {
-            total = total + hist.getInt(4);
+        while (i < hist.getCount()) {
+            total = total + hist.getInt(5);
             hist.moveToNext();
+            i++;
         }
         return total;
     }
@@ -544,19 +572,545 @@ public class UserDatabase {
         String previousDate = format.format(date);
 
         //todo check the between statement is correctly bound
-        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between " + currentDate + " and " + previousDate + ";", new String[] {user.getUsername()});
+        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between '" + previousDate + "' and '" + currentDate + "';", new String[] {user.getUsername()});
         hist.moveToFirst();
-        int total = 0;
+        int total = user.getDistance();
         int i = 0;
 
-        while (i > hist.getCount()) {
-            total = total + hist.getInt(4);
+        while (i < hist.getCount()) {
+            total = total + hist.getInt(5);
             hist.moveToNext();
+            i++;
         }
         return total;
     }
 
     //----------------------------------------------------------------------------------------------
 
+    public int getDayExerciseSteps(User user, String exerciseType) {
+        int total = 0;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+        String currentDate = format.format(getDateNoTime());
 
+        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN2 + " = ? and " + EXERCISE_COLUMN8 + " = ?;", new String[] {user.getUsername(), currentDate, exerciseType});
+        exerc.moveToFirst();
+
+        int i = 0;
+        while (i < exerc.getCount()) {
+            total = total + exerc.getInt(3);
+            exerc.moveToNext();
+            i++;
+        }
+
+        return total;
+    }
+    public int getWeekExerciseSteps(User user, String exerciseType) {
+        Date date = getDateNoTime();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+        String currentDate = format.format(date);
+        date = new Date(getDateNoTime().getTime() - (7 * DAY_IN_MS));
+        String previousDate = format.format(date);
+
+        //todo check the between statement is correctly bound
+        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ? and " + EXERCISE_COLUMN2 + " between '" + previousDate + "' and '" + currentDate + "';", new String[] {user.getUsername(), exerciseType});
+        exerc.moveToFirst();
+        int total = 0;
+        int i = 0;
+
+        while (i < exerc.getCount()) {
+            total = total + exerc.getInt(3);
+            exerc.moveToNext();
+            i++;
+        }
+        return total;
+    }
+    public int getMonthExerciseSteps(User user, String exerciseType) {
+        Date date = getDateNoTime();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+        String currentDate = format.format(date);
+        date = new Date(getDateNoTime().getTime() - (30 * DAY_IN_MS));
+        String previousDate = format.format(date);
+
+        //todo check the between statement is correctly bound
+        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ? and " + EXERCISE_COLUMN2 + " between '" + previousDate + "' and '" + currentDate + "';", new String[] {user.getUsername(), exerciseType});
+        exerc.moveToFirst();
+        int total = 0;
+        int i = 0;
+
+        while (i < exerc.getCount()) {
+            total = total + exerc.getInt(3);
+            exerc.moveToNext();
+            i++;
+        }
+        return total;
+    }
+
+    public int getDayExerciseCalories(User user, String exerciseType) {
+        int total = 0;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+        String currentDate = format.format(getDateNoTime());
+
+        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN2 + " = ? and " + EXERCISE_COLUMN8 + " = ?;", new String[] {user.getUsername(), currentDate, exerciseType});
+        exerc.moveToFirst();
+
+        int i = 0;
+        while (i < exerc.getCount()) {
+            total = total + exerc.getInt(4);
+            exerc.moveToNext();
+            i++;
+        }
+
+        return total;
+    }
+    public int getWeekExerciseCalories(User user, String exerciseType) {
+        Date date = getDateNoTime();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+        String currentDate = format.format(date);
+        date = new Date(getDateNoTime().getTime() - (7 * DAY_IN_MS));
+        String previousDate = format.format(date);
+
+        //todo check the between statement is correctly bound
+        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ? and " + EXERCISE_COLUMN2 + " between '" + previousDate + "' and '" + currentDate + "';", new String[] {user.getUsername(), exerciseType});
+        exerc.moveToFirst();
+        int total = 0;
+        int i = 0;
+
+        while (i < exerc.getCount()) {
+            total = total + exerc.getInt(4);
+            exerc.moveToNext();
+            i++;
+        }
+        return total;
+    }
+    public int getMonthExerciseCalories(User user, String exerciseType) {
+        Date date = getDateNoTime();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+        String currentDate = format.format(date);
+        date = new Date(getDateNoTime().getTime() - (30 * DAY_IN_MS));
+        String previousDate = format.format(date);
+
+        //todo check the between statement is correctly bound
+        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ? and " + EXERCISE_COLUMN2 + " between '" + previousDate + "' and '" + currentDate + "';", new String[] {user.getUsername(), exerciseType});
+        exerc.moveToFirst();
+        int total = 0;
+        int i = 0;
+
+        while (i < exerc.getCount()) {
+            total = total + exerc.getInt(4);
+            exerc.moveToNext();
+            i++;
+        }
+        return total;
+    }
+
+    public int getDayExerciseDistance(User user, String exerciseType) {
+        int total = 0;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+        String currentDate = format.format(getDateNoTime());
+
+        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN2 + " = ? and " + EXERCISE_COLUMN8 + " = ?;", new String[] {user.getUsername(), currentDate, exerciseType});
+        exerc.moveToFirst();
+
+        int i = 0;
+        while (i < exerc.getCount()) {
+            total = total + exerc.getInt(5);
+            exerc.moveToNext();
+            i++;
+        }
+
+        return total;
+    }
+    public int getWeekExerciseDistance(User user, String exerciseType) {
+        Date date = getDateNoTime();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+        String currentDate = format.format(date);
+        date = new Date(getDateNoTime().getTime() - (7 * DAY_IN_MS));
+        String previousDate = format.format(date);
+
+        //todo check the between statement is correctly bound
+        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ? and " + EXERCISE_COLUMN2 + " between '" + previousDate + "' and '" + currentDate + "';", new String[] {user.getUsername(), exerciseType});
+        exerc.moveToFirst();
+        int total = 0;
+        int i = 0;
+
+        while (i < exerc.getCount()) {
+            total = total + exerc.getInt(5);
+            exerc.moveToNext();
+            i++;
+        }
+        return total;
+    }
+    public int getMonthExerciseDistance(User user, String exerciseType) {
+        Date date = getDateNoTime();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+        String currentDate = format.format(date);
+        date = new Date(getDateNoTime().getTime() - (30 * DAY_IN_MS));
+        String previousDate = format.format(date);
+
+        //todo check the between statement is correctly bound
+        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ? and " + EXERCISE_COLUMN2 + " between '" + previousDate + "' and '" + currentDate + "';", new String[] {user.getUsername(), exerciseType});
+        exerc.moveToFirst();
+        int total = 0;
+        int i = 0;
+
+        while (i < exerc.getCount()) {
+            total = total + exerc.getInt(5);
+            exerc.moveToNext();
+            i++;
+        }
+        return total;
+    }
+
+    //----------------------------------------------------------------------------------------------
+
+    public int getDaySteps(User user, String exerciseType, String targetDay) {
+        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ? and " + EXERCISE_COLUMN2 + " = ?;", new String[] {user.getUsername(), exerciseType, targetDay});
+        exerc.moveToFirst();
+
+        int total = 0;
+        int i = 0;
+
+        if (exerc != null) {
+            while (i < exerc.getCount()) {
+                total = total + exerc.getInt(3);
+                exerc.moveToNext();
+                i++;
+            }
+        }
+        return total;
+    }
+    public int getMonthSteps(User user, String month) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        int currentMonth = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        if (month.equals("January")) {
+            calendar.set(Calendar.MONTH, 1);
+        } else if (month.equals("February")) {
+            calendar.set(Calendar.MONTH, 2);
+        } else if (month.equals("March")) {
+            calendar.set(Calendar.MONTH, 3);
+        } else if (month.equals("April")) {
+            calendar.set(Calendar.MONTH, 4);
+        } else if (month.equals("May")) {
+            calendar.set(Calendar.MONTH, 5);
+        } else if (month.equals("June")) {
+            calendar.set(Calendar.MONTH, 6);
+        } else if (month.equals("July")) {
+            calendar.set(Calendar.MONTH, 7);
+        } else if (month.equals("August")) {
+            calendar.set(Calendar.MONTH, 8);
+        } else if (month.equals("September")) {
+            calendar.set(Calendar.MONTH, 9);
+        } else if (month.equals("October")) {
+            calendar.set(Calendar.MONTH, 10);
+        } else if (month.equals("November")) {
+            calendar.set(Calendar.MONTH, 11);
+        } else if (month.equals("December")) {
+            calendar.set(Calendar.MONTH, 12);
+        }
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+
+        Date startDate = calendar.getTime();
+        String firstDate = format.format(startDate);
+        //todo account for variable month lengths
+        Date endDate = new Date(startDate.getTime() + (30 * DAY_IN_MS));
+        String lastDate = format.format(endDate);
+
+        //todo check the between statement is correctly bound
+        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between '" + firstDate + "' and '" + lastDate + "';", new String[] {user.getUsername()});
+        hist.moveToFirst();
+        int total = 0;
+        int i = 0;
+
+        while (i < hist.getCount()) {
+            total = total + hist.getInt(3);
+            hist.moveToNext();
+            i++;
+        }
+        return total;
+    }
+
+    public int getDayCalories(User user, String exerciseType, String targetDay) {
+        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ? and " + EXERCISE_COLUMN2 + " = ?;", new String[] {user.getUsername(), exerciseType, targetDay});
+        exerc.moveToFirst();
+
+        int total = 0;
+        int i = 0;
+
+        if (exerc != null) {
+            while (i < exerc.getCount()) {
+                total = total + exerc.getInt(4);
+                exerc.moveToNext();
+                i++;
+            }
+        }
+        return total;
+    }
+    public int getMonthCalories(User user, String month) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        int currentMonth = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        if (month.equals("January")) {
+            calendar.set(Calendar.MONTH, 1);
+        } else if (month.equals("February")) {
+            calendar.set(Calendar.MONTH, 2);
+        } else if (month.equals("March")) {
+            calendar.set(Calendar.MONTH, 3);
+        } else if (month.equals("April")) {
+            calendar.set(Calendar.MONTH, 4);
+        } else if (month.equals("May")) {
+            calendar.set(Calendar.MONTH, 5);
+        } else if (month.equals("June")) {
+            calendar.set(Calendar.MONTH, 6);
+        } else if (month.equals("July")) {
+            calendar.set(Calendar.MONTH, 7);
+        } else if (month.equals("August")) {
+            calendar.set(Calendar.MONTH, 8);
+        } else if (month.equals("September")) {
+            calendar.set(Calendar.MONTH, 9);
+        } else if (month.equals("October")) {
+            calendar.set(Calendar.MONTH, 10);
+        } else if (month.equals("November")) {
+            calendar.set(Calendar.MONTH, 11);
+        } else if (month.equals("December")) {
+            calendar.set(Calendar.MONTH, 12);
+        }
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+
+        Date startDate = calendar.getTime();
+        String firstDate = format.format(startDate);
+        //todo account for variable month lengths
+        Date endDate = new Date(startDate.getTime() + (30 * DAY_IN_MS));
+        String lastDate = format.format(endDate);
+
+        //todo check the between statement is correctly bound
+        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between '" + firstDate + "' and '" + lastDate + "';", new String[] {user.getUsername()});
+        hist.moveToFirst();
+        int total = 0;
+        int i = 0;
+
+        while (i < hist.getCount()) {
+            total = total + hist.getInt(4);
+            hist.moveToNext();
+            i++;
+        }
+        return total;
+    }
+
+    public int getDayDistance(User user, String exerciseType, String targetDay) {
+        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ? and " + EXERCISE_COLUMN2 + " = ?;", new String[] {user.getUsername(), exerciseType, targetDay});
+        exerc.moveToFirst();
+
+        int total = 0;
+        int i = 0;
+
+        if (exerc != null) {
+            while (i < exerc.getCount()) {
+                total = total + exerc.getInt(5);
+                exerc.moveToNext();
+                i++;
+            }
+        }
+        return total;
+    }
+    public int getMonthDistance(User user, String month) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        int currentMonth = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        if (month.equals("January")) {
+            calendar.set(Calendar.MONTH, 1);
+        } else if (month.equals("February")) {
+            calendar.set(Calendar.MONTH, 2);
+        } else if (month.equals("March")) {
+            calendar.set(Calendar.MONTH, 3);
+        } else if (month.equals("April")) {
+            calendar.set(Calendar.MONTH, 4);
+        } else if (month.equals("May")) {
+            calendar.set(Calendar.MONTH, 5);
+        } else if (month.equals("June")) {
+            calendar.set(Calendar.MONTH, 6);
+        } else if (month.equals("July")) {
+            calendar.set(Calendar.MONTH, 7);
+        } else if (month.equals("August")) {
+            calendar.set(Calendar.MONTH, 8);
+        } else if (month.equals("September")) {
+            calendar.set(Calendar.MONTH, 9);
+        } else if (month.equals("October")) {
+            calendar.set(Calendar.MONTH, 10);
+        } else if (month.equals("November")) {
+            calendar.set(Calendar.MONTH, 11);
+        } else if (month.equals("December")) {
+            calendar.set(Calendar.MONTH, 12);
+        }
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+
+        Date startDate = calendar.getTime();
+        String firstDate = format.format(startDate);
+        //todo account for variable month lengths
+        Date endDate = new Date(startDate.getTime() + (30 * DAY_IN_MS));
+        String lastDate = format.format(endDate);
+
+        //todo check the between statement is correctly bound
+        Cursor hist = db.rawQuery("select * from " + HISTORIC_TABLE + " where " + HISTORIC_COLUMN1 + " = ? and " + HISTORIC_COLUMN2 + " between '" + firstDate + "' and '" + lastDate + "';", new String[] {user.getUsername()});
+        hist.moveToFirst();
+        int total = 0;
+        int i = 0;
+
+        while (i < hist.getCount()) {
+            total = total + hist.getInt(5);
+            hist.moveToNext();
+            i++;
+        }
+        return total;
+    }
+
+    public long getMonthExerciseTime(User user, String month, String exerciseType) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        int currentMonth = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        if (month.equals("January")) {
+            calendar.set(Calendar.MONTH, 0);
+        } else if (month.equals("February")) {
+            calendar.set(Calendar.MONTH, 1);
+        } else if (month.equals("March")) {
+            calendar.set(Calendar.MONTH, 2);
+        } else if (month.equals("April")) {
+            calendar.set(Calendar.MONTH, 3);
+        } else if (month.equals("May")) {
+            calendar.set(Calendar.MONTH, 4);
+        } else if (month.equals("June")) {
+            calendar.set(Calendar.MONTH, 5);
+        } else if (month.equals("July")) {
+            calendar.set(Calendar.MONTH, 6);
+        } else if (month.equals("August")) {
+            calendar.set(Calendar.MONTH, 7);
+        } else if (month.equals("September")) {
+            calendar.set(Calendar.MONTH, 8);
+        } else if (month.equals("October")) {
+            calendar.set(Calendar.MONTH, 9);
+        } else if (month.equals("November")) {
+            calendar.set(Calendar.MONTH, 10);
+        } else if (month.equals("December")) {
+            calendar.set(Calendar.MONTH, 11);
+        }
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+
+        Date startDate = calendar.getTime();
+        String firstDate = format.format(startDate);
+        //todo account for variable month lengths
+        Date endDate = new Date(startDate.getTime() + (30 * DAY_IN_MS));
+        String lastDate = format.format(endDate);
+
+        //todo check the between statement is correctly bound
+        Cursor exerc = db.rawQuery("select * from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ? and " + EXERCISE_COLUMN2 + " between '" + firstDate + "' and '" + lastDate + "';", new String[] {user.getUsername(), exerciseType});
+        exerc.moveToFirst();
+        long total = 0;
+        int i = 0;
+
+        while (i < exerc.getCount()) {
+            total = total + exerc.getLong(6);
+            exerc.moveToNext();
+            i++;
+        }
+        return total;
+    }
+
+
+    //----------------------------------------------------------------------------------------------
+
+    public ArrayList getExerciseDateArray(User user, String exerciseType) {
+        //SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+
+        Cursor exerc = db.rawQuery("select " + EXERCISE_COLUMN2 + " from " + EXERCISE_TABLE + " where " + EXERCISE_COLUMN1 + " = ? and " + EXERCISE_COLUMN8 + " = ?;", new String[] {user.getUsername(), exerciseType});
+        exerc.moveToFirst();
+
+        ArrayList list = new ArrayList();
+        int i = 0;
+        String temp;
+
+        if (exerc != null) {
+            while (i < exerc.getCount()) {
+                temp = exerc.getString(0);
+                if (!list.contains(temp)) {
+                    list.add(temp);
+                }
+                exerc.moveToNext();
+                i++;
+            }
+        }
+        if (list.size() == 0) {
+            list.add("empty");
+        }
+        return list;
+    }
+
+    //----------------------------------------------------------------------------------------------
+
+    public void historicTableCheat(User user, int numOfEntrys) {
+        Date date = new Date(getDateNoTime().getTime());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+
+        String currentDate;
+        int i = 0;
+        boolean alt = false;
+
+        while (i < numOfEntrys) {
+            currentDate = format.format(date);
+            if (alt) {
+                ContentValues values = new ContentValues();
+                values.put(HISTORIC_COLUMN1, user.getUsername());
+                values.put(HISTORIC_COLUMN2, currentDate);
+                values.put(HISTORIC_COLUMN3, 500);
+                values.put(HISTORIC_COLUMN4, 100);
+                values.put(HISTORIC_COLUMN5, 400);
+                values.put(HISTORIC_COLUMN6, -1);
+                values.put(HISTORIC_COLUMN8, 300000);
+                db.insert(HISTORIC_TABLE, null, values);
+                alt = false;
+            } else {
+                ContentValues values = new ContentValues();
+                values.put(HISTORIC_COLUMN1, user.getUsername());
+                values.put(HISTORIC_COLUMN2, currentDate);
+                values.put(HISTORIC_COLUMN3, 1000);
+                values.put(HISTORIC_COLUMN4, 200);
+                values.put(HISTORIC_COLUMN5, 700);
+                values.put(HISTORIC_COLUMN6, -1);
+                values.put(HISTORIC_COLUMN8, 300000);
+                db.insert(HISTORIC_TABLE, null, values);
+                alt = true;
+            }
+            i++;
+            date = new Date(getDateNoTime().getTime() - (i * DAY_IN_MS));
+        }
+
+
+    }
 }

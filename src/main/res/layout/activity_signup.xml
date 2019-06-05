@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".SignUp">
 
-    <!-- todo change edittext contents to hints -->
 
     <LinearLayout
         android:layout_width="395dp"
@@ -28,28 +27,28 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint="Username"
             android:inputType="textPersonName"
             android:padding="20dp"
-            android:paddingTop="50dp"
-            android:text="username" />
+            android:paddingTop="50dp" />
 
         <EditText
             android:id="@+id/newUserpasswordTextbox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint="Password"
             android:inputType="textPersonName"
-            android:padding="20dp"
-            android:text="password" />
+            android:padding="20dp" />
 
         <EditText
             android:id="@+id/newUserPasswordConfermTextbox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint="Confirm Password"
             android:inputType="textPersonName"
-            android:padding="20dp"
-            android:text="confirm Password" />
+            android:padding="20dp" />
 
         <Button
             android:id="@+id/submitNewUserButton"

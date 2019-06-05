@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Exercise1">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="395dp"
+        android:layout_height="536dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- todo style this to be a proper title -->
+
+        <TextView
+            android:id="@+id/exercisePageTitle"
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:text="title" /><![CDATA[
+
+-->
+
+        ]]>
+
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="333dp"
+            android:layout_weight="50"
+            tools:context=".Exercise1" />
+
+        <TextView
+            android:id="@+id/exerciseStepCountTextview"
+            android:layout_width="match_parent"
+            android:layout_height="41dp"
+            android:padding="5dp"
+            android:text="Steps: " />
+
+        <TextView
+            android:id="@+id/exerciseCalorieCountTextview"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:padding="5dp"
+            android:text="Calories: " />
+
+        <TextView
+            android:id="@+id/exerciseDistanceCountTextview"
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:padding="5dp"
+            android:text="Distance: " />
+
+        <Button
+            android:id="@+id/toggleExerciseButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="20dp"
+            android:text="Start" />
+
+        <TextView
+            android:id="@+id/speedReading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    z
+
+</android.support.constraint.ConstraintLayout>

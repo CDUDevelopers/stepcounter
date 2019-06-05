@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">StepCounterApp</string>
+    <string name="app_name">RunMate</string>
 
-    <string name="walking_prompt">Choose a walking Activities</string>
+    <string name="exercise_prompt">Choose a walking Activities</string>
 
-    <string-array name="walking_arrays">
+    <string-array name="exercise_arrays">
         <item>Days</item>
         <item>weeks</item>
         <item>months</item>
@@ -11,4 +11,5 @@
     </string-array>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_maps2">Map</string>
+    <string name="title_activity_more_information">MoreInformation</string>
 </resources>
